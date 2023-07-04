@@ -18,7 +18,7 @@ const mapElement = useRef();
 useEffect(() => {
     axios.get(`MapExample.json`)
     .then(res => {
-        setMapData(res.data.features[0].geometry.coordinates);
+        setMapData(res.data.features[0].geometry.coordinates[0]);
         // console.log(res.data.features[0].geometry.coordinates)
     })
     .catch(err => console.log(err))
@@ -30,15 +30,18 @@ useEffect(() => {
 
 
 useEffect(() => {
+
     const {naver} = window;
-    if(!mapElement.current || !naver ) return;
+    // if(!mapElement.current || !naver ) return;
+
+
 
     let polylinePath = [];
 
-        polylinePath.push(new naver.maps.LatLng(mapData))
+    mapData.map(path => {polylinePath.push(new naver.maps.LatLng(path[1], path[0]));
+    });
 
-    console.log(polylinePath)
-
+    
 
     const polyline = new naver.maps.Polyline({
         path : polylinePath,
@@ -48,11 +51,20 @@ useEffect(() => {
         map: mapElement.current,
     });
 
+
+    
+    const mapOptions ={center: new naver.maps.LatLng(mapData[0])}
+
+
+    const map = new naver.maps.Map(mapElement.current, mapOptions)
+
+
+console.log(polylinePath)
+
+
+
+
 },[mapData])
-
-console.log(mapData)
-
-
 
 
 
