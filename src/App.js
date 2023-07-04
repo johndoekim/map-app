@@ -1,25 +1,23 @@
 import './App.css';
-import Map from './component/Map';
 import MapExam from './component/MapExam';
+import { NavermapsProvider } from 'react-naver-maps';
 
 
 
 
 function App() {
 
+    return(
+
+<NavermapsProvider ncpClientId='h2fkbpffkr'>
+
+<MapExam/>
+
+</NavermapsProvider>
     
-
-    return(<>
-
-
-
-<MapExam/>    
     
     
-    
-    </>)
-
-  
+    )
 }
 
 export default App;
