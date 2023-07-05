@@ -1,17 +1,21 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
-import { Container as MapDiv, NaverMap, Polyline, useNavermaps, } from 'react-naver-maps'
+import { Map, MapTypeId } from "react-kakao-maps-sdk";
+
+
+
+
+
 
 
 
 const MapExam = () =>{
 
 
+
 const [mapData, setMapData] = useState([]);
 
-// const mapElement = useRef();
 
-const navermaps = useNavermaps();
 
 useEffect(() => {
     axios.get(`MapExample.json`)
@@ -22,7 +26,6 @@ useEffect(() => {
     .catch(err => console.log(err))
 
 },[])
-
 
 
 
@@ -44,18 +47,12 @@ useEffect(() => {
 //         strokeWeight : 6,
 //         map: mapElement.current,
 //     });
-
-
     
 //     const mapOptions ={center: new naver.maps.LatLng(mapData[0])}
 
-
 //     const map = new naver.maps.Map(mapElement.current, mapOptions)
 
-
 // console.log(polylinePath)
-
-
 
 
 // },[mapData])
@@ -67,8 +64,22 @@ useEffect(() => {
     return(<>
 
 
-    <NaverMap
-    defaultCenter={new navermaps.LatLng(mapData[0])}></NaverMap>
+<Map
+    center={{
+        lat:37.450701,
+        lng: 126.570667,
+    }}
+    style={{
+        width:"100%",
+        height:"450px",
+    }}
+    level={3}
+    >
+
+    <MapTypeId type={kakao.maps.MapTypeId.TRAFFIC}/>
+
+    </Map>
+
 
 
     
