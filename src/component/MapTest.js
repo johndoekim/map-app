@@ -4,7 +4,7 @@ import { CustomOverlayMap, Map, MapMarker, Polyline } from "react-kakao-maps-sdk
 
 const MapTest = () => {
   const [routeData, setRouteData] = useState([]);
-  const [position, setPosition] = useState(); // 수정: 오타 수정
+  const [position, setPosition] = useState(); 
   const [distanceAndDuration, setDistanceAndDuration]= useState();
 
 
