@@ -1,5 +1,5 @@
 import './App.css';
-import MapExam from './component/MapExam';
+import MapTest from './component/MapTest';
 
 
 
@@ -7,10 +7,11 @@ import MapExam from './component/MapExam';
 function App() {
 
     return(
-
     
 
-<MapExam/>
+
+<MapTest/>
+
 
     
     
