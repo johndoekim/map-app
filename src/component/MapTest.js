@@ -42,6 +42,9 @@ polylinepath = routeData.map(path => {return {lat : path[1], lng : path[0]};
 
 
 
+
+
+
   return (
     <>
       <Map
@@ -70,9 +73,6 @@ polylinepath = routeData.map(path => {return {lat : path[1], lng : path[0]};
         strokeOpacity={0.5} // 선의 불투명도 
         strokeStyle={"solid"} // 선의 스타일
         />
-
-
-        
       </Map>
 
       {position && (
@@ -80,6 +80,8 @@ polylinepath = routeData.map(path => {return {lat : path[1], lng : path[0]};
           {'클릭한 위치의 위도는 ' + position.lat + '이고, 경도는 ' + position.lng + '입니다'}
         </p>
       )}
+
+
     </>
   );
 };
