@@ -4,18 +4,50 @@ import { Map, MapMarker } from "react-kakao-maps-sdk"
 
 
 const MapStation = () => {
-
+    //정류소 위치 및 기능 
     const [isOpen, setIsOpen] = useState({})
     const [stationInfo, setStationInfo] = useState([]);
 
+    //목적지 구현 부분
+    const [destination, setDestinaion] = useState();
+
+    //현재 위치 구현
+    const [mylocation, setMyLocation] = useState({lat : 36.5, lng : 127.8})
+
+    console.log(mylocation)
+
     useEffect(() => {
-        axios.get('http://openapi.seoul.go.kr:8088/4266536b6563687636375255614b49/json/bikeList/1/100/')
+      if (navigator.geolocation){
+        navigator.geolocation.getCurrentPosition((position) => {
+          setMyLocation({
+            lat : position.coords.latitude,
+            lng: position.coords.longitude,
+          });
+        },
+        (err) => {
+          alert('현재 위치를 표시 할 수 없습니다.')
+        },
+        {enableHighAccuracy: true})
+      } else{
+        alert('현재 위치를 표시 할 수 없습니다')
+      }
+    }, [])
+
+
+
+
+
+
+    useEffect(() => {
+        axios.get('http://openapi.seoul.go.kr:8088/4266536b6563687636375255614b49/json/bikeList/1/1/')
         .then(res => 
             {   setStationInfo(res.data.rentBikeStatus.row)})
         .catch(err => console.log(err))
     },[])
 
-    // console.log(stationInfo)
+    console.log(stationInfo)
+
+
 
 
 
@@ -28,18 +60,28 @@ const MapStation = () => {
     });
 
 
+    const destinationHandler = (e) =>
+    {setDestinaion(e.target.value)}
+
+
   
     return (
+      <>
+
+      <input type="text" placeholder="목적지를 입력해 주세요" onChange={destinationHandler}></input>
+
+
+
+
+
+
       <Map
-        center={{
-          lat: 37.450701,
-          lng: 127.570667,
-        }}
+        center={mylocation}
         style={{
           width: "70%",
           height: "450px",
         }}
-        level={3}
+        level={5}
       >
         {markers.map((marker, index) => (
           <MapMarker
@@ -72,6 +114,9 @@ const MapStation = () => {
           </MapMarker>
         ))}
       </Map>
+
+      </>
+
     );
   };
 
