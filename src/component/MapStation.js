@@ -4,9 +4,8 @@ import { Map, MapMarker } from "react-kakao-maps-sdk"
 
 
 const MapStation = () => {
-    const [isOpen, setIsOpen] = useState([{setIsOpen : false}, {setIsOpen : false}])
 
-
+    const [isOpen, setIsOpen] = useState({})
     const [stationInfo, setStationInfo] = useState([]);
 
     useEffect(() => {
@@ -16,54 +15,41 @@ const MapStation = () => {
         .catch(err => console.log(err))
     },[])
 
-    console.log(stationInfo)
+    // console.log(stationInfo)
 
 
 
-    const station = []
-
-    // station = stationInfo.map(info => {return {lat : info[1], lng : info[0]};
-    // })
-
-    console.log(stationInfo[0])
-     
-
-    
+    const markers = stationInfo.map((info) => {
+      return {
+        lat: parseFloat(info.stationLatitude),
+        lng: parseFloat(info.stationLongitude),
+        parkingBikeTotCnt: info.parkingBikeTotCnt,
+      };
+    });
 
 
   
     return (
-      <Map // 지도를 표시할 Container
+      <Map
         center={{
-          // 지도의 중심좌표
           lat: 37.450701,
           lng: 127.570667,
         }}
         style={{
-          // 지도의 크기
           width: "70%",
           height: "450px",
         }}
-        level={3} // 지도의 확대 레벨
+        level={3}
       >
-
-
-        <MapMarker // 인포윈도우를 생성하고 지도에 표시합니다
-          position={{
-            // 인포윈도우가 표시될 위치입니다
-            lat: 37.450701,
-            lng: 127.570667,
-          }}
-          clickable={true} // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
-          onMouseOver={() => setIsOpen(true)}
-
-          onMouseOut={()=> setIsOpen(false)}
-        >
-              
-          
-          {/* MapMarker의 자식을 넣어줌으로 해당 자식이 InfoWindow로 만들어지게 합니다 */}
-          {/* 인포윈도우에 표출될 내용으로 HTML 문자열이나 React Component가 가능합니다 */}
-          {isOpen && (
+        {markers.map((marker, index) => (
+          <MapMarker
+            key={index}
+            position={marker}
+            clickable={true}
+            onMouseOver={() => setIsOpen({ [index]: true })}
+            onMouseOut={() => setIsOpen({ [index]: false })}
+          >
+            {isOpen[index] && (
             <div style={{ minWidth: "150px" }}>
               <img
                 alt="close"
@@ -76,55 +62,20 @@ const MapStation = () => {
                   top: "5px",
                   cursor: "pointer",
                 }}
-                onClick={() => setIsOpen(false)}
+                onClick={() => setIsOpen({ ...isOpen, [index]: false })}
               />
-              <div style={{ padding: "5px", color: "#000" }}>현재 따릉이 대여 댓수 : N대</div>
+              <div style={{ padding: "5px", color: "#000" }}>
+                따릉이 잔여 현황: {marker.parkingBikeTotCnt}대
+              </div>
             </div>
           )}
-        </MapMarker>
-        
-        
-        <MapMarker // 인포윈도우를 생성하고 지도에 표시합니다
-          position={{
-            // 인포윈도우가 표시될 위치입니다
-            lat: 37.457801,
-            lng: 127.570767,
-          }}
-          clickable={true} // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
-          onMouseOver={() => setIsOpen(true)}
-          onMouseOut={()=> setIsOpen(false)}
-        >
-        
-         {isOpen && (
-            <div style={{ minWidth: "150px" }}>
-              <img
-                alt="close"
-                width="14"
-                height="13"
-                src="https://t1.daumcdn.net/localimg/localimages/07/mapjsapi/2x/bt_close.gif"
-                style={{
-                  position: "absolute",
-                  right: "5px",
-                  top: "5px",
-                  cursor: "pointer",
-                }}
-                onClick={() => setIsOpen(false)}
-              />
-              <div style={{ padding: "5px", color: "#000" }}>현재 따릉이 대여 댓수 : N대</div>
-            </div>
-          )}
-        </MapMarker>
-        
-        
-        
-        
-        
-        
-        
-        
-        
+          </MapMarker>
+        ))}
       </Map>
-    )
-  }
+    );
+  };
+
+    
+
 
 export default MapStation;
