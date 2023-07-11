@@ -1,6 +1,10 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
+import MapTest from "./MapPolyLine";
+import { useHistory } from "react-router-dom";
+import MapPolyLine from "./MapPolyLine";
+
 
 const kakao = window.kakao;
 
@@ -12,6 +16,9 @@ const PageSearch = () => {
   const [shouldPerformSearch, setShouldPerformSearch] = useState(false);
   const [startPoint, setStartPoint] = useState(null);
   const [destination, setDestination] = useState(null);
+  const [routeData, setRouteData]= useState();
+
+  const history = useHistory();
 
   const InputChangeHandler = (e) => {
     setInputKeyword(e.target.value);
@@ -27,8 +34,13 @@ const PageSearch = () => {
         startPoint: startPoint.content,
         destination: destination.content,
       };
-      axios.post("https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app", body)
+      axios
+        .post(
+          "https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app",
+          body
+        )
         .then((response) => {
+          setRouteData(response.data);
           console.log(response);
         })
         .catch((error) => {
@@ -38,6 +50,15 @@ const PageSearch = () => {
       alert("출발지와 목적지를 모두 설정해주세요.");
     }
   };
+
+  useEffect(() => {
+    if (routeData) {
+      history.push({
+        pathname: "/MapPolyLine",
+        state: { routeData: routeData },
+      });
+    }
+  }, [routeData]);
 
   useEffect(() => {
     if (!map || !inputKeyword || !shouldPerformSearch) return;
@@ -110,6 +131,8 @@ const PageSearch = () => {
           : "출발지 설정"}
       </button>
       <button onClick={handleFindRoute}>길찾기</button>
+
+      
 
     </>
   );
