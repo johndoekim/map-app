@@ -12,7 +12,7 @@ const MapStation = () => {
     const [destination, setDestinaion] = useState();
 
     //현재 위치 구현
-    const [mylocation, setMyLocation] = useState({lat : 36.5, lng : 127.8})
+    const [mylocation, setMyLocation] = useState({lat : 37.55, lng : 126.91})
 
     console.log(mylocation)
 
@@ -39,7 +39,7 @@ const MapStation = () => {
 
 
     useEffect(() => {
-        axios.get('http://openapi.seoul.go.kr:8088/4266536b6563687636375255614b49/json/bikeList/1/1/')
+        axios.get('http://openapi.seoul.go.kr:8088/4266536b6563687636375255614b49/json/bikeList/1/5/')
         .then(res => 
             {   setStationInfo(res.data.rentBikeStatus.row)})
         .catch(err => console.log(err))

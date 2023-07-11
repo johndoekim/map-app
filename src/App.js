@@ -1,6 +1,7 @@
 import './App.css';
 import MapStation from './component/MapStation';
 import MapTest from './component/MapTest';
+import PageSearch from './component/PageSearch';
 
 
 
@@ -8,12 +9,14 @@ import MapTest from './component/MapTest';
 function App() {
 
     return(
-    
+    <>
 
 
-<MapStation/>
+<PageSearch/>    
     
-    
+{/* <MapStation/> */}
+
+</>
     
     )
 }
