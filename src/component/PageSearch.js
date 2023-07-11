@@ -10,21 +10,8 @@ const PageSearch = () => {
   const [map, setMap] = useState();
   const [inputKeyword, setInputKeyword] = useState();
   const [shouldPerformSearch, setShouldPerformSearch] = useState(false);
-
-  const body = markers
-
-  useEffect(() => {
-    axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app', body)
-    .then(res => console.log(res))
-    .catch(err => console.log(err))
-  },[shouldPerformSearch])
-
-
-
-
-
-
-
+  const [startPoint, setStartPoint] = useState(null);
+  const [destination, setDestination] = useState(null);
 
   const InputChangeHandler = (e) => {
     setInputKeyword(e.target.value);
@@ -32,6 +19,24 @@ const PageSearch = () => {
 
   const changeHandlerClick = (e) => {
     setShouldPerformSearch((prevState) => !prevState);
+  };
+
+  const handleFindRoute = () => {
+    if (startPoint && destination) {
+      const body = {
+        startPoint: startPoint.content,
+        destination: destination.content,
+      };
+      axios.post("https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app", body)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      alert("출발지와 목적지를 모두 설정해주세요.");
+    }
   };
 
   useEffect(() => {
@@ -92,7 +97,19 @@ const PageSearch = () => {
         onChange={InputChangeHandler}
       ></input>
       <button onClick={changeHandlerClick}>검색</button>
-
+      <br />
+      <button
+        onClick={() => {
+          startPoint && !destination
+            ? setDestination(info)
+            : setStartPoint(info);
+        }}
+      >
+        {startPoint && !destination
+          ? "목적지 설정"
+          : "출발지 설정"}
+      </button>
+      <button onClick={handleFindRoute}>길찾기</button>
 
     </>
   );
