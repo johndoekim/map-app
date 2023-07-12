@@ -6,8 +6,13 @@ const kakao = window.kakao;
 
 
 const MapPolyLine = () => {
+
+
   const location = useLocation();
   const routeData = location.state ? location.state.routeData : null;
+
+  // console.log(routeData)
+
   const [middleValue, setMiddleValue] = useState(null);
 
   let polylinepath = [];
@@ -22,7 +27,7 @@ const MapPolyLine = () => {
 }
 
 
-console.log(polylinepath)
+// console.log(polylinepath)
 
 //출발지와 목적지의 중간 값
 useEffect(() => {
@@ -38,6 +43,7 @@ useEffect(() => {
 
 return (
   <>
+
         <Map
         center={middleValue || { lat: 37.566826, lng: 126.9786567 }}
         style={{
@@ -48,9 +54,6 @@ return (
       >
         <ZoomControl position={kakao.maps.ControlPosition.TOPRIGHT}/>
 
-
-        {/* {position && <MapMarker position={position} />} */}
-
         <Polyline
         path = {polylinepath}
         strokeWeight={5} // 선의 두께
@@ -58,7 +61,10 @@ return (
         strokeOpacity={0.5} // 선의 불투명도 
         strokeStyle={"solid"} // 선의 스타일
         />
-      </Map>
+      </Map> 
+
+
+      
   </>
 );
 };

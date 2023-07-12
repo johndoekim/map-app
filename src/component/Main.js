@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
@@ -11,10 +11,12 @@ const Main = () =>{
     const {register, handleSubmit, watch, formState: {errors}} = useForm();
     const [routeData, setRouteData]= useState();
 
+    const history = useHistory();
+
 
     const onSubmit = data => {
         const body = {'startPoint' : data.SP,
-    'endPoint' : data.EP};
+    'destination' : data.EP};
 
     axios
     .post(
@@ -28,7 +30,18 @@ const Main = () =>{
     .catch((error) => {
       console.log(error);
     });
+
 }
+
+useEffect(() => {
+  if (routeData) {
+    history.push({
+      pathname: "/MapPolyLine",
+      state: { routeData: routeData },
+    });
+  }
+}, [routeData]);
+
 
     
     //이 부분으로 MapPolyLine으로 보내는 부분 만들어주면 됨.
