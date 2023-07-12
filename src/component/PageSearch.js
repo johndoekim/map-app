@@ -1,14 +1,24 @@
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
-import { Map, MapMarker } from "react-kakao-maps-sdk";
-import MapTest from "./MapPolyLine";
+import { useEffect, useState } from "react";
+import { Map, MapMarker, ZoomControl } from "react-kakao-maps-sdk";
 import { useHistory } from "react-router-dom";
-import MapPolyLine from "./MapPolyLine";
+import { useLocation } from "react-router-dom/cjs/react-router-dom";
 
 
 const kakao = window.kakao;
 
+
 const PageSearch = () => {
+
+  // const location = useLocation();
+
+  // if(location.state)
+
+
+
+
+
+
   const [info, setInfo] = useState();
   const [markers, setMarkers] = useState([]);
   const [map, setMap] = useState();
@@ -25,13 +35,17 @@ const PageSearch = () => {
   };
 
   const changeHandlerClick = (e) => {
-    setShouldPerformSearch((prevState) => !prevState);
+    if (inputKeyword !== "") {
+      setShouldPerformSearch((prevState) => !prevState);
+    }
   };
+  
 
+  //axios로 출발지와 목적지를 보냄
   const handleFindRoute = () => {
     if (startPoint && destination) {
       const body = {
-        startPoint: startPoint.content,
+        startPoint: startPoint.content, 
         destination: destination.content,
       };
       axios
@@ -51,6 +65,7 @@ const PageSearch = () => {
     }
   };
 
+  //axios에서 전달받은 경로 데이터를 함께 푸쉬
   useEffect(() => {
     if (routeData) {
       history.push({
@@ -59,6 +74,9 @@ const PageSearch = () => {
       });
     }
   }, [routeData]);
+
+
+  //맵 검색
 
   useEffect(() => {
     if (!map || !inputKeyword || !shouldPerformSearch) return;
@@ -96,9 +114,13 @@ const PageSearch = () => {
           width: "80%",
           height: "550px",
         }}
-        level={3}
+        level={4}
         onCreate={setMap}
+        
       >
+          <ZoomControl position={kakao.maps.ControlPosition.TOPRIGHT}/>
+
+
         {markers.map((marker) => (
           <MapMarker
             key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
@@ -110,6 +132,7 @@ const PageSearch = () => {
             )}
           </MapMarker>
         ))}
+        
       </Map>
 
       <input

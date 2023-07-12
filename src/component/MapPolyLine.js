@@ -1,59 +1,53 @@
-import { useState } from "react";
-import { CustomOverlayMap, Map, MapMarker, Polyline } from "react-kakao-maps-sdk";
-import PageSearch from "./PageSearch";
+import { useEffect, useState } from "react";
+import {  Map, MapTypeId, Polyline, ZoomControl } from "react-kakao-maps-sdk";
 import { useLocation } from "react-router-dom";
+const kakao = window.kakao;
+
 
 
 const MapPolyLine = () => {
-  const [position, setPosition] = useState(); 
   const location = useLocation();
-  const routeData = location.state.routeData;
+  const routeData = location.state ? location.state.routeData : null;
+  const [middleValue, setMiddleValue] = useState(null);
 
-  
-console.log(routeData)
+  let polylinepath = [];
 
-console.log(routeData.body)
-
-const jsonObject = JSON.parse(routeData.body)
-
-console.log(jsonObject)
-
-const routeGpx = JSON.parse(jsonObject.route_gpx)
-
-console.log(routeGpx)
-
-console.log(routeGpx.features[0].geometry.coordinates)
-
-const pathLineData = routeGpx.features[0].geometry.coordinates
-
-
-
-
-let polylinepath = [];
-
-if (routeData) {
-  polylinepath = pathLineData.map((path) => {
+  if (routeData) {
+    const jsonObject = JSON.parse(routeData.body);
+    const routeGpx = JSON.parse(jsonObject.route_gpx);
+    const pathLineData = routeGpx.features[0].geometry.coordinates;
+    polylinepath = pathLineData.map((path) => {
     return { lat: path[1], lng: path[0] };
   });
 }
 
+
 console.log(polylinepath)
+
+//출발지와 목적지의 중간 값
+useEffect(() => {
+  if (polylinepath && polylinepath.length > 0 && !middleValue) {
+    const middleIndex = Math.floor(polylinepath.length / 2);
+    setMiddleValue(polylinepath[middleIndex]);
+  }
+}, [polylinepath, middleValue]);
+
+
 
 
 
 return (
   <>
-         <Map
-        center={{
-          lat: 37.56695,
-          lng: 126.978664,
-        }}
+        <Map
+        center={middleValue || { lat: 37.566826, lng: 126.9786567 }}
         style={{
           width: "60%",
           height: "600px",
         }}
-        level={5}
+        level={6}
       >
+        <ZoomControl position={kakao.maps.ControlPosition.TOPRIGHT}/>
+
 
         {/* {position && <MapMarker position={position} />} */}
 
