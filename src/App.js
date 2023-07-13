@@ -2,7 +2,8 @@ import './App.css';
 import MapSearchPoint from './component/MapSearchPoint';
 import { Route } from 'react-router-dom/cjs/react-router-dom';
 import MapPolyLine from './component/MapPolyLine';
-import Main from './component/Main';
+import MapMain from './component/MapMain';
+import MapSelectWaypoint from './component/MapSelectWaypoint';
 
 
 
@@ -14,7 +15,9 @@ function App() {
 
 <Route path="/MapSearchPoint" component = {MapSearchPoint}/>
 <Route path="/MapPolyLine" component = {MapPolyLine}/>
-<Route path="/Main" component={Main}/>
+<Route path="/MapMain" component={MapMain}/>
+
+<Route path="/MapSelectWaypoint" component={MapSelectWaypoint}/>
 
 
 

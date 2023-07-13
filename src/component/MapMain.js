@@ -9,7 +9,7 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 const Main = () =>{
 
     const {register, handleSubmit, watch, formState: {errors}} = useForm();
-    const [routeData, setRouteData]= useState();
+    const [gpsData, setGpsData]= useState();
 
     const history = useHistory();
 
@@ -20,11 +20,11 @@ const Main = () =>{
 
     axios
     .post(
-      "https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app",
+      "https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_geocode",
       body
     )
     .then((response) => {
-      setRouteData(response.data);
+      setGpsData(response.data);
       console.log(response);
     })
     .catch((error) => {
@@ -34,17 +34,16 @@ const Main = () =>{
 }
 
 useEffect(() => {
-  if (routeData) {
+  if (gpsData) {
     history.push({
-      pathname: "/MapPolyLine",
-      state: { routeData: routeData },
+      pathname: "/MapSelectWaypoint",
+      state: { gpsData: gpsData },
     });
   }
-}, [routeData]);
+}, [gpsData]);
 
 
     
-    //이 부분으로 MapPolyLine으로 보내는 부분 만들어주면 됨.
 
 
 

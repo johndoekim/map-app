@@ -113,25 +113,43 @@ return (
             />
           ))}
 
-          <CustomOverlayMap
-          position={middleValue}>
+<CustomOverlayMap position={middleValue}
+              yAnchor={1}
+              zIndex={2}>
+  <div
+    className="label"
+    style={{
+      color: "#000",
+      backgroundColor: "#fff",
+      padding: "5px",
+      borderRadius: "10px",
+      whiteSpace: "nowrap", 
+
+    }}
+  >
+    <span className="left"></span>
+    <span className="center">
+      예상 시간 : {Math.round(distanceAndDuration[0].duration / 60)} 분{" "}
+      {Math.round(distanceAndDuration[0].duration / 60)} 초
+    </span>
+    <br></br>
+    <span className="center">
+      거리 :{" "}
+      {distanceAndDuration[0].distance > 1000 ? (
+        <>
+          {Math.round((distanceAndDuration[0].distance / 1000) * 100) / 100} KM
+        </>
+      ) : (
+        <>
+          {distanceAndDuration[0].distance} M
+        </>
+      )}
+    </span>
+    <span className="right"></span>
+  </div>
+</CustomOverlayMap>
 
 
-
-
-
-
-          <div className="label" style={{color: "#000"}}>
-            <span className="left"></span>
-            <span className="center">예상 소요 시간 : {Math.round(distanceAndDuration[0].duration /60 )} 분 {Math.round(distanceAndDuration[0].duration /60 )} 초</span>
-            <br></br>
-            <span className="center">거리 : {distanceAndDuration[0].distance > 1000} ? {distanceAndDuration[0].distance / 1000} KM : {distanceAndDuration[0].distance} M </span>
-
-            <span className="right"></span>
-          </div> 
-
-
-          </CustomOverlayMap>
 
           
           

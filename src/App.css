@@ -36,3 +36,45 @@
     transform: rotate(360deg);
   }
 }
+
+
+
+
+.waypoint-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 1rem;
+}
+
+.waypoint-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 15rem;
+  height: 20rem;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.16), 0 2px 4px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;
+}
+
+.waypoint-card:hover {
+  transform: translateY(-1rem);
+}
+
+.waypoint-card img {
+  width: 100%;
+  height: 10rem;
+  object-fit: cover;
+  border-radius: 8px 8px 0 0;
+}
+
+.waypoint-card h3 {
+  margin-top: 1rem;
+  font-size: 1.5rem;
+}
