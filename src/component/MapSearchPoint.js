@@ -8,7 +8,7 @@ import { useLocation } from "react-router-dom/cjs/react-router-dom";
 const kakao = window.kakao;
 
 
-const PageSearch = () => {
+const MapSearchPoint = () => {
 
   // const location = useLocation();
 
@@ -161,4 +161,4 @@ const PageSearch = () => {
   );
 };
 
-export default PageSearch;
+export default MapSearchPoint;
