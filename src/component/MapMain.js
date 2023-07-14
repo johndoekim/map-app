@@ -2,6 +2,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import LoadingModal from "./LoadingModal";
+
 
 
 
@@ -10,27 +12,26 @@ const MapMain = () =>{
 
     const {register, handleSubmit, watch, formState: {errors}} = useForm();
     const [gpsData, setGpsData]= useState();
+    const [loading, setLoading] = useState(false);
 
     const history = useHistory();
 
 
-    const onSubmit = data => {
-        const body = {'startPoint' : data.SP,
-    'destination' : data.EP};
+    const onSubmit = async data => {
+      setLoading(true)
 
-    axios
-    .post(
-      "https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_geocode",
-      body
-    )
-    .then((response) => {
-      setGpsData(response.data);
-      console.log(response);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+      try{
 
+    
+    const body = {'startPoint' : data.SP,
+                  'destination' : data.EP};
+
+    const res = await axios.post("https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_geocode",body)
+      setGpsData(res.data);
+      console.log(res);
+      }
+      catch(err){console.log(err)}
+      finally{setLoading(false)}
 }
 
 useEffect(() => {
@@ -40,7 +41,7 @@ useEffect(() => {
       state: { gpsData: gpsData },
     });
   }
-}, [gpsData]);
+}, [gpsData, loading]);
 
 
     
@@ -48,6 +49,12 @@ useEffect(() => {
 
 
     return(<>
+
+<div className="modal-box">
+          {loading ? (
+              <LoadingModal show={loading} setShow={setLoading}></LoadingModal>
+          ) : null}
+      </div>
 
         <form onSubmit={handleSubmit(onSubmit)}>
             <input placeholder="출발지" {...register("SP", 

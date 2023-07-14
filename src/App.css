@@ -78,3 +78,24 @@
   margin-top: 1rem;
   font-size: 1.5rem;
 }
+
+
+.loading-container {
+  border: 0px;
+  background: rgba(0, 0, 0, 0);
+  z-index: -1;
+  content: none;
+}
+.loading-container > div.modal-content {
+  border: 0px;
+}
+.overlay-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  background: rgba(255, 255, 255, 0);
+
+  z-index: 1000;
+}
