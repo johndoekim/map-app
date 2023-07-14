@@ -36,7 +36,7 @@ jobs:
         aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws_region: ${{ secrets.AWS_REGION }}
-        application_name: [map-app]
-        environment_name: [Taroot-env]
+        application_name: map-app
+        environment_name: Taroot-env
         version_label: ${{ github.sha }}
         deployment_package: johndoekim/map-app:latest
