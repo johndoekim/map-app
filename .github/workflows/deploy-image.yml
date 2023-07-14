@@ -39,7 +39,7 @@ jobs:
         aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         region: ap-south-1
-        application_name: map-app
+        application_name: taroot
         environment_name: Taroot-env
         version_label: ${{ github.sha }}
         deployment_package: deploy.zip
