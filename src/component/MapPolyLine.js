@@ -59,10 +59,9 @@ const MapPolyLine = () => {
   });
 
     
-    pathlineElevation = pathLineData.map((path, idx) => {
-    return {idx : idx +1 , elevation : path[2]}
-    })
-
+  pathlineElevation = pathLineData.map((path, idx) => {
+    return { idx: idx, elevation: path[2] };
+});
 
 
 
@@ -105,6 +104,35 @@ useEffect(() => {
     window.removeEventListener("resize", updateChartSize);
   };
 }, []);
+
+
+const renderTooltipContent = (e) => {
+  if (e.active && e.payload !== undefined && e.payload[0] !== undefined) {
+      const idx = e.payload[0].payload.idx;
+      const elevation = e.payload[0].value;
+      const ratio = idx / (pathlineElevation.length - 1);
+      const totalM = distanceAndDuration[0].distance;
+      const Mvalue = Math.round(totalM * ratio);
+
+      return (
+        <div
+        className="custom-tooltip"
+        style={{ backgroundColor: "white", padding: "10px" }}
+    >
+        <p>{`${Mvalue}M`}</p>
+        <p style={{ color: "#8884d8" }}>{`고도: ${elevation}m`}</p>
+    </div>
+      );
+  }
+
+  return null;
+};
+
+
+
+
+
+
 
 
 return (
@@ -206,25 +234,35 @@ return (
 
 
       <AreaChart
-      width={chartWidth}
-      height={200}
-      data={pathlineElevation}
-      margin={{
-        top: 10,
-        right: 30,
-        left: 0,
-        bottom: 0
-      }}
-    >
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="idx" tickFormatter={tick => Math.round((distanceAndDuration[0].distance * tick / pathlineElevation.length) / 10) * 10} />
-
-      <YAxis tickFormatter={tick => format(".0f")(tick) + "m"} /> {/* Y 축 단위에 'm' 추가 */}
-      <Tooltip />
-      <Area type="monotone" dataKey="elevation" stroke="#8884d8" fill="#8884d8" />
-    </AreaChart>
-
-
+            width={chartWidth}
+            height={chartHeight}
+            data={pathlineElevation}
+            margin={{
+                top: 10,
+                right: 30,
+                left: 0,
+                bottom: 0,
+            }}
+        >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis
+                dataKey="idx"
+                tickFormatter={(tick) => {
+                    const ratio = tick / (pathlineElevation.length - 1);
+                    const totalM = distanceAndDuration[0].distance;
+                    const roundedM = Math.round((totalM * ratio) / 10) * 10;
+                    return roundedM + "M";
+                }}
+            />
+            <YAxis tickFormatter={(tick) => format(".0f")(tick) + "m"} />
+            <Tooltip content={renderTooltipContent} />
+            <Area
+                type="monotone"
+                dataKey="elevation"
+                stroke="#8884d8"
+                fill="#8884d8"
+            />
+        </AreaChart>
 
 
 
