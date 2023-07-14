@@ -29,6 +29,9 @@ jobs:
         push: true
         tags: johndoekim/map-app:latest
 
+    - name: Generate Deployment Package
+      run: zip -r deploy.zip * -x "**node_modules**"
+
 
     - name: Deploy to AWS Elastic Beanstalk
       uses: einaregilsson/beanstalk-deploy@v21
@@ -39,4 +42,4 @@ jobs:
         application_name: map-app
         environment_name: Taroot-env
         version_label: ${{ github.sha }}
-        deployment_package: johndoekim/map-app:latest
+        deployment_package: deploy.zip
