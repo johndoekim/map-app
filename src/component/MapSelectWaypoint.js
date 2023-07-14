@@ -13,7 +13,7 @@ const MapSelectWaypoint = () =>{
 
 
     const [gpsPoint, setGpsPoint] = useState();
-    const [workoutWaypoint, setWorkoutWaypoint] = useState()
+    const [wayPoint, setWayPoint] = useState()
     const [routeData, setRouteData] = useState()
 
     const gpsData = location.state ? location.state.gpsData : null;
@@ -25,20 +25,45 @@ const MapSelectWaypoint = () =>{
     },[])
 
 
+
+
     
 
+    const WorkoutClickHandler = async () => {
+      try {
+          const body = {
+              'startPoint' : gpsPoint.sp_nearest_station_coor,
+              'endPoint' : gpsPoint.tp_nearest_station_coor
+          } 
+          
+          const response = await axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_highest_coordinate', body);
+          const wayPoint = JSON.parse(response.data.body);
+          setWayPoint(wayPoint); 
+  
+          const newBody = {
+              'startPoint' : gpsPoint.sp_nearest_station_coor,
+              'wayPoint' : wayPoint.result,
+              'endPoint' : gpsPoint.tp_nearest_station_coor
+          };
+          
+          const secondResponse = await axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_route_purpose_geojson', newBody);
+          console.log(secondResponse);
+          setRouteData(secondResponse.data)
+  
+      } catch (error) {
+          console.log(error);
+      }
+  }
+  
+  
 
-    const WorkoutClickHandler = () =>{
-    }
-
-    // const body = {gpsPoint}
 
     const FastRouteClickHandler = () =>{
-    
-      const body = {'startPoint' : gpsPoint.sp_nearest_station_coor,
-                    'endPoint' : gpsPoint.tp_nearest_station_coor} 
-    
+      
+    const body = {'startPoint' : gpsPoint.sp_nearest_station_coor,
+    'endPoint' : gpsPoint.tp_nearest_station_coor} 
 
+    
       axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_fast_route',body)
       .then(res => 
         {
@@ -58,6 +83,7 @@ const MapSelectWaypoint = () =>{
         })
       }
     },[routeData])
+
 
 
 

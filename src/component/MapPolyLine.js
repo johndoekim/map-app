@@ -217,7 +217,8 @@ return (
       }}
     >
       <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="idx" />
+      <XAxis dataKey="idx" tickFormatter={tick => Math.round((distanceAndDuration[0].distance * tick / pathlineElevation.length) / 10) * 10} />
+
       <YAxis tickFormatter={tick => format(".0f")(tick) + "m"} /> {/* Y 축 단위에 'm' 추가 */}
       <Tooltip />
       <Area type="monotone" dataKey="elevation" stroke="#8884d8" fill="#8884d8" />
