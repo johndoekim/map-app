@@ -1,6 +1,20 @@
 import { useEffect, useState } from "react";
 import {  CustomOverlayMap, Map, MapMarker, MapTypeId, Polyline, ZoomControl } from "react-kakao-maps-sdk";
 import { useLocation } from "react-router-dom";
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip
+} from "recharts";
+import { format } from "d3-format";
+
+
+
+
+
 const kakao = window.kakao;
 
 
@@ -13,7 +27,10 @@ const MapPolyLine = () => {
 
   const [startMark, setStartMark] = useState([]);
   const [endMark, setEndMark] = useState([]);
-  // const [distanceAndDuration, setDistanceandDuration] = useState([]);
+  const [chartWidth, setChartWidth] = useState(window.innerWidth * 0.6);
+  const [chartHeight, setChartHeight] = useState(window.innerHeight * 0.35); // 초기 높이 설정. 예를 들어 40%로 설정.
+  
+
 
   // console.log(routeData)
 
@@ -23,10 +40,14 @@ const MapPolyLine = () => {
 
   let distanceAndDuration = [];
 
+  let pathlineElevation = [];
+
   if (routeData) {
     const jsonObject = JSON.parse(routeData.body);
     const routeGpx = JSON.parse(jsonObject.route_gpx);
     const pathLineData = routeGpx.features[0].geometry.coordinates;
+
+    console.log(pathLineData)
 
     
     distanceAndDuration = [routeGpx.features[0].properties.summary].map((dadinfo) =>{
@@ -36,14 +57,18 @@ const MapPolyLine = () => {
     polylinepath = pathLineData.map((path) => {
     return { lat: path[1], lng: path[0]};
   });
+
+    
+    pathlineElevation = pathLineData.map((path, idx) => {
+    return {idx : idx +1 , elevation : path[2]}
+    })
+
+
+
+
 }
 
-
-console.log(distanceAndDuration[0])
-
-console.log(distanceAndDuration)
-
-
+console.log(pathlineElevation)
 
     
 
@@ -54,12 +79,6 @@ useEffect(() => {
     setMiddleValue(polylinepath[middleIndex]);
   }
 }, [polylinepath, middleValue]);
-
-// //출발지
-// console.log(polylinepath[0])
-
-// //도착지
-// console.log(polylinepath[polylinepath.length -1])
 
 
 
@@ -74,6 +93,19 @@ useEffect(() => {
 
 
 
+const updateChartSize = () => {
+  setChartWidth(window.innerWidth * 0.6);
+  setChartHeight(window.innerHeight * 0.35); // window.innerHeight에 원하는 백분율로 조정.
+};
+
+useEffect(() => {
+  window.addEventListener("resize", updateChartSize);
+  
+  return () => {
+    window.removeEventListener("resize", updateChartSize);
+  };
+}, []);
+
 
 return (
   <>
@@ -84,7 +116,7 @@ return (
           width: "60%",
           height: "600px",
         }}
-        level={6}
+        level={5}
       >
         <ZoomControl position={kakao.maps.ControlPosition.TOPRIGHT}/>
 
@@ -114,7 +146,7 @@ return (
           ))}
 
 <CustomOverlayMap position={middleValue}
-              yAnchor={1}
+              yAnchor={2.5}
               zIndex={2}>
   <div
     className="label"
@@ -171,6 +203,34 @@ return (
 
         
       </Map> 
+
+
+      <AreaChart
+      width={chartWidth}
+      height={200}
+      data={pathlineElevation}
+      margin={{
+        top: 10,
+        right: 30,
+        left: 0,
+        bottom: 0
+      }}
+    >
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="idx" />
+      <YAxis tickFormatter={tick => format(".0f")(tick) + "m"} /> {/* Y 축 단위에 'm' 추가 */}
+      <Tooltip />
+      <Area type="monotone" dataKey="elevation" stroke="#8884d8" fill="#8884d8" />
+    </AreaChart>
+
+
+
+
+
+
+
+
+
 
 
       

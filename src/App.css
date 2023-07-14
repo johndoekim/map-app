@@ -61,6 +61,7 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.16), 0 2px 4px rgba(0, 0, 0, 0.12);
   cursor: pointer;
   transition: transform 0.3s ease-in-out;
+  overflow: hidden; /* 이미지가 카드 외부로 벗어나지 않도록 함 */
 }
 
 .waypoint-card:hover {
@@ -68,9 +69,8 @@
 }
 
 .waypoint-card img {
-  width: 100%;
-  height: 10rem;
-  object-fit: cover;
+  width: 90%;
+  height: 90%;
   border-radius: 8px 8px 0 0;
 }
 

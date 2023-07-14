@@ -6,7 +6,7 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 
 
-const Main = () =>{
+const MapMain = () =>{
 
     const {register, handleSubmit, watch, formState: {errors}} = useForm();
     const [gpsData, setGpsData]= useState();
@@ -66,7 +66,7 @@ useEffect(() => {
             {errors?.SP?.type ==="pattern" && <p>한글, 영어, 숫자 이외 입력이 불가능합니다.</p>}
 
 
-            <input type="submit"/>
+            <input type="submit" value="목적을 선택해주세요"/>
 
         </form>
 
@@ -80,4 +80,4 @@ useEffect(() => {
 
 }
 
-export default Main;
+export default MapMain;
