@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   backend:
-    image: "johndoekim/map:0.1"
+    image: "johndoekim/map:latest"
     ports: 
       - "80:80"
     restart: "always"
