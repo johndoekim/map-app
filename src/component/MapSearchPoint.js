@@ -10,14 +10,6 @@ const kakao = window.kakao;
 
 const MapSearchPoint = () => {
 
-  // const location = useLocation();
-
-  // if(location.state)
-
-
-
-
-
 
   const [info, setInfo] = useState();
   const [markers, setMarkers] = useState([]);
@@ -26,7 +18,7 @@ const MapSearchPoint = () => {
   const [shouldPerformSearch, setShouldPerformSearch] = useState(false);
   const [startPoint, setStartPoint] = useState(null);
   const [destination, setDestination] = useState(null);
-  const [routeData, setRouteData]= useState();
+  const [gpsData, setGpsData]= useState();
 
   const history = useHistory();
 
@@ -45,16 +37,16 @@ const MapSearchPoint = () => {
   const handleFindRoute = () => {
     if (startPoint && destination) {
       const body = {
-        startPoint: startPoint.content, 
-        destination: destination.content,
+        'startPoint': startPoint.content, 
+        'endPoint': destination.content,
       };
       axios
         .post(
-          "https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app",
+          "https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_route_from_search_point",
           body
         )
         .then((response) => {
-          setRouteData(response.data);
+          setGpsData(response.data);
           console.log(response);
         })
         .catch((error) => {
@@ -67,13 +59,13 @@ const MapSearchPoint = () => {
 
   //axios에서 전달받은 경로 데이터를 함께 푸쉬
   useEffect(() => {
-    if (routeData) {
+    if (gpsData) {
       history.push({
-        pathname: "/MapPolyLine",
-        state: { routeData: routeData },
+        pathname: "/MapSelectWaypoint",
+        state: { gpsData: gpsData },
       });
     }
-  }, [routeData]);
+  }, [gpsData]);
 
 
   //맵 검색

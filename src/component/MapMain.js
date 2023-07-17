@@ -58,7 +58,7 @@ useEffect(() => {
 
         <form onSubmit={handleSubmit(onSubmit)}>
             <input placeholder="출발지" {...register("SP", 
-            {required:true, minLength:2, maxLength: 10, pattern: /^[A-Za-z가-힣0-9]+$/iu })}/>
+            {required:true, minLength:2, maxLength: 10, pattern:  /^[A-Za-z가-힣0-9\s]+$/iu  })}/>
             {errors?.SP?.type ==="required" && <p>필수 입력 항목입니다.</p>}
             {errors?.SP?.type ==="minLength" && <p>두 글자 이상 설정이 가능합니다.</p>}
             {errors?.SP?.type ==="maxLength" && <p>열 글자 초과 설정이 불가능합니다.</p>}
@@ -66,7 +66,7 @@ useEffect(() => {
 
 
             <input placeholder="도착지" {...register("EP", 
-            {required:true, minLength:2, maxLength: 10, pattern: /^[A-Za-z가-힣0-9]+$/iu })}/>
+            {required:true, minLength:2, maxLength: 10, pattern:  /^[A-Za-z가-힣0-9\s]+$/iu  })}/>
             {errors?.SP?.type ==="required" && <p>필수 입력 항목입니다.</p>}
             {errors?.SP?.type ==="minLength" && <p>두 글자 이상 설정이 가능합니다.</p>}
             {errors?.SP?.type ==="maxLength" && <p>열 글자 초과 설정이 불가능합니다.</p>}

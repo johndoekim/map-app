@@ -28,7 +28,7 @@ const MapPolyLine = () => {
   const [startMark, setStartMark] = useState([]);
   const [endMark, setEndMark] = useState([]);
   const [chartWidth, setChartWidth] = useState(window.innerWidth * 0.6);
-  const [chartHeight, setChartHeight] = useState(window.innerHeight * 0.35); // 초기 높이 설정. 예를 들어 40%로 설정.
+  const [chartHeight, setChartHeight] = useState(window.innerHeight * 0.35); 
   
 
 
