@@ -7,7 +7,6 @@ import LoadingModal from "./LoadingModal";
 
 
 
-
 const MapMain = () =>{
 
     const {register, handleSubmit, watch, formState: {errors}} = useForm();
