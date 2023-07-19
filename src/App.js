@@ -7,6 +7,7 @@ import MapSelectWaypoint from './component/MapSelectWaypoint';
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import BoardWrite from './component/BoardWrite';
 import BoardSignUp from './component/BoardSignUp';
+import BoardSignIn from './component/BoardSignIn';
 
 
 
@@ -30,6 +31,9 @@ function App() {
 <Route path="/MapSelectWaypoint" component={MapSelectWaypoint}/>
 
 
+<Route path="BoardSignIn" component={BoardSignIn}/>
+<Route path="BoardSignup" component={BoardSignUp}/>
+
 {/* <Route path="/MapSearchPoint" component={MapSearchPoint}/> */}
 
 
@@ -39,7 +43,7 @@ function App() {
 <BoardWrite/> */}
 
 
-<BoardSignUp/>
+{/* <BoardSignUp/> */}
 
 
 

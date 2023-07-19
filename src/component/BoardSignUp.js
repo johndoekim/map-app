@@ -2,12 +2,15 @@ import { useForm } from "react-hook-form"
 import LoadingModal from "./LoadingModal";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 
 const BoardSignUp = () =>{
 
-    const {register, handleSubmit, watch, formState: {errors}} = useForm();
+    const {register, handleSubmit, watch, formState: {errors}, setFocus} = useForm();
     const [loading, setLoading] = useState(false);
+
+    const history = useHistory();
 
 
 
@@ -24,9 +27,24 @@ const BoardSignUp = () =>{
             'email' : data.email,
                             }
         const res = await axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/board/signup', body)
-        console.log(res)
+        console.log(res.status)
+        if (res.status === 200){
+            alert('회원 가입에 성공하셨습니다.')
+            history.push('/BoardSignIn')
         }
-        catch(err){console.log(err)}
+
+        }
+        catch(err){console.log(err.response.data.errorMessage)
+        if (err.response.data.errorMessage === 'already exist username.'){
+            alert('이미 존재하는 아이디 입니다.')
+        }
+        else if (err.response.data.errorMessage === 'already exist email.'){
+            alert('이미 존재하는 이메일 입니다.')
+        }
+        else if (err.response.data.errorMessage === 'already exist nickname.'){
+            alert('이미 존재하는 닉네임 입니다.')
+        }
+    }
         finally{setLoading(false)}
     }
 
@@ -41,14 +59,14 @@ const BoardSignUp = () =>{
             {errors?.username?.type ==="pattern" && <p>영어, 숫자 이외 입력이 불가능합니다.</p>}
 
 
-            <input placeholder="password" {...register("password", 
+            <input type="password" placeholder="password" {...register("password", 
             {required:true, minLength:8, maxLength: 15, pattern:  /^[A-Za-z가-힣0-9\s~!@#$%]+$/iu  })}/>
             {errors?.password?.type ==="required" && <p>필수 입력 항목입니다.</p>}
             {errors?.password?.type ==="minLength" && <p>여덟 글자 이상 설정이 가능합니다.</p>}
             {errors?.password?.type ==="maxLength" && <p>열 다섯 글자 초과 설정이 불가능합니다.</p>}
             {errors?.password?.type ==="pattern" && <p>!,@,#,$,% 이외의 특수문자는 사용 불가능합니다.</p>}
 
-            <input placeholder="confirm_password" {...register("confirm_password", {
+            <input type="password" placeholder="confirm_password" {...register("confirm_password", {
                 required:true, validate: (value) => {if (watch('password') !== value){
                     return "비밀번호와 일치하지 않습니다." }}})}/>
             {errors?.confirm_password?.type ==="required" && <p>필수 입력 항목입니다.</p>}
