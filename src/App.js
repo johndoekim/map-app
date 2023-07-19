@@ -31,8 +31,8 @@ function App() {
 <Route path="/MapSelectWaypoint" component={MapSelectWaypoint}/>
 
 
-<Route path="BoardSignIn" component={BoardSignIn}/>
-<Route path="BoardSignup" component={BoardSignUp}/>
+<Route path="/BoardSignIn" component={BoardSignIn}/>
+<Route path="/BoardSignup" component={BoardSignUp}/>
 
 {/* <Route path="/MapSearchPoint" component={MapSearchPoint}/> */}
 
