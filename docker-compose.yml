@@ -4,4 +4,5 @@ services:
     image: "johndoekim/map-app:latest"
     ports: 
       - "80:80"
+      - "443:443"
     restart: "always"
