@@ -16,7 +16,6 @@ const BoardSignIn = () => {
     const history = useHistory();
 
 
-
     
 
 
@@ -58,7 +57,7 @@ const BoardSignIn = () => {
                   <Card.Body>
                     <Card.Title>로그인</Card.Title>
                     <Form onSubmit={handleSubmit(onSubmit)}>
-                      <Form.Group>
+                      <Form.Group controlId="formUsername" className="mb-3">
                         <Form.Label>ID</Form.Label>
                         <Form.Control
                           type="text"
@@ -69,7 +68,7 @@ const BoardSignIn = () => {
                           <p className="error-message">필수 입력 항목입니다</p>
                         )}
                       </Form.Group>
-                      <Form.Group>
+                      <Form.Group controlId="formPassword" className="mb-3">
                         <Form.Label>비밀번호</Form.Label>
                         <Form.Control
                           type="password"
