@@ -11,44 +11,64 @@ const BoardList = () =>{
     const [postsData, setPostsData] = useState([]);
     const [lastPostIdx, setLastPostIdx] = useState(null);
 
-    const [ref, inView] = useInView();
+    const [ref, inView] = useInView({
+        threshold: 0.1,
+      });
+    
     const [clickedPostId, setClickedPostId] = useState(null);
 
     const handlePostClick = (postId) => {
         setClickedPostId(postId);
     };
 
+    
+
+
+
+
+
     const fetchPosts = () => {
+        console.log('fechpost called')
+        
         axios
-            .get(`https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/board/list?limit=8&last_post_idx=${lastPostIdx || ''}`)
-            .then((res) => {
-                console.log(res)
-                const jsonPostsData = JSON.parse(res.data.body);
-                setPostsData((prevData) => [...prevData, ...jsonPostsData]);
+          .get(
+            `https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/board/list?limit=50&last_post_idx=${
+              lastPostIdx || ""
+            }`
+          )
+          .then((res) => {
+            const jsonPostsData = res.data;
 
 
-                // setLastPostIdx(jsonPostsData[jsonPostsData.length - 1].post_idx);
+            const newPostsData = jsonPostsData.filter(
+                (newPost) => !postsData.some((oldPost) => oldPost.post_idx === newPost.post_idx)
+              );
+              
+
+
+
+        
+              setPostsData((prevData) => {
+                const updatedData = [...prevData, ...newPostsData];
+                console.log('updatedData:', updatedData);
+                return updatedData;
+              });
+                      
+              if (newPostsData.length > 0) {
+                setLastPostIdx(newPostsData[newPostsData.length - 1].post_idx);
+              }
             })
             .catch((err) => {
-                console.log(err);
+              console.log(err);
             });
     };
 
     useEffect(() => {
-        if (postsData.length === 0) {
-            fetchPosts();
-        }
-    }, [postsData.length]);
-
-    useEffect(() => {
         if (inView) {
-            fetchPosts();
+          fetchPosts();
         }
-    }, [inView]);
-;
-
-
-
+      }, [inView]);
+    
 
 
 
@@ -86,7 +106,7 @@ const BoardList = () =>{
                         {postsData.map(post => 
                         {
                             return(
-                        <tr key={post.post_idx}>
+                            <tr key={post.post_idx}>
                             <td>{post.post_idx}</td>
                             <td className={`title ${clickedPostId === post.post_idx ? 'clicked' : ''}`} 
                             onClick={() => handlePostClick(post.post_idx)}>
@@ -101,9 +121,10 @@ const BoardList = () =>{
                         
                             }
                     </tbody>
+                    <div ref={ref}></div>
+
                 </table>
 
-                <div ref={ref}></div>
             </div>
             
 
