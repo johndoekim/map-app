@@ -2,6 +2,7 @@ import { useState } from "react"
 import LoadingModal from "./LoadingModal";
 import axios from "axios";
 import { useForm } from "react-hook-form";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 
 const BoardSignIn = () => {
@@ -11,7 +12,7 @@ const BoardSignIn = () => {
     const {register, handleSubmit, watch, formState: {errors}, setFocus} = useForm();
 
 
-
+    const history = useHistory();
 
 
     const onSubmit = async data =>{
@@ -29,6 +30,7 @@ const BoardSignIn = () => {
                 sessionStorage.setItem('idx', res.data.idx)
                 sessionStorage.setItem('nickname', res.data.nickname)
                 alert('로그인이 성공하였습니다.')
+                history.push('/boardlist')
             }
         }
         catch(err)

@@ -110,7 +110,7 @@ const BoardList = () =>{
                             <td>{post.post_idx}</td>
                             <td className={`title ${clickedPostId === post.post_idx ? 'clicked' : ''}`} 
                             onClick={() => handlePostClick(post.post_idx)}>
-                            <Link to={`/posts/${post.post_idx}`}>{post.title}</Link>
+                            <Link to={`/board/${post.post_idx}`}>{post.title}</Link>
                             </td>
                             <td>{post.nickname}</td>
                             <td>{post.created_at}</td>

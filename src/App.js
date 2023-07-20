@@ -9,6 +9,9 @@ import BoardWrite from './component/BoardWrite';
 import BoardSignUp from './component/BoardSignUp';
 import BoardSignIn from './component/BoardSignIn';
 import BoardList from './component/BoardList';
+import CardTest from './component/CardTest';
+import GlobalStyle from './component/GlobalStyle ';
+
 
 
 
@@ -20,11 +23,7 @@ function App() {
     return(
     <>
 
-
-{/*     
-<Link to="/MapMain">메인으로(테스트) </Link>
-<Link to="/MapSearchPoint">지도에서 찾기</Link>
- */}
+<GlobalStyle/>
 
 <Route path="/MapSearchPoint" component = {MapSearchPoint}/>
 <Route path="/MapPolyLine" component = {MapPolyLine}/>
@@ -37,17 +36,8 @@ function App() {
 <Route path="/BoardWrite" component={BoardWrite}/>
 <Route path="/BoardList" component={BoardList}/>
 
-{/* <Route path="/MapSearchPoint" component={MapSearchPoint}/> */}
 
-
-{/* 
-
-<hr/>
-<BoardWrite/> */}
-
-
-{/* <BoardSignUp/> */}
-
+<CardTest/>
 
 
 </>
