@@ -17,7 +17,6 @@ const BoardWrite = () =>{
     const [image, setImage] = useState([]);
 
 
-
     //이미지 업로드 검증 단
     const invalidFile = msg => {
         alert(msg);
@@ -84,7 +83,7 @@ const BoardWrite = () =>{
 
 
 
-            const res = await axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/board/write', body, config)
+            const res = await axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/board/write', formData, config)
             console.log(res)
         }
         catch(err){console.log(err)}

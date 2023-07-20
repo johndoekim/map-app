@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import BoardWrite from './component/BoardWrite';
 import BoardSignUp from './component/BoardSignUp';
 import BoardSignIn from './component/BoardSignIn';
+import BoardList from './component/BoardList';
 
 
 
@@ -34,6 +35,7 @@ function App() {
 <Route path="/BoardSignIn" component={BoardSignIn}/>
 <Route path="/BoardSignup" component={BoardSignUp}/>
 <Route path="/BoardWrite" component={BoardWrite}/>
+<Route path="/BoardList" component={BoardList}/>
 
 {/* <Route path="/MapSearchPoint" component={MapSearchPoint}/> */}
 
