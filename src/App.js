@@ -33,6 +33,7 @@ function App() {
 
 <Route path="/BoardSignIn" component={BoardSignIn}/>
 <Route path="/BoardSignup" component={BoardSignUp}/>
+<Route path="/BoardWrite" component={BoardWrite}/>
 
 {/* <Route path="/MapSearchPoint" component={MapSearchPoint}/> */}
 
