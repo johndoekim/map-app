@@ -37,7 +37,7 @@ const BoardSignIn = () => {
         catch(err)
         {console.log(err.response.data.success)
         if(err.response.data.success === false)
-        {alert('로그인에 실패하였습니다.')}
+        {alert('로그인에 실패하였습니다. 아이디와 비밀번호를 다시 확인해 주세요')}
         }
         finally{setLoading(false)}
     
