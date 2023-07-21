@@ -33,7 +33,7 @@ const LoadingModal = (props) => {
                         // margin={20}
                         speedMultiplier={0.4}
                     />
-                    <p style={{ marginTop: "40px", color: "rgb(1B1D1D)", fontWeight: "bold" }}>Loading...</p>
+                <p style={{ marginTop: "40px", color: "#000000", fontWeight: "bold" }}>Loading...</p>
                 </div>
             </Modal>
         </>

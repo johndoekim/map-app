@@ -10,6 +10,8 @@ import {
   Tooltip
 } from "recharts";
 import { format } from "d3-format";
+import styled from "styled-components";
+
 
 
 
@@ -137,8 +139,9 @@ const renderTooltipContent = (e) => {
 
 return (
   <>
+      <Card>
 
-        <Map
+        <StyledMap
         center={middleValue || { lat: 37.566826, lng: 126.9786567 }}
         style={{
           width: "60%",
@@ -147,7 +150,6 @@ return (
         level={5}
       >
         <ZoomControl position={kakao.maps.ControlPosition.TOPRIGHT}/>
-
 
           {startMark.map((marker, index) => (
             <MapMarker
@@ -211,11 +213,7 @@ return (
 
 
 
-          
-          
-
-
-
+  
 
         <Polyline
         path = {polylinepath}
@@ -226,11 +224,8 @@ return (
         />
 
 
-
-
-
         
-      </Map> 
+      </StyledMap> 
 
 
       <AreaChart
@@ -265,6 +260,7 @@ return (
         </AreaChart>
 
 
+        </Card>
 
 
 
@@ -275,6 +271,37 @@ return (
       
   </>
 );
+
+
+
+
+
+
+
+
 };
+
+
+const Card = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fff;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+  max-width: 960px;
+  margin: 20px auto;
+`;
+
+const StyledMap = styled(Map)`
+  width: 100%;
+  height: 600px;
+  margin-bottom: 15px;
+
+  @media (min-width: 768px) {
+    width: 60%;
+  }
+`;
 
 export default MapPolyLine;

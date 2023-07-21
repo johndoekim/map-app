@@ -11,7 +11,7 @@ const CardTest = () => {
     const [postsData, setPostsData] = useState([]);
     const [lastPostIdx, setLastPostIdx] = useState(null);
     const [ref, inView] = useInView({
-        threshold: 0.1,
+        threshold: 0.3,
       });
     
     const [clickedPost_idx, setClickedPost_idx] = useState(null);
@@ -22,7 +22,7 @@ const CardTest = () => {
         
         axios
           .get(
-            `https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/board/list?limit=50&last_post_idx=${
+            `https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/board/list?limit=30&last_post_idx=${
               lastPostIdx || ""
             }`
           )
@@ -69,11 +69,12 @@ const CardTest = () => {
 };    
 
 
-console.log(postsData[0])
 
 
 
   return (
+
+    <>
     <div>
       {postsData.map((post) => (
         <CardComponent
@@ -83,14 +84,24 @@ console.log(postsData[0])
           nickname={post.nickname}
           created_at={post.created_at}
           post_idx={post.post_idx}
-          image_path={`https://mumbai-map-bucket.s3.ap-south-1.amazonaws.com/${post.image_path}`}
+          image_path={`https://seoul-taroot.s3.ap-northeast-2.amazonaws.com/${post.image_path}`}
           onTitleClick={() => handlePostClick(post.post_idx)}
         />
       ))}
 
-<div ref={ref}></div>
 
     </div>
+
+
+
+
+
+
+    <div ref={ref}></div>
+
+
+
+    </>
   );
 };
 

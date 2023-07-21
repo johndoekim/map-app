@@ -115,17 +115,17 @@ const MapSelectWaypoint = () =>{
           
 
           <div className="waypoint-card" onClick={WorkoutClickHandler}>
-            <img src="/images/waypoint-bicycle.png" alt="운동" />
+            <img src="/images/waypoint-workout.svg" alt="운동" />
             <h3>운동</h3>
           </div>
 
           <div className="waypoint-card">
-            <img src="여행이미지URL" alt="힐링" />
+            <img src="/images/waypoint-bicycle.png" alt="힐링" />
             <h3>힐링</h3>
           </div>
 
           <div className="waypoint-card">
-            <img src="/images/waypoint-food.png" alt="맛집" />
+            <img src="/images/waypoint-food-bicycle.svg" alt="맛집" />
             <h3>맛집</h3>
           </div>
 

@@ -15,7 +15,6 @@ import GlobalStyle from './component/GlobalStyle ';
 
 
 
-
 function App() {
 
 
@@ -35,8 +34,6 @@ function App() {
 <Route path="/BoardSignup" component={BoardSignUp}/>
 <Route path="/BoardWrite" component={BoardWrite}/>
 <Route path="/BoardList" component={CardTest}/>
-
-
 
 
 
