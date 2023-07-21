@@ -29,9 +29,14 @@ const Sidebar = ({ sidebarOpen, isLogin }) => (
         <StyledLink to="/boardsignin">로그인</StyledLink>
       </SidebarItem>
     )}
+
+{isLogin && (
+
     <SidebarItem>
       <StyledLink to="/boardwrite">글쓰기</StyledLink>
     </SidebarItem>
+)}
+
     <SidebarItem>
       <StyledLink to="/boardlist">게시판</StyledLink>
     </SidebarItem>

@@ -16,6 +16,7 @@ import Header from './component/Header';
 import Sidebar from './component/SideBar';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import PrivateRoute from './component/PrivateRoute';
 
 
 function App() {
@@ -56,15 +57,20 @@ function App() {
 <Sidebar sidebarOpen={sidebarOpen} isLogin={isLogin} handleLogout={handleLogout}/>
 <MainContainer>
 
+
+  {/* 지도 */}
+
 <Route path="/MapSearchPoint" component = {MapSearchPoint}/>
 <Route path="/MapPolyLine" component = {MapPolyLine}/>
 <Route path="/MapMain" component={MapMain}/>
 <Route path="/MapSelectWaypoint" component={MapSelectWaypoint}/>
 
 
+{/* 게시판 */}
+
 <Route path="/BoardSignIn" component={BoardSignIn}/>
-<Route path="/BoardSignup" component={BoardSignUp}/>
-<Route path="/BoardWrite" component={BoardWrite}/>
+<PrivateRoute path="/BoardSignup" component={BoardSignUp}/>
+<PrivateRoute path="/BoardWrite" component={BoardWrite}/>
 <Route path="/BoardList" component={CardTest}/>
 
 </MainContainer>
