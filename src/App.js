@@ -17,14 +17,15 @@ import Sidebar from './component/SideBar';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import PrivateRoute from './component/PrivateRoute';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { DevTools } from 'react-query/devtools';
+
+const queryClient = new QueryClient();
 
 
 function App() {
 
     const [sidebarOpen, setSidebarOpen] = useState(false);
-
-
-
     const [isLogin, setIsLogin] = useState(false);
 
 
@@ -34,7 +35,7 @@ function App() {
         } else {
           setIsLogin(false);
         }
-      });
+      },[isLogin]);
 
 
 
@@ -50,6 +51,7 @@ function App() {
 
     return(
     <>
+<QueryClientProvider client={queryClient}>
 
 <GlobalStyle/>
 
@@ -74,6 +76,8 @@ function App() {
 <Route path="/BoardList" component={CardTest}/>
 
 </MainContainer>
+
+</QueryClientProvider>
 
 </>
     

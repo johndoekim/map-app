@@ -2,8 +2,20 @@ import styled from "styled-components";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import { useState } from "react";
 import { useEffect } from "react";
+import useAuth from './useAuth';
 
-const StyledLink = styled(Link)`
+
+
+
+
+
+
+const Sidebar = ({ sidebarOpen }) => {
+
+  const { data: isLogin } = useAuth();
+
+
+  const StyledLink = styled(Link)`
   text-decoration: none;
   color: #333;
   &:hover {
@@ -13,15 +25,7 @@ const StyledLink = styled(Link)`
 `;
 
 
-
-
-
-const Sidebar = ({ sidebarOpen, isLogin }) => (
-
-
-
-
-  
+  return(
   <SidebarWrapper sidebarOpen={sidebarOpen}>
 
   {!isLogin && (
@@ -45,8 +49,9 @@ const Sidebar = ({ sidebarOpen, isLogin }) => (
     </SidebarItem>
 
   </SidebarWrapper>
-);
+)};
 export default Sidebar;
+
 
 const SidebarWrapper = styled.aside`
   display: flex;
