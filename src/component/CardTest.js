@@ -28,6 +28,7 @@ const CardTest = () => {
           )
           .then((res) => {
             const jsonPostsData = res.data;
+            console.log(res)
 
 
             const newPostsData = jsonPostsData.filter(
@@ -68,7 +69,7 @@ const CardTest = () => {
 };    
 
 
-
+console.log(postsData[0])
 
 
 
@@ -82,6 +83,7 @@ const CardTest = () => {
           nickname={post.nickname}
           created_at={post.created_at}
           post_idx={post.post_idx}
+          image_path={`https://mumbai-map-bucket.s3.ap-south-1.amazonaws.com/${post.image_path}`}
           onTitleClick={() => handlePostClick(post.post_idx)}
         />
       ))}

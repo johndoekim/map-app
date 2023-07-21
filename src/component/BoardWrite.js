@@ -3,6 +3,7 @@ import { renderIntoDocument } from "react-dom/test-utils";
 import { Form, useForm } from "react-hook-form";
 import LoadingModal from "./LoadingModal";
 import axios from "axios";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 
 const BoardWrite = () =>{
@@ -16,6 +17,7 @@ const BoardWrite = () =>{
 
     const [image, setImage] = useState([]);
 
+    const history = useHistory();
 
     //이미지 업로드 검증 단
     const invalidFile = msg => {
@@ -85,8 +87,31 @@ const BoardWrite = () =>{
 
             const res = await axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/board/write', formData, config)
             console.log(res)
+            alert('글 작성에 성공하였습니다.')
+            history.push('/boardlist')
+            
         }
-        catch(err){console.log(err)}
+        catch(err){
+          console.log(err)
+
+          if (err.response.data.message === "Unauthorized")
+          {alert('인증되지 않은 사용자 입니다. 로그인 후 이용해주세요')
+          history.push('/boardsignin')}
+
+          console.log(err.response.data.message)
+
+          if (err.response.data.message === "User is not authorized to access this resource with an explicit deny")
+          {alert('글 작성 권한이 없습니다. 로그인 후 다시 이용해 주세요.')
+          history.push('/boardsignin')}
+
+
+
+
+
+        
+        
+        
+        }
         finally{setLoading(false)}
 
     }
