@@ -42,13 +42,19 @@ const CardComponent = ({ id, title, content, image_path, nickname, post_idx, cre
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
             {image_path && <CardMedia component="img" alt="" height="auto" image={image_path} />}
-            <Typography paragraph>{content}</Typography>
+            <ContentTypography paragraph>{content}</ContentTypography>
           </CardContent>
         </Collapse>
       </Card>
     </StyledCard>
   );
 };
+
+
+
+const ContentTypography = styled(Typography)`
+  white-space: pre-line;
+`;
 
 const StyledCard = styled(Card)`
   width: 100%;

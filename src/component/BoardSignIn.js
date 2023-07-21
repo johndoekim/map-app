@@ -1,8 +1,9 @@
-import { useState } from "react"
+import { useState, forwardRef } from "react"
 import LoadingModal from "./LoadingModal";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import styled from "styled-components";
 
 
 const BoardSignIn = () => {
@@ -42,29 +43,108 @@ const BoardSignIn = () => {
     
     }
 
+    const StyledInput = forwardRef((props, ref) => (
+        <Input {...props} ref={ref} />
+      ));
     
 
-    return(<>
+    return(
+    <>
+
+    <Card>
 
     <form onSubmit={handleSubmit(onSubmit)}>
+    <FormGroup>
 
 
-        <input type="text" placeholder="ID" {...register("username",
+        <StyledInput type="text" placeholder="ID" {...register("username",
         {required:true})}/>
+                   <ErrorMessage>
+
         {errors.username?.type === "required" && <p>필수 입력 항목입니다</p>}
+        </ErrorMessage>
 
-        <input type="password" placeholder="비밀번호" {...register("password",
+        <StyledInput type="password" placeholder="비밀번호" {...register("password",
         {required:true})}/>
+                   <ErrorMessage>
+
         {errors.password?.type === "required" && <p>필수 입력 항목입니다</p>}
+        </ErrorMessage>
 
-        <button type="submit">로그인</button>
+        <SubmitButton type="submit" value="로그인" />
 
+        </FormGroup>
 
     </form>
     
-    
+    </Card>
+
     
     </>)
 }
+
+const FormGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 24px;
+  width: 100%;
+`;
+
+const Input = styled.input`
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px;
+  outline: none;
+  width: 100%;
+  font-size: 14px;
+`;
+
+const ErrorMessage = styled.p`
+  margin-top: 4px;
+  font-size: 14px;
+  color: red;
+`;
+
+const Card = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fff;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+  max-width: 480px;
+  margin: 20px auto;
+`;
+
+const SubmitButton = styled.input`
+  margin-top: 20px;
+  margin-bottom: 20px;
+  background-color: #2ecc71; // 원하는 색상을 여기에 지정하세요.
+  color: #fff;
+  font-size: 18px;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #27ae60; // 원하는 hover 색상을 지정하세요.
+  }
+`;
+
+
+
+
+
+
+
+
+
+
+
+
 
 export default BoardSignIn;

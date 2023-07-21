@@ -29,7 +29,7 @@ const MapPolyLine = () => {
 
   const [startMark, setStartMark] = useState([]);
   const [endMark, setEndMark] = useState([]);
-  const [chartWidth, setChartWidth] = useState(window.innerWidth * 0.6);
+  const [chartWidth, setChartWidth] = useState(window.innerWidth * 0.55);
   const [chartHeight, setChartHeight] = useState(window.innerHeight * 0.35); 
   
 
@@ -95,7 +95,7 @@ useEffect(() => {
 
 
 const updateChartSize = () => {
-  setChartWidth(window.innerWidth * 0.6);
+  setChartWidth(window.innerWidth * 0.5);
   setChartHeight(window.innerHeight * 0.35); // window.innerHeight에 원하는 백분율로 조정.
 };
 
@@ -140,11 +140,12 @@ const renderTooltipContent = (e) => {
 return (
   <>
       <Card>
+      <MapContainer>
 
         <StyledMap
         center={middleValue || { lat: 37.566826, lng: 126.9786567 }}
         style={{
-          width: "60%",
+          width: "100%",
           height: "600px",
         }}
         level={5}
@@ -226,6 +227,7 @@ return (
 
         
       </StyledMap> 
+      </MapContainer>
 
 
       <AreaChart
@@ -294,14 +296,16 @@ const Card = styled.div`
   margin: 20px auto;
 `;
 
-const StyledMap = styled(Map)`
+const MapContainer = styled.div`
+  display: flex;
+  justify-content: center;
   width: 100%;
   height: 600px;
   margin-bottom: 15px;
+`;
 
-  @media (min-width: 768px) {
-    width: 60%;
-  }
+const StyledMap = styled(Map)`
+  flex-grow: 1;
 `;
 
 export default MapPolyLine;
