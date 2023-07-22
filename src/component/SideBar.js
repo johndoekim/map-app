@@ -1,7 +1,5 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
-import { useState } from "react";
-import { useEffect } from "react";
 import useAuth from './useAuth';
 
 
@@ -10,7 +8,7 @@ import useAuth from './useAuth';
 
 
 
-const Sidebar = ({ sidebarOpen }) => {
+const Sidebar = ({ sidebarOpen, handleLogout}) => {
 
   const { data: isLogin } = useAuth();
 
@@ -40,6 +38,18 @@ const Sidebar = ({ sidebarOpen }) => {
       <StyledLink to="/boardwrite">글쓰기</StyledLink>
     </SidebarItem>
 )}
+
+
+{isLogin && (
+
+<SidebarItem onClick={handleLogout}>
+  <StyledLink to="/" >로그아웃</StyledLink>
+</SidebarItem>
+)}
+
+
+
+
 
     <SidebarItem>
       <StyledLink to="/boardlist">게시판</StyledLink>

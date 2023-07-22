@@ -4,7 +4,7 @@ import { Route } from 'react-router-dom/cjs/react-router-dom';
 import MapPolyLine from './component/MapPolyLine';
 import MapMain from './component/MapMain';
 import MapSelectWaypoint from './component/MapSelectWaypoint';
-import { Link } from 'react-router-dom/cjs/react-router-dom.min';
+import { Link, useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import BoardWrite from './component/BoardWrite';
 import BoardSignUp from './component/BoardSignUp';
 import BoardSignIn from './component/BoardSignIn';
@@ -25,6 +25,8 @@ const queryClient = new QueryClient();
 
 function App() {
 
+
+    const history = useHistory();
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [isLogin, setIsLogin] = useState(false);
 
@@ -39,11 +41,12 @@ function App() {
 
 
 
+
       const handleLogout = () => {
         sessionStorage.clear();
         setIsLogin(false);
+        history.push("/");
       };
-    
 
     const toggleSidebar = () => {
       setSidebarOpen(!sidebarOpen);
