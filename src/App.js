@@ -4,21 +4,18 @@ import { Route } from 'react-router-dom/cjs/react-router-dom';
 import MapPolyLine from './component/MapPolyLine';
 import MapMain from './component/MapMain';
 import MapSelectWaypoint from './component/MapSelectWaypoint';
-import { Link, useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import BoardWrite from './component/BoardWrite';
 import BoardSignUp from './component/BoardSignUp';
 import BoardSignIn from './component/BoardSignIn';
-import BoardList from './component/BoardList';
 import CardTest from './component/CardTest';
 import GlobalStyle from './component/GlobalStyle ';
 import styled from "styled-components";
 import Header from './component/Header';
 import Sidebar from './component/SideBar';
 import { useState } from 'react';
-import { useEffect } from 'react';
 import PrivateRoute from './component/PrivateRoute';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { DevTools } from 'react-query/devtools';
+import useAuth from './component/useAuth';
 
 const queryClient = new QueryClient();
 
@@ -26,27 +23,11 @@ const queryClient = new QueryClient();
 function App() {
 
 
-    const history = useHistory();
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    const [isLogin, setIsLogin] = useState(false);
+
+    const { data: isLogin } = useAuth(); 
 
 
-    useEffect(() => {
-        if (sessionStorage.getItem("token")) {
-          setIsLogin(true);
-        } else {
-          setIsLogin(false);
-        }
-      },[isLogin]);
-
-
-
-
-      const handleLogout = () => {
-        sessionStorage.clear();
-        setIsLogin(false);
-        history.push("/");
-      };
 
     const toggleSidebar = () => {
       setSidebarOpen(!sidebarOpen);
@@ -54,12 +35,13 @@ function App() {
 
     return(
     <>
+
 <QueryClientProvider client={queryClient}>
 
 <GlobalStyle/>
 
 <Header />
-<Sidebar sidebarOpen={sidebarOpen} isLogin={isLogin} handleLogout={handleLogout}/>
+<Sidebar sidebarOpen={sidebarOpen} isLogin={isLogin}/>
 <MainContainer>
 
 

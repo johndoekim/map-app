@@ -4,6 +4,122 @@ import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import LoadingModal from "./LoadingModal";
 import styled from "styled-components";
+import MapSelectWaypoint from "./MapSelectWaypoint";
+
+const MapMain = () => {
+  const { register, handleSubmit, watch, formState: { errors } } = useForm();
+  const [gpsData, setGpsData] = useState();
+  const [loading, setLoading] = useState(false);
+
+  const history = useHistory();
+
+  const onSubmit = async data => {
+    setLoading(true);
+
+    try {
+      const body = { startPoint: data.SP, destination: data.EP };
+
+      const res = await axios.post(
+        "https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_geocode",
+        body
+      );
+      setGpsData(res.data);
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+
+
+  // useEffect(() => {
+  //   if (gpsData) {
+  //     history.push({
+  //       pathname: "/MapSelectWaypoint",
+  //       state: { gpsData: gpsData },
+  //     });
+  //   }
+  // }, [gpsData, loading]);
+
+
+
+
+
+  return (
+    <>
+      <div className="modal-box">
+        {loading ? (
+          <LoadingModal show={loading} setShow={setLoading}></LoadingModal>
+        ) : null}
+      </div>
+      <FormWrapper onSubmit={handleSubmit(onSubmit)}>
+        <InputWrapper>
+          <StyledInput
+            placeholder="출발지"
+            {...register("SP", {
+              required: true,
+              minLength: 2,
+              maxLength: 10,
+              pattern: /^[A-Za-z가-힣0-9\s]+$/iu,
+            })}
+          />
+          {errors?.SP?.type === "required" && (
+            <ErrorText>필수 입력 항목입니다.</ErrorText>
+          )}
+          {errors?.SP?.type === "minLength" && (
+            <ErrorText>두 글자 이상 설정이 가능합니다.</ErrorText>
+          )}
+          {errors?.SP?.type === "maxLength" && (
+            <ErrorText>열 글자 초과 설정이 불가능합니다.</ErrorText>
+          )}
+          {errors?.SP?.type === "pattern" && (
+            <ErrorText>한글, 영어, 숫자 이외 입력이 불가능합니다.</ErrorText>
+          )}
+        </InputWrapper>
+        <SubmitButton type="submit" value="목적을 선택해주세요" />
+        <InputWrapper>
+          <StyledInput
+            placeholder="도착지"
+            {...register("EP", {
+              required: true,
+              minLength: 2,
+              maxLength: 10,
+              pattern: /^[A-Za-z가-힣0-9\s]+$/iu,
+            })}
+          />
+          {errors?.EP?.type === "required" && (
+            <ErrorText>필수 입력 항목입니다.</ErrorText>
+          )}
+          {errors?.EP?.type === "minLength" && (
+            <ErrorText>두 글자 이상 설정이 가능합니다.</ErrorText>
+          )}
+          {errors?.EP?.type === "maxLength" && (
+            <ErrorText>열 글자 초과 설정이 불가능합니다.</ErrorText>
+          )}
+          {errors?.EP?.type === "pattern" && (
+            <ErrorText>한글, 영어, 숫자 이외 입력이 불가능합니다.</ErrorText>
+          )}
+        </InputWrapper>
+      </FormWrapper>
+
+      <MapSelectWaypoint gpsData={gpsData}/>
+    </>
+  );
+};
+
+
+
+
+
+
+
+
+
+
+export default MapMain;
 
 const FormWrapper = styled.form`
   display: flex;
@@ -77,100 +193,3 @@ const SubmitButton = styled.input`
     margin-top: 0;
   }
 `;
-
-const MapMain = () => {
-  const { register, handleSubmit, watch, formState: { errors } } = useForm();
-  const [gpsData, setGpsData] = useState();
-  const [loading, setLoading] = useState(false);
-
-  const history = useHistory();
-
-  const onSubmit = async data => {
-    setLoading(true);
-
-    try {
-      const body = { startPoint: data.SP, destination: data.EP };
-
-      const res = await axios.post(
-        "https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_geocode",
-        body
-      );
-      setGpsData(res.data);
-      console.log(res);
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (gpsData) {
-      history.push({
-        pathname: "/MapSelectWaypoint",
-        state: { gpsData: gpsData },
-      });
-    }
-  }, [gpsData, loading]);
-
-  return (
-    <>
-      <div className="modal-box">
-        {loading ? (
-          <LoadingModal show={loading} setShow={setLoading}></LoadingModal>
-        ) : null}
-      </div>
-      <FormWrapper onSubmit={handleSubmit(onSubmit)}>
-        <InputWrapper>
-          <StyledInput
-            placeholder="출발지"
-            {...register("SP", {
-              required: true,
-              minLength: 2,
-              maxLength: 10,
-              pattern: /^[A-Za-z가-힣0-9\s]+$/iu,
-            })}
-          />
-          {errors?.SP?.type === "required" && (
-            <ErrorText>필수 입력 항목입니다.</ErrorText>
-          )}
-          {errors?.SP?.type === "minLength" && (
-            <ErrorText>두 글자 이상 설정이 가능합니다.</ErrorText>
-          )}
-          {errors?.SP?.type === "maxLength" && (
-            <ErrorText>열 글자 초과 설정이 불가능합니다.</ErrorText>
-          )}
-          {errors?.SP?.type === "pattern" && (
-            <ErrorText>한글, 영어, 숫자 이외 입력이 불가능합니다.</ErrorText>
-          )}
-        </InputWrapper>
-        <SubmitButton type="submit" value="목적을 선택해주세요" />
-        <InputWrapper>
-          <StyledInput
-            placeholder="도착지"
-            {...register("EP", {
-              required: true,
-              minLength: 2,
-              maxLength: 10,
-              pattern: /^[A-Za-z가-힣0-9\s]+$/iu,
-            })}
-          />
-          {errors?.EP?.type === "required" && (
-            <ErrorText>필수 입력 항목입니다.</ErrorText>
-          )}
-          {errors?.EP?.type === "minLength" && (
-            <ErrorText>두 글자 이상 설정이 가능합니다.</ErrorText>
-          )}
-          {errors?.EP?.type === "maxLength" && (
-            <ErrorText>열 글자 초과 설정이 불가능합니다.</ErrorText>
-          )}
-          {errors?.EP?.type === "pattern" && (
-            <ErrorText>한글, 영어, 숫자 이외 입력이 불가능합니다.</ErrorText>
-          )}
-        </InputWrapper>
-      </FormWrapper>
-    </>
-  );
-};
-
-export default MapMain;

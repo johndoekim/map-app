@@ -2,15 +2,16 @@ import { useLocation, useHistory } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import LoadingModal from "./LoadingModal";
+import MapMain from "./MapMain";
 
 
 
 
-
-const MapSelectWaypoint = () =>{
-    // const history = useHistory();
+const MapSelectWaypoint = ({gpsData}) =>{
     const location = useLocation();
     const history = useHistory();
+
+    console.log(gpsData)
 
 
     const [gpsPoint, setGpsPoint] = useState();
@@ -19,13 +20,11 @@ const MapSelectWaypoint = () =>{
     const [loading, setLoading] = useState(false);
 
 
-    const gpsData = location.state ? location.state.gpsData : null;
-
     useEffect(() => {
         if(gpsData){
             setGpsPoint(JSON.parse(gpsData.body))
         }
-    },[])
+    },[gpsData])
 
 
     
@@ -59,7 +58,12 @@ const MapSelectWaypoint = () =>{
           setRouteData(secondResponse.data)
   
       } catch (error) {
+          
           console.log(error);
+          if ("TypeError: Cannot read properties of undefined (reading 'sp_nearest_station_coor')")
+          {alert('출발지와 목적지를 먼저 선택해 주세요')}
+
+
       } finally {
         setLoading(false); 
       }
@@ -82,6 +86,12 @@ const MapSelectWaypoint = () =>{
           setRouteData(res.data)
       }catch(error){
         console.log(error);
+        if ("TypeError: Cannot read properties of undefined (reading 'sp_nearest_station_coor')")
+        {alert('출발지와 목적지를 먼저 선택해 주세요')}
+
+
+
+
       }finally{
         setLoading(false);
       }

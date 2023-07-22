@@ -29,7 +29,7 @@ const MapPolyLine = () => {
 
   const [startMark, setStartMark] = useState([]);
   const [endMark, setEndMark] = useState([]);
-  const [chartWidth, setChartWidth] = useState(window.innerWidth * 0.55);
+  const [chartWidth, setChartWidth] = useState(window.innerWidth * 0.525);
   const [chartHeight, setChartHeight] = useState(window.innerHeight * 0.35); 
   
 

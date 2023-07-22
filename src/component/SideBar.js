@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import useAuth from './useAuth';
+import { useEffect } from "react";
 
 
 
@@ -8,7 +9,7 @@ import useAuth from './useAuth';
 
 
 
-const Sidebar = ({ sidebarOpen, handleLogout}) => {
+const Sidebar = ({ sidebarOpen}) => {
 
   const { data: isLogin } = useAuth();
 
@@ -21,6 +22,17 @@ const Sidebar = ({ sidebarOpen, handleLogout}) => {
     text-shadow: 1px 1px 2px #000000;
   }
 `;
+
+
+
+const handleLogout = () => {
+  sessionStorage.clear();
+  alert('로그아웃 되었습니다.')
+};
+
+
+console.log(isLogin)
+
 
 
   return(
@@ -48,10 +60,6 @@ const Sidebar = ({ sidebarOpen, handleLogout}) => {
       <StyledLink to="/boardwrite">글쓰기</StyledLink>
     </SidebarItem>
 )}
-
-
-
-
 
 
     <SidebarItem>
