@@ -32,6 +32,16 @@ const Sidebar = ({ sidebarOpen, handleLogout}) => {
       </SidebarItem>
     )}
 
+
+    
+{isLogin && (
+
+<SidebarItem onClick={handleLogout}>
+  <StyledLink to="/" >로그아웃</StyledLink>
+</SidebarItem>
+)}
+
+
 {isLogin && (
 
     <SidebarItem>
@@ -39,13 +49,6 @@ const Sidebar = ({ sidebarOpen, handleLogout}) => {
     </SidebarItem>
 )}
 
-
-{isLogin && (
-
-<SidebarItem onClick={handleLogout}>
-  <StyledLink to="/" >로그아웃</StyledLink>
-</SidebarItem>
-)}
 
 
 
