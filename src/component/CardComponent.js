@@ -14,7 +14,6 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 
 const CardComponent = ({
-  id,
   title,
   content,
   image_path,
@@ -23,6 +22,7 @@ const CardComponent = ({
   user_idx,
   created_at,
   onTitleClick,
+  onEdit
 }) => {
 
 
@@ -38,14 +38,13 @@ const CardComponent = ({
   };
 
   const handleEditClick = () => {
-    console.log('Edit button clicked');
+    onEdit(post_idx);
   };
 
+
+
+
   const handleDeleteClick = () => {
-    console.log('delete button clicked');
-
-
-    
     const config = {
       headers: {
       'Authorization': sessionStorage.getItem('token'),
@@ -71,7 +70,7 @@ const CardComponent = ({
 });}
 
 
-
+//권한 확인 관련
   const [logineduserIdx, setLoginedUserIdx] = useState()
   const [loginednickname, setLoginedNickname] = useState()
 
@@ -82,6 +81,9 @@ const CardComponent = ({
     
   },[logineduserIdx, loginednickname])
 
+
+
+  //alert 관련
   const handleCloseSnackbar = (event, reason) => {
     if (reason === 'clickaway') {
       return;

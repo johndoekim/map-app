@@ -18,6 +18,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import useAuth from './component/useAuth';
 import { ConfirmProvider } from 'material-ui-confirm';
 import CardComponent from './component/CardComponent';
+import BoardEdit from './component/BoardEdit';
 
 const queryClient = new QueryClient();
 
@@ -62,6 +63,8 @@ function App() {
 <PrivateRoute path="/BoardSignup" component={BoardSignUp}/>
 <PrivateRoute path="/BoardWrite" component={BoardWrite}/>
 <Route path="/BoardList" component={CardTest}/>
+<Route path="/BoardEdit/:post_idx" component={BoardEdit} />
+
 
 
 </MainContainer>

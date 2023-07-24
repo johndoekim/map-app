@@ -71,6 +71,9 @@ const CardTest = () => {
 
 
 
+const handleEdit = (post_idx) => {
+  history.push(`/BoardEdit/${post_idx}`);
+};
 
 
   return (
@@ -87,6 +90,7 @@ const CardTest = () => {
           post_idx={post.post_idx}
           image_path={`https://seoul-taroot.s3.ap-northeast-2.amazonaws.com/${post.image_path}`}
           onTitleClick={() => handlePostClick(post.post_idx)}
+          onEdit={handleEdit}
         />
       ))}
 
