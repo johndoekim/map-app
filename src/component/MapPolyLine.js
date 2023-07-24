@@ -34,7 +34,7 @@ const MapPolyLine = () => {
   
 
 
-  // console.log(routeData)
+  console.log(routeData)
 
   const [middleValue, setMiddleValue] = useState(null);
 

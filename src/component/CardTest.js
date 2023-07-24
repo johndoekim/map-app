@@ -65,8 +65,9 @@ const CardTest = () => {
 
   const handlePostClick = (post_idx) => {
     setClickedPost_idx(post_idx);
-    history.push(`/board/${post_idx}`);
+    // history.push(`/board/${post_idx}`);
 };    
+
 
 
 

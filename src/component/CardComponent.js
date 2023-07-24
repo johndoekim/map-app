@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -6,14 +6,91 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
+import Button from '@mui/material/Button'; 
 import styled from 'styled-components';
+import { useConfirm } from "material-ui-confirm";
+import axios from 'axios';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
-const CardComponent = ({ id, title, content, image_path, nickname, post_idx, created_at, onTitleClick }) => {
+const CardComponent = ({
+  id,
+  title,
+  content,
+  image_path,
+  nickname,
+  post_idx,
+  user_idx,
+  created_at,
+  onTitleClick,
+}) => {
+
+
+  const confirm = useConfirm();
+
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+
   const [expanded, setExpanded] = useState(false);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+
+  const handleEditClick = () => {
+    console.log('Edit button clicked');
+  };
+
+  const handleDeleteClick = () => {
+    console.log('delete button clicked');
+
+
+    
+    const config = {
+      headers: {
+      'Authorization': sessionStorage.getItem('token'),
+    }};
+
+    const body = {'post_idx' : post_idx}
+
+
+    confirm({description : "정말로 게시글을 삭제 하시겠습니까?"})
+    .then(() => {
+      axios
+        .post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/board/delete', body, config)
+        .then(res => {
+          console.log(res);
+          setSnackbarOpen(true);
+          window.location.reload()
+
+          
+        });
+    })
+.catch(() => {
+  console.log('back');
+});}
+
+
+
+  const [logineduserIdx, setLoginedUserIdx] = useState()
+  const [loginednickname, setLoginedNickname] = useState()
+
+
+  useEffect(() => {
+    setLoginedNickname(sessionStorage.getItem('nickname'))
+    setLoginedUserIdx(sessionStorage.getItem('idx'))
+    
+  },[logineduserIdx, loginednickname])
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbarOpen(false);
+  };
+  
+
+
 
   return (
     <StyledCard>
@@ -36,6 +113,22 @@ const CardComponent = ({ id, title, content, image_path, nickname, post_idx, cre
             <Grid item>
               <Typography variant="subtitle2" align="right">작성자: {nickname}</Typography>
               <Typography variant="body2" align="right">작성 시각: {created_at}</Typography>
+
+              {loginednickname === nickname && (
+                <Box display="flex" justifyContent="flex-end" marginTop={1}>
+                  <Button variant="outlined" color="primary" onClick={handleEditClick}>
+                    수정
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    onClick={handleDeleteClick}
+                    style={{ marginLeft: 8 }}
+                  >
+                    삭제
+                  </Button>
+                </Box>
+              )}
             </Grid>
           </Grid>
         </CardContent>
@@ -46,11 +139,29 @@ const CardComponent = ({ id, title, content, image_path, nickname, post_idx, cre
           </CardContent>
         </Collapse>
       </Card>
+
+
+{/* alert 처리 */}
+
+      <Snackbar
+      open={snackbarOpen}
+      autoHideDuration={6000}
+      onClose={handleCloseSnackbar}
+      anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+    >
+      <MuiAlert onClose={handleCloseSnackbar} severity="success">
+        게시글이 성공적으로 삭제되었습니다.
+      </MuiAlert>
+    </Snackbar>
+
+{/* alert 처리 */}
+
+
+
+
     </StyledCard>
   );
 };
-
-
 
 const ContentTypography = styled(Typography)`
   white-space: pre-line;

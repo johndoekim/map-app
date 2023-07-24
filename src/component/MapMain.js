@@ -5,6 +5,13 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import LoadingModal from "./LoadingModal";
 import styled from "styled-components";
 import MapSelectWaypoint from "./MapSelectWaypoint";
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
+
+
+
+
 
 const MapMain = () => {
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
@@ -12,6 +19,10 @@ const MapMain = () => {
   const [loading, setLoading] = useState(false);
 
   const history = useHistory();
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+
+
 
   const onSubmit = async data => {
     setLoading(true);
@@ -29,8 +40,18 @@ const MapMain = () => {
       console.log(err);
     } finally {
       setLoading(false);
+      setSnackbarOpen(true)
     }
   };
+
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbarOpen(false);
+  };
+  
 
 
 
@@ -79,7 +100,7 @@ const MapMain = () => {
             <ErrorText>한글, 영어, 숫자 이외 입력이 불가능합니다.</ErrorText>
           )}
         </InputWrapper>
-        <SubmitButton type="submit" value="출발지와 도착지를 입력해주세요" />
+        <SubmitButton type="submit" value="출발지와 목적지를 입력해주세요" />
         <InputWrapper>
           <StyledInput
             placeholder="도착지"
@@ -104,6 +125,20 @@ const MapMain = () => {
           )}
         </InputWrapper>
       </FormWrapper>
+
+
+
+      
+      <Snackbar
+      open={snackbarOpen}
+      autoHideDuration={6000}
+      onClose={handleCloseSnackbar}
+      anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+    >
+      <MuiAlert onClose={handleCloseSnackbar} severity="success">
+        출발지와 목적지가 성공적으로 설정되었습니다.
+      </MuiAlert>
+    </Snackbar>
 
       <MapSelectWaypoint gpsData={gpsData}/>
     </>

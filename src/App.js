@@ -16,6 +16,8 @@ import { useState } from 'react';
 import PrivateRoute from './component/PrivateRoute';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import useAuth from './component/useAuth';
+import { ConfirmProvider } from 'material-ui-confirm';
+import CardComponent from './component/CardComponent';
 
 const queryClient = new QueryClient();
 
@@ -37,10 +39,11 @@ function App() {
     <>
 
 <QueryClientProvider client={queryClient}>
+<ConfirmProvider>
 
 <GlobalStyle/>
 
-<Header />
+<Header toggleSidebar={toggleSidebar}/>
 <Sidebar sidebarOpen={sidebarOpen} isLogin={isLogin}/>
 <MainContainer>
 
@@ -60,8 +63,9 @@ function App() {
 <PrivateRoute path="/BoardWrite" component={BoardWrite}/>
 <Route path="/BoardList" component={CardTest}/>
 
-</MainContainer>
 
+</MainContainer>
+</ConfirmProvider>
 </QueryClientProvider>
 
 </>
