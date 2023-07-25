@@ -9,6 +9,7 @@ import SuccessModal from "./SuccessModal";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import { MenuItem, FormControl, Select, InputLabel } from '@mui/material';
 
 
 
@@ -20,6 +21,20 @@ const BoardWrite = () =>{
   
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
+
+
+  //루트 저장 및 선택
+  const [routeDataFromDB, setRouteDataFromDB] = useState([]);
+  const [selectedRoute, setSelectedRoute] = useState();
+
+  console.log(selectedRoute)
+
+
+  
+  const handleChange = (e) => {
+    setSelectedRoute(e.target.value);
+  };
 
 
   //로딩
@@ -36,6 +51,7 @@ const BoardWrite = () =>{
     const [image, setImage] = useState([]);
 
     const history = useHistory();
+
 
     //이미지 업로드 검증 단
     const invalidFile = msg => {
@@ -71,13 +87,27 @@ const BoardWrite = () =>{
       const getStoredRoute = async () =>{
         try{
           
-          const res = await axios.get(`https://seoul-taroot.s3.ap-northeast-2.amazonaws.com/board/route/40_2023-07-25+17%3A48%3A19.690622.json`)
+          const config = {
+            headers: {
+            'Authorization': sessionStorage.getItem('token'),
+          }};
+
+          const res = await axios.get(`https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_route_from_db`, config)
           console.log(res)
+          setRouteDataFromDB(res.data)
+          
 
         }catch(err){console.log(err)}
       }
 
-      getStoredRoute()
+      useState(() =>{
+        getStoredRoute()
+      },[])
+
+
+      console.log(routeDataFromDB)
+
+
 
 
 
@@ -213,6 +243,25 @@ const BoardWrite = () =>{
 
 
     <SubmitButton type="submit" value="글 작성" />
+
+
+
+    <FormControl fullWidth variant="outlined">
+      <InputLabel id="route-select-label">루트 선택</InputLabel>
+      <Select
+        labelId="route-select-label"
+        id="route-select"
+        value={selectedRoute}
+        onChange={handleChange}
+        label="루트 선택"
+      >
+        {routeDataFromDB.map((route) => (
+          <MenuItem key={route.route_idx} value={route}>
+            {`루트 ${route.route_idx}: ${route.created_at}, ${route.workout_distance}m`}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
 
 
     </FormGroup>
