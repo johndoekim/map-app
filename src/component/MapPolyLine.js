@@ -11,6 +11,7 @@ import {
 } from "recharts";
 import { format } from "d3-format";
 import styled from "styled-components";
+import axios from "axios";
 
 
 
@@ -36,6 +37,12 @@ const MapPolyLine = () => {
 
   console.log(routeData)
 
+
+
+
+
+
+
   const [middleValue, setMiddleValue] = useState(null);
 
   let polylinepath = [];
@@ -48,6 +55,7 @@ const MapPolyLine = () => {
     const jsonObject = JSON.parse(routeData.body);
     const routeGpx = JSON.parse(jsonObject.route_gpx);
     const pathLineData = routeGpx.features[0].geometry.coordinates;
+    console.log(jsonObject)
 
     console.log(pathLineData)
 
@@ -130,7 +138,26 @@ const renderTooltipContent = (e) => {
   return null;
 };
 
+const handlerSaveRoute = async () =>{
+  try{
 
+    const body = {'body' : routeData, 
+  'workout_distance' : distanceAndDuration[0].distance,
+'workout_time' : distanceAndDuration[0].duration}
+
+    const config = {headers: {
+      'Authorization': sessionStorage.getItem('token'),
+    }};
+
+
+
+    const res = await axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_route_data_from_user', body, config)
+    console.log(res)
+  }
+  catch(err){console.log(err)}
+
+
+}
 
 
 
@@ -140,6 +167,9 @@ const renderTooltipContent = (e) => {
 return (
   <>
       <Card>
+
+        <button onClick={handlerSaveRoute}>루트 저장</button>
+
       <MapContainer>
 
         <StyledMap
