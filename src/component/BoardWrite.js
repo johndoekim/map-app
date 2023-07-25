@@ -65,6 +65,23 @@ const BoardWrite = () =>{
         setImage(files[0]);
       };
 
+      
+      //루트 불러오기 단
+
+      const getStoredRoute = async () =>{
+        try{
+          
+          const res = await axios.get(`https://seoul-taroot.s3.ap-northeast-2.amazonaws.com/board/route/40_2023-07-25+17%3A48%3A19.690622.json`)
+          console.log(res)
+
+        }catch(err){console.log(err)}
+      }
+
+      getStoredRoute()
+
+
+
+
 
 
 
@@ -112,13 +129,6 @@ const BoardWrite = () =>{
           if (err.response.data.message === "User is not authorized to access this resource with an explicit deny")
           {alert('글 작성 권한이 없습니다. 로그인 후 다시 이용해 주세요.')
           history.push('/boardsignin')}
-
-
-
-
-
-        
-        
         
         }
         finally{setLoading(false)}
