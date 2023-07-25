@@ -7,7 +7,6 @@ import styled from "styled-components";
 import { useEffect } from 'react';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
-import SuccessModal from './SuccessModal';
 
 
 const BoardEdit = () =>{
@@ -19,17 +18,6 @@ const BoardEdit = () =>{
 
     const [owned, setOwned] = useState();
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
-    const [modalMessage, setModalMessage] = useState()
-
-    const handleOpenModal = () => {
-    setIsModalOpen(true);
-    };
-
-    const handleCloseModal = () => {
-    setIsModalOpen(false);
-    };
 
 
 
@@ -100,11 +88,11 @@ const BoardEdit = () =>{
           );
 
 
-        setModalMessage("수정이 완료되었습니다.");
-        handleOpenModal();
+          alert('수정이 완료되었습니다')
         
           history.push(`/boardlist`);
-        } catch (error) {
+        } 
+          catch (error) {
           console.error('Failed update post:', error);
           alert('게시물 수정에 실패했습니다.');
         }
@@ -194,12 +182,6 @@ const BoardEdit = () =>{
 </form>
     
 </Card>
-
-<SuccessModal
-  open={isModalOpen}
-  message={modalMessage}
-  onClose={handleCloseModal}
-/>
 
     
     

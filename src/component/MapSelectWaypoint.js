@@ -1,5 +1,5 @@
 import { useLocation, useHistory } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useReducer } from "react";
 import axios from "axios";
 import LoadingModal from "./LoadingModal";
 import MapMain from "./MapMain";
@@ -11,13 +11,17 @@ const MapSelectWaypoint = ({gpsData}) =>{
     const location = useLocation();
     const history = useHistory();
 
-    console.log(gpsData)
 
 
     const [gpsPoint, setGpsPoint] = useState();
     const [wayPoint, setWayPoint] = useState()
     const [routeData, setRouteData] = useState()
     const [loading, setLoading] = useState(false);
+
+
+
+
+    const [anotherWayPoint, setAnotherWayPoint] = useState();
 
 
     useEffect(() => {
@@ -38,52 +42,47 @@ const MapSelectWaypoint = ({gpsData}) =>{
     };
 
 
-    const PurposeClickHandler = async (purpose) =>{
+    const PurposeClickHandler = async (purpose) => {
       setLoading(true);
-      try{
+      try {
         const body = {
-          'startPoint' : gpsPoint.sp_nearest_station_coor,
-          'endPoint' : gpsPoint.tp_nearest_station_coor,
-          'purpose' : purpose
-        }
-
-        const response = await axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_waypoint_food_or_healing', body);
-
-
-        const wayPoint = JSON.parse(response.data.body)
-
-        
-
-        console.log(wayPoint)
-
-
-
-        setWayPoint(wayPoint)
-
-        //웨이포인트 값을 세개를 받아오는데 이걸 정제를 해야 함
-        
-
+          startPoint: gpsPoint.sp_nearest_station_coor,
+          endPoint: gpsPoint.tp_nearest_station_coor,
+          purpose: purpose,
+        };
+    
+        const response = await axios.post(
+          "https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_waypoint_food_or_healing",
+          body
+        );
+    
+        const rawWaypoint = JSON.parse(response.data.body);
+        console.log(rawWaypoint);
+    
+        const wayPoint = await Promise.resolve([rawWaypoint[0].lng, rawWaypoint[0].lat]);
+        console.log(wayPoint);
+    
         const newBody = {
-          'startPoint' : gpsPoint.sp_nearest_station_coor,
-          'wayPoint' : wayPoint.result,
-          'endPoint' : gpsPoint.tp_nearest_station_coor
-      };
+          startPoint: gpsPoint.sp_nearest_station_coor,
+          wayPoint: wayPoint,
+          endPoint: gpsPoint.tp_nearest_station_coor,
+        };
+    
+    
+        const secondResponse = await axios.post(
+          "https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_route_purpose_geojson",
+          newBody
+        );
 
-        const secondResponse = await axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_route_purpose_geojson', newBody);
         console.log(secondResponse);
         setRouteData(secondResponse.data)
-
-    } catch (error) {
-        
+      } catch (error) {
         console.log(error);
-        // if ("TypeError: Cannot read properties of undefined (reading 'sp_nearest_station_coor')")
-        // {alert('출발지와 목적지를 먼저 선택해 주세요')}
-
-
-    } finally {
-      setLoading(false); 
-    }
-}
+      } finally {
+        setLoading(false);
+      }
+    };
+    
 
 
   
@@ -164,6 +163,8 @@ const MapSelectWaypoint = ({gpsData}) =>{
         })
       }
     },[routeData,loading])
+
+
 
 
 
