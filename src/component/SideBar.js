@@ -1,8 +1,11 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import useAuth from './useAuth';
-import { useEffect } from "react";
-
+import { useEffect, useState } from "react";
+import SuccessModal from "./SuccessModal";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 
 
 
@@ -10,6 +13,13 @@ import { useEffect } from "react";
 
 
 const Sidebar = ({ sidebarOpen}) => {
+
+
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   const { data: isLogin } = useAuth();
 
@@ -27,7 +37,7 @@ const Sidebar = ({ sidebarOpen}) => {
 
 const handleLogout = () => {
   sessionStorage.clear();
-  alert('로그아웃 되었습니다.')
+  openModal()
 };
 
 
@@ -36,6 +46,29 @@ console.log(isLogin)
 
 
   return(
+<>
+    <div>
+      <SuccessModal
+        isOpen={isModalOpen}
+        closeModal={closeModal}
+      >
+        <Box>
+          <Typography variant="h6" component="h2">
+            로그아웃 성공 !
+            </Typography>
+
+        </Box>
+      </SuccessModal>
+    </div>
+
+
+
+
+
+
+
+
+
   <SidebarWrapper sidebarOpen={sidebarOpen}>
 
   {!isLogin && (
@@ -70,6 +103,8 @@ console.log(isLogin)
     </SidebarItem>
 
   </SidebarWrapper>
+
+  </>
 )};
 export default Sidebar;
 

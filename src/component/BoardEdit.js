@@ -7,6 +7,11 @@ import styled from "styled-components";
 import { useEffect } from 'react';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import SuccessModal from "./SuccessModal";
+
 
 
 const BoardEdit = () =>{
@@ -17,6 +22,15 @@ const BoardEdit = () =>{
 
 
     const [owned, setOwned] = useState();
+
+
+
+
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+  
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
 
 
 
@@ -88,9 +102,14 @@ const BoardEdit = () =>{
           );
 
 
-          alert('수정이 완료되었습니다')
-        
-          history.push(`/boardlist`);
+          // alert('수정이 완료되었습니다')
+
+
+          setIsModalOpen(true)
+
+
+          // history.push(`/boardlist`);
+
         } 
           catch (error) {
           console.error('Failed update post:', error);
@@ -141,6 +160,29 @@ const BoardEdit = () =>{
 
 
     return(<>
+
+
+<div>
+      <SuccessModal
+        isOpen={isModalOpen}
+        closeModal={closeModal}
+      >
+        <Box>
+          <Typography variant="h6" component="h2">
+            게시글 수정이 완료되었습니다.
+            </Typography>
+
+        </Box>
+      </SuccessModal>
+    </div>
+
+
+
+
+
+    {/* 모달 */}
+
+
     
     
 
@@ -184,6 +226,14 @@ const BoardEdit = () =>{
 </Card>
 
     
+
+
+
+
+
+
+
+
     
     
     </>)

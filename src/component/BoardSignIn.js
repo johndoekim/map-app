@@ -4,9 +4,20 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import styled from "styled-components";
-
+import SuccessModal from "./SuccessModal";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 
 const BoardSignIn = () => {
+
+
+
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
     const [loading, setLoading] = useState(false);
 
@@ -30,8 +41,12 @@ const BoardSignIn = () => {
                 sessionStorage.setItem('token', res.data.token)
                 sessionStorage.setItem('idx', res.data.idx)
                 sessionStorage.setItem('nickname', res.data.nickname)
-                alert('로그인이 성공하였습니다.')
-                history.push('/boardlist')
+
+
+                openModal()
+
+                // alert('로그인이 성공하였습니다.')
+                // history.push('/boardlist')
             }
         }
         catch(err)
@@ -50,6 +65,26 @@ const BoardSignIn = () => {
 
     return(
     <>
+
+
+<div>
+      <SuccessModal
+        isOpen={isModalOpen}
+        closeModal={closeModal}
+      >
+        <Box>
+          <Typography variant="h6" component="h2">
+            로그인 성공 !
+            </Typography>
+
+        </Box>
+      </SuccessModal>
+    </div>
+
+
+
+
+
 
     <Card>
 

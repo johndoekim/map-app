@@ -60,10 +60,10 @@ function App() {
 {/* 게시판 */}
 
 <Route path="/BoardSignIn" component={BoardSignIn}/>
-<PrivateRoute path="/BoardSignup" component={BoardSignUp}/>
+<Route path="/BoardSignup" component={BoardSignUp}/>
 <PrivateRoute path="/BoardWrite" component={BoardWrite}/>
 <Route path="/BoardList" component={CardTest}/>
-<Route path="/BoardEdit/:post_idx" component={BoardEdit} />
+<PrivateRoute path="/BoardEdit/:post_idx" component={BoardEdit} />
 
 
 

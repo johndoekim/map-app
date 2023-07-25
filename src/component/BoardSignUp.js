@@ -5,6 +5,11 @@ import axios from "axios";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import LoadingModal from "./LoadingModal";
 import styled from "styled-components";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import SignupModal from "./SignupModal";
+
 
 
 
@@ -17,6 +22,13 @@ const BoardSignUp = () => {
     setFocus,
   } = useForm();
   const [loading, setLoading] = useState(false);
+
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
 
   const history = useHistory();
 
@@ -36,8 +48,10 @@ const BoardSignUp = () => {
       );
       console.log(res.status);
       if (res.status === 200) {
-        alert("회원 가입에 성공하셨습니다.");
-        history.push("/BoardSignIn");
+        openModal();
+
+        // alert("회원 가입에 성공하셨습니다.");
+        // history.push("/BoardSignIn");
       }
     } catch (err) {
       console.log(err.response.data.errorMessage);
@@ -63,6 +77,30 @@ const BoardSignUp = () => {
 
   return (
     <>
+
+
+<div>
+      <SignupModal
+        isOpen={isModalOpen}
+        closeModal={closeModal}
+      >
+        <Box>
+          <Typography variant="h6" component="h2">
+            회원가입 성공 ! 로그인을 진행해 주세요
+            </Typography>
+
+        </Box>
+      </SignupModal>
+    </div>
+
+
+
+
+
+
+
+
+    
       <Card>
         <form onSubmit={handleSubmit(onSubmit)}>
         <FormGroup>

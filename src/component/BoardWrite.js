@@ -5,10 +5,27 @@ import LoadingModal from "./LoadingModal";
 import axios from "axios";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import styled from "styled-components";
+import SuccessModal from "./SuccessModal";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+
+
+
 
 
 const BoardWrite = () =>{
+  //모달
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
+
+  //로딩
     const [loading, setLoading] = useState(false);
+
+    //파일 업로드
 
     const inputFiles = useRef();
 
@@ -80,8 +97,7 @@ const BoardWrite = () =>{
 
             const res = await axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/board/write', formData, config)
             console.log(res)
-            alert('글 작성에 성공하였습니다.')
-            history.push('/boardlist')
+            setIsModalOpen(true)
             
         }
         catch(err){
@@ -128,6 +144,31 @@ const BoardWrite = () =>{
 
 
     return(<>
+
+
+
+
+
+<div>
+      <SuccessModal
+        isOpen={isModalOpen}
+        closeModal={closeModal}
+      >
+        <Box>
+          <Typography variant="h6" component="h2">
+            게시글 작성이 완료되었습니다.
+            </Typography>
+
+        </Box>
+      </SuccessModal>
+    </div>
+
+
+
+
+
+    {/* 모달 */}
+
 
 
 <Card>
