@@ -91,6 +91,7 @@ const handleEdit = (post_idx) => {
           image_path={`https://seoul-taroot.s3.ap-northeast-2.amazonaws.com/${post.image_path}`}
           onTitleClick={() => handlePostClick(post.post_idx)}
           onEdit={handleEdit}
+          route_path={post.route_path}
         />
       ))}
 

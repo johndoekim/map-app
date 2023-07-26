@@ -12,9 +12,6 @@ import {
 import { format } from "d3-format";
 import styled from "styled-components";
 import axios from "axios";
-import useAuth from './useAuth';
-import Button from '@mui/material/Button';
-import SendIcon from '@mui/icons-material/Send';
 
 
 
@@ -25,15 +22,13 @@ const kakao = window.kakao;
 
 
 
-const MapPolyLine = () => {
+const MapPolyLineForBoard = ({routeData}) => {
 
 
-  const { isLogin, refetch } = useAuth();
+//   const location = useLocation();
+//   const routeData = location.state ? location.state.routeData : null;
 
 
-
-  const location = useLocation();
-  const routeData = location.state ? location.state.routeData : null;
 
   const [startMark, setStartMark] = useState([]);
   const [endMark, setEndMark] = useState([]);
@@ -95,6 +90,7 @@ useEffect(() => {
     setMiddleValue(polylinepath[middleIndex]);
   }
 }, [polylinepath, middleValue]);
+
 
 
 
@@ -175,15 +171,6 @@ return (
   <>
       <Card>
 
-        <Saveroutebutton>
-        {isLogin && (<Button onClick={() =>{
-          handlerSaveRoute();
-        }}variant="contained" endIcon={<SendIcon />}>
-        루트 저장
-      </Button>)}
-      </Saveroutebutton>
-
-        
 
       <MapContainer>
 
@@ -220,6 +207,8 @@ return (
             }}}
             />
           ))}
+
+
 
 <CustomOverlayMap position={middleValue}
               yAnchor={2.5}
@@ -329,13 +318,6 @@ return (
 };
 
 
-const Saveroutebutton = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 1em;
-`
-
-
 const Card = styled.div`
   display: flex;
   flex-direction: column;
@@ -360,4 +342,4 @@ const StyledMap = styled(Map)`
   flex-grow: 1;
 `;
 
-export default MapPolyLine;
+export default MapPolyLineForBoard;

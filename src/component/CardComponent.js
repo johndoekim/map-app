@@ -12,6 +12,7 @@ import { useConfirm } from "material-ui-confirm";
 import axios from 'axios';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import MapPolyLineForBoard from './MapPolyLineForBoard';
 
 const CardComponent = ({
   title,
@@ -22,24 +23,38 @@ const CardComponent = ({
   user_idx,
   created_at,
   onTitleClick,
-  onEdit
+  onEdit,
+  route_path
 }) => {
 
 
+  const delay = ms => new Promise(
+    resolve => setTimeout(resolve, ms)
+  );
+  
+
   const confirm = useConfirm();
 
+  const [routeData, setRouteData] = useState()
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const [expanded, setExpanded] = useState(false);
 
-  const handleExpandClick = () => {
+  const handleExpandClick = async () => {
+    await delay(100)
     setExpanded(!expanded);
   };
 
   const handleEditClick = () => {
     onEdit(post_idx);
   };
+
+
+  console.log(routeData)
+
+
+  console.log(typeof routeData)
 
 
 
@@ -83,7 +98,7 @@ const CardComponent = ({
 
 
 
-  //alert 관련
+  //alert 처리
   const handleCloseSnackbar = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -91,6 +106,15 @@ const CardComponent = ({
     setSnackbarOpen(false);
   };
   
+  //라우트 데이터 처리
+  useEffect(() =>{
+    if (route_path){
+      axios.get(`https://seoul-taroot.s3.ap-northeast-2.amazonaws.com/${route_path}`)
+      .then(res => {console.log(res)
+      setRouteData(res.data.body)})
+      .catch(err => console.log(err))
+    }
+  },[expanded])
 
 
 
@@ -136,6 +160,7 @@ const CardComponent = ({
         </CardContent>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
+            {routeData && <MapPolyLineForBoard routeData={routeData}/>}
             {image_path && <CardMedia component="img" alt="" height="auto" image={image_path} />}
             <ContentTypography paragraph>{content}</ContentTypography>
           </CardContent>
