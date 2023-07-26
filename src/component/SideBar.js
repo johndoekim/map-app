@@ -21,7 +21,7 @@ const Sidebar = ({ sidebarOpen}) => {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  const { data: isLogin } = useAuth();
+  const { isLogin, refetch } = useAuth();
 
 
   const StyledLink = styled(Link)`
@@ -38,6 +38,7 @@ const Sidebar = ({ sidebarOpen}) => {
 const handleLogout = () => {
   sessionStorage.clear();
   openModal()
+  refetch()
 };
 
 
@@ -78,6 +79,8 @@ console.log(isLogin)
     )}
 
 
+
+
     
 {isLogin && (
 
@@ -101,6 +104,16 @@ console.log(isLogin)
     <SidebarItem>
       <StyledLink to="/mapmain">루트 추천</StyledLink>
     </SidebarItem>
+
+
+
+
+{!isLogin && (
+      <SidebarItem>
+        <StyledLink to="/boardsignup">회원가입</StyledLink>
+      </SidebarItem>
+    )}
+
 
   </SidebarWrapper>
 

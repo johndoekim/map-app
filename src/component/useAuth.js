@@ -7,5 +7,6 @@ const checkLoginStatus = async () => {
 };
 
 export default function useAuth() {
-  return useQuery('authStatus', checkLoginStatus);
+  const { data, refetch } = useQuery('authStatus', checkLoginStatus);
+  return { isLogin: data, refetch };
 }

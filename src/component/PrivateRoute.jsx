@@ -1,24 +1,30 @@
+
+
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import useAuth from './useAuth';
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
-  const { data: isLogin } = useAuth();
+  const { isLogin, refetch } = useAuth();
 
-  return (
-    <Route
-      {...rest}
-      render={(props) =>
-        isLogin /* 원래 대로 작동하는지 확인하기 위해 isLogined() 를 isLogin 변경합니다. */ ? (
-          <Component {...props} />
-        ) : (
-          <Redirect to="/boardsignin">
-            {alert('로그인 후 이용해 주세요')}
-          </Redirect>
-        )
-      }
-    />
-  );
+  const renderContent = (props) => {
+    if (isLogin) {
+      return <Component {...props} />;
+    } else {
+      refetch();
+      alert('로그인 후 이용해 주세요');
+      return (
+        <Redirect
+          to={{
+            pathname: '/boardsignin',
+            state: { from: props.location },
+          }}
+        />
+      );
+    }
+  };
+
+  return <Route {...rest} render={renderContent} />;
 };
 
 export default PrivateRoute;

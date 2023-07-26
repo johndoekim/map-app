@@ -96,10 +96,6 @@ const BoardSignUp = () => {
 
 
 
-
-
-
-
     
       <Card>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -243,6 +239,7 @@ const Input = styled.input`
   outline: none;
   width: 100%;
   font-size: 14px;
+  align-items: center;
 `;
 
 const ErrorMessage = styled.p`

@@ -8,6 +8,7 @@ import SuccessModal from "./SuccessModal";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import useAuth from "./useAuth";
 
 const BoardSignIn = () => {
 
@@ -18,6 +19,9 @@ const BoardSignIn = () => {
   
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
+  const { isLogin, refetch } = useAuth();
+
 
     const [loading, setLoading] = useState(false);
 
@@ -44,6 +48,7 @@ const BoardSignIn = () => {
 
 
                 openModal()
+                refetch();
 
                 // alert('로그인이 성공하였습니다.')
                 // history.push('/boardlist')
