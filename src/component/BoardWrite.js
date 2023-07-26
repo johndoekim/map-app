@@ -26,7 +26,7 @@ const BoardWrite = () =>{
 
   //루트 저장 및 선택
   const [routeDataFromDB, setRouteDataFromDB] = useState([]);
-  const [selectedRoute, setSelectedRoute] = useState();
+  const [selectedRoute, setSelectedRoute] = useState('null');
 
   console.log(selectedRoute)
 
@@ -116,8 +116,8 @@ const BoardWrite = () =>{
 
 
     const onSubmit = async data =>{
-        setLoading(true)
-        
+      setLoading(true)
+
         try{
 
             const config = {
@@ -126,7 +126,7 @@ const BoardWrite = () =>{
                 'Authorization': sessionStorage.getItem('token'),
               }};
 
-            const body = {'title' : data.title, 'content' : data.content}
+            const body = {'title' : data.title, 'content' : data.content, 'route_idx' : selectedRoute.route_idx }
 
             const formData = new FormData();
             formData.append('body', new Blob([JSON.stringify(body)], {type : "application/json"}))
@@ -184,6 +184,12 @@ const BoardWrite = () =>{
 
 
     return(<>
+
+<div className="modal-box">
+        {loading ? (
+          <LoadingModal show={loading} setShow={setLoading}></LoadingModal>
+        ) : null}
+      </div>
 
 
 
