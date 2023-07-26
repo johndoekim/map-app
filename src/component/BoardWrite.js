@@ -10,6 +10,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { MenuItem, FormControl, Select, InputLabel } from '@mui/material';
+import WriteErrorModal from "./WriteErrorModal";
 
 
 
@@ -21,6 +22,18 @@ const BoardWrite = () =>{
   
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
+
+  //에러 처리 모달
+
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+const [errorModalMessage, setErrorModalMessage] = useState('');
+
+const closeErrorModal = () => {
+  setIsErrorModalOpen(false);
+  setErrorModalMessage('');
+};
+
 
 
 
@@ -53,12 +66,14 @@ const BoardWrite = () =>{
     const history = useHistory();
 
 
+
     //이미지 업로드 검증 단
     const invalidFile = msg => {
-        alert(msg);
-        inputFiles.current.value = '';
-        setImage([]);
-      };
+      setIsErrorModalOpen(true);
+      setErrorModalMessage(msg);
+      inputFiles.current.value = '';
+      setImage([]);
+    };
 
     const {register, handleSubmit, formState: {errors}} = useForm();
     const handlerChangeFile = e => {
@@ -150,15 +165,17 @@ const BoardWrite = () =>{
         catch(err){
           console.log(err)
 
-          if (err.response.data.message === "Unauthorized")
-          {alert('인증되지 않은 사용자 입니다. 로그인 후 이용해주세요')
-          history.push('/boardsignin')}
-
-          console.log(err.response.data.message)
-
-          if (err.response.data.message === "User is not authorized to access this resource with an explicit deny")
-          {alert('글 작성 권한이 없습니다. 로그인 후 다시 이용해 주세요.')
-          history.push('/boardsignin')}
+          if (err.response.data.message === "Unauthorized") {
+            setIsErrorModalOpen(true);
+            setErrorModalMessage('인증되지 않은 사용자 입니다. 로그인 후 이용해주세요')
+            history.push('/boardsignin')
+          }
+        
+          if (err.response.data.message === "User is not authorized to access this resource with an explicit deny") {
+            setIsErrorModalOpen(true);
+            setErrorModalMessage('글 작성 권한이 없습니다. 로그인 후 다시 이용해 주세요.')
+            history.push('/boardsignin')
+          }
         
         }
         finally{setLoading(false)}
@@ -185,6 +202,8 @@ const BoardWrite = () =>{
 
     return(<>
 
+
+{/* 로딩 모달 */}
 <div className="modal-box">
         {loading ? (
           <LoadingModal show={loading} setShow={setLoading}></LoadingModal>
@@ -194,7 +213,7 @@ const BoardWrite = () =>{
 
 
 
-
+{/* 성공 모달 */}
 <div>
       <SuccessModal
         isOpen={isModalOpen}
@@ -213,7 +232,25 @@ const BoardWrite = () =>{
 
 
 
-    {/* 모달 */}
+    {/* 성공 모달 */}
+
+
+
+    {/* 에러 모달 */}
+
+    <div>
+  <WriteErrorModal isOpen={isErrorModalOpen} closeModal={closeErrorModal}>
+    <Box>
+      <Typography variant="h6" component="h2">
+        {errorModalMessage}
+      </Typography>
+    </Box>
+  </WriteErrorModal>
+</div>
+
+
+
+{/* 에러 모달 */}
 
 
 
@@ -245,7 +282,27 @@ const BoardWrite = () =>{
     {errors?.content?.type === 'required' && <p>필수 입력 항목입니다.</p>}
     </ErrorMessage>
 
-    <input type="file" ref={inputFiles} onChange={handlerChangeFile}></input>
+
+
+{/* 이미지 선택 */}
+    <StyledInputWrapper>
+  <input
+    accept="image/*"
+    style={{ display: 'none' }}
+    id="contained-button-file"
+    type="file"
+    ref={inputFiles}
+    onChange={handlerChangeFile}
+  />
+  <label htmlFor="contained-button-file">
+    <Button variant="contained" component="span">
+      Upload Image
+    </Button>
+  </label>
+  <FileNameWrapper>
+        <span>{image.name}</span> {/* Upload 버튼과 중앙 정렬 */}
+      </FileNameWrapper>
+</StyledInputWrapper>
 
 
     <SubmitButton type="submit" value="글 작성" />
@@ -280,6 +337,18 @@ const BoardWrite = () =>{
     
     </>)
 }
+const StyledInputWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+`;
+
+const FileNameWrapper = styled.div`
+  margin-top: 10px;
+`;
+
 
 
 const FormGroup = styled.div`

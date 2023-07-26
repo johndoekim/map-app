@@ -53,7 +53,7 @@ function App() {
 
 <Route path="/MapSearchPoint" component = {MapSearchPoint}/>
 <Route path="/MapPolyLine" component = {MapPolyLine}/>
-<Route path="/MapMain" component={MapMain}/>
+<Route exact path="/" component={MapMain}/>
 <Route path="/MapSelectWaypoint" component={MapSelectWaypoint}/>
 
 
@@ -78,15 +78,19 @@ function App() {
 
 
 const MainContainer = styled.main`
-  padding: 70px 20px; 
-  padding-right: 270px; // 사이드바를 고려하여 오른쪽 패딩 추가
+  padding: 70px 20px;
+  padding-right: ${({ sidebarOpen }) => (sidebarOpen ? '270px' : '20px')};
 
-  // 햄버거 메뉴를 사용하거나 최대 너비가 800px보다 작을 때,
-  // 오른쪽 마진값을 원래대로 되돌립니다.
+  // 최대 너비가 800px보다 작을 때 오른쪽 패딩은 기본 상태로 유지
   @media only screen and (max-width: 800px) {
     padding-right: 20px;
   }
 `;
+
+
+
+
+
 
 
 

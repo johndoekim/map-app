@@ -55,7 +55,4 @@ const HamburgerMenu = styled.div`
     border-radius: 4px;
   }
 
-  @media only screen and (min-width: 800px) {
-    display: none; // 화면이 800px 이상일 때에는 햄버거 메뉴가 사라집니다.
-  }
 `;

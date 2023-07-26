@@ -7,9 +7,13 @@ import MapMain from "./MapMain";
 
 
 
-const MapSelectWaypoint = ({gpsData}) =>{
+const MapSelectWaypoint = () =>{
     const location = useLocation();
     const history = useHistory();
+
+
+    const gpsData = location.state ? location.state.gpsData : null;
+
 
 
 

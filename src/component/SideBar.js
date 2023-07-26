@@ -102,7 +102,7 @@ console.log(isLogin)
       <StyledLink to="/boardlist">게시판</StyledLink>
     </SidebarItem>
     <SidebarItem>
-      <StyledLink to="/mapmain">루트 추천</StyledLink>
+      <StyledLink to="/MapSearchPoint">지도 루트 찾기</StyledLink>
     </SidebarItem>
 
 
@@ -123,7 +123,7 @@ export default Sidebar;
 
 
 const SidebarWrapper = styled.aside`
-  display: flex;
+  display: ${({ sidebarOpen }) => (sidebarOpen ? "flex" : "none")};
   flex-direction: column;
   position: fixed;
   top: 60px;
@@ -134,12 +134,9 @@ const SidebarWrapper = styled.aside`
   height: calc(100vh - 60px);
   width: 250px;
   margin-right: 0;
-  align-items : center;
-
-  @media only screen and (max-width: 800px) {
-    display: ${({ sidebarOpen }) => (sidebarOpen ? "flex" : "none")};
-  }
+  align-items: center;
 `;
+
 
 const SidebarItem = styled.div`
   padding: 20px;

@@ -24,6 +24,8 @@ const MapMain = () => {
 
 
 
+
+
   const onSubmit = async data => {
     setLoading(true);
 
@@ -56,14 +58,14 @@ const MapMain = () => {
 
 
 
-  // useEffect(() => {
-  //   if (gpsData) {
-  //     history.push({
-  //       pathname: "/MapSelectWaypoint",
-  //       state: { gpsData: gpsData },
-  //     });
-  //   }
-  // }, [gpsData, loading]);
+  useEffect(() => {
+    if (gpsData) {
+      history.push({
+        pathname: "/MapSelectWaypoint",
+        state: { gpsData: gpsData },
+      });
+    }
+  }, [gpsData, loading]);
 
 
 
@@ -140,7 +142,7 @@ const MapMain = () => {
       </MuiAlert>
     </Snackbar>
 
-      <MapSelectWaypoint gpsData={gpsData}/>
+      {/* <MapSelectWaypoint gpsData={gpsData}/> */}
     </>
   );
 };
@@ -160,10 +162,12 @@ const FormWrapper = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 1.5rem;
   max-width: 800px;
   margin: 0 auto;
   padding: 2rem;
+  min-height: calc(100vh - 70px); // Header 높이를 포함하여 Viewpoint의 높이에서 뺍니다.
 
   @media (min-width: 768px) {
     flex-direction: row;
