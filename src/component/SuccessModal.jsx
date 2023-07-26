@@ -10,6 +10,7 @@ function SuccessModal({ isOpen, closeModal, children }) {
   const handleConfirmClick = () => {
     closeModal(); 
     history.push("/boardlist");
+    
 
   };
 
