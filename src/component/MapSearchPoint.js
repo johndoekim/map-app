@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { Map, MapMarker, ZoomControl } from "react-kakao-maps-sdk";
 import { useHistory } from "react-router-dom";
 import { useLocation } from "react-router-dom/cjs/react-router-dom";
+import { TextField, Button } from "@mui/material";
+import LoadingModal from "./LoadingModal";
 
 
 const kakao = window.kakao;
@@ -10,6 +12,7 @@ const kakao = window.kakao;
 
 const MapSearchPoint = () => {
 
+  const [loading, setLoading] = useState(false);
 
   const [info, setInfo] = useState();
   const [markers, setMarkers] = useState([]);
@@ -33,29 +36,35 @@ const MapSearchPoint = () => {
   };
   
 
-  //axios로 출발지와 목적지를 보냄
-  const handleFindRoute = () => {
-    if (startPoint && destination) {
-      const body = {
-        'startPoint': startPoint.content, 
-        'endPoint': destination.content,
-      };
-      axios
-        .post(
-          "https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_route_from_search_point",
-          body
-        )
-        .then((response) => {
-          setGpsData(response.data);
-          console.log(response);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    } else {
-      alert("출발지와 목적지를 모두 설정해주세요.");
+const handleFindRoute = async () => {
+
+  setLoading(true);
+
+
+  try {
+    if (!startPoint || !destination) {
+      setLoading(false);
+      return;
     }
-  };
+    const body = {
+      startPoint: startPoint.content,
+      endPoint: destination.content,
+    };
+
+    const res = await axios.post(
+      "https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_route_from_search_point",
+      body
+    );
+    setGpsData(res.data);
+  } catch (err) {
+    console.log(err);
+  } finally {
+    setLoading(false);
+  }
+};
+
+
+
 
   //axios에서 전달받은 경로 데이터를 함께 푸쉬
   useEffect(() => {
@@ -79,7 +88,9 @@ const MapSearchPoint = () => {
         const bounds = new kakao.maps.LatLngBounds();
         let markers = [];
 
-        for (var i = 0; i < 2; i++) {
+        const dataLength = data.length >= 2 ? 2 : data.length;
+
+        for (var i = 0; i < dataLength; i++) {
           markers.push({
             position: {
               lat: data[i].y,
@@ -97,6 +108,19 @@ const MapSearchPoint = () => {
 
   return (
     <>
+
+      <div className="modal-box">
+        {loading ? (
+          <LoadingModal show={loading} setShow={setLoading}></LoadingModal>
+        ) : null}
+      </div>
+
+
+
+
+
+
+
       <Map
         center={{
           lat: 37.566826,
@@ -127,26 +151,40 @@ const MapSearchPoint = () => {
         
       </Map>
 
-      <input
-        type="text"
-        placeholder="장소를 입력해 주세요"
-        onChange={InputChangeHandler}
-      ></input>
-      <button onClick={changeHandlerClick}>검색</button>
-      <br />
-      <button
-        onClick={() => {
-          startPoint && !destination
-            ? setDestination(info)
-            : setStartPoint(info);
-        }}
-      >
-        {startPoint && !destination
-          ? "목적지 설정"
-          : "출발지 설정"}
-      </button>
-      <button onClick={handleFindRoute}>길찾기</button>
 
+
+      <TextField
+        label="장소를 입력해 주세요"
+        variant="outlined"
+        value={inputKeyword || ""}
+        onChange={InputChangeHandler}
+        style={{ marginBottom: "16px", width: "80%"}}
+      />
+      <div style={{ display: "flex", justifyContent: "center"}}>
+        <Button variant="contained" onClick={changeHandlerClick}>
+          검색
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            startPoint && !destination
+              ? setDestination(info)
+              : setStartPoint(info);
+          }}
+          style={{ marginLeft: "16px" }}
+        >
+          {startPoint && !destination ? "목적지 설정" : "출발지 설정"}
+        </Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={handleFindRoute}
+          style={{ marginLeft: "16px" }}
+        >
+          길찾기
+        </Button>
+      </div>
       
 
     </>
