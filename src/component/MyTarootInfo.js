@@ -6,51 +6,39 @@ import axios from 'axios';
 import { styled } from '@mui/system';
 import { useHistory } from 'react-router-dom';
 import useAuth from './useAuth';
+import { FetchRoutes } from './FetchRoutes';
+import { useQuery } from 'react-query';
 
 
 const MyTarootInfo = () => {
-  const history = useHistory();
-  const { isLogin, refetch } = useAuth();
-  const [routeInfo, setRouteInfo] = useState([]);
+    const history = useHistory();
+    const { isLogin } = useAuth();
+    const { data: routeInfo, isLoading, isError } = useQuery('routeInfo', FetchRoutes, {
+      enabled: isLogin,
+      retry: false,
+    });
+  
 
-  useEffect(() => {
-    refetch();
-    if (isLogin) {
-      const config = {
-        headers: {
-          Authorization: sessionStorage.getItem('token'),
-        },
+    const redirectToLogin = () => {
+        if (!isLogin) {
+          history.push('/boardsignin');
+        }
       };
+    
 
-      axios
-        .get(
-          'https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_route_from_db',
-          config
-        )
-        .then((res) => {
-          console.log(res);
-          setRouteInfo(res.data);
-        })
-        .catch((err) => console.log(err));
-    }
-  }, [isLogin, refetch]);
-
-  const redirectToLogin = () => {
-    if (!isLogin) {
-      history.push('/boardsignin');
-    }
-  };
-
-  const totalDistance = routeInfo.reduce(
-    (acc, route) => acc + route.workout_distance,
-    0
-  );
-  const numberOfRoutes = routeInfo.length;
+      const totalDistance = routeInfo
+      ? routeInfo.reduce((acc, route) => acc + route.workout_distance, 0)
+      : 0;
+    const numberOfRoutes = routeInfo ? routeInfo.length : 0;
 
   return (
+
+    <>
+
+    
     <SidebarWrapper isLogin={isLogin} onClick={redirectToLogin}>
       <Typography variant="h5" component="div" sx={{ marginBottom: '1rem', fontSize: '1.5rem' }}>
-        {sessionStorage.getItem('nickname')}
+        {sessionStorage.getItem('nickname')} 님
       </Typography>
 
       <Typography variant="body1" component="div" sx={{ marginBottom: '1rem', fontSize: '1rem' }}>
@@ -88,17 +76,22 @@ const MyTarootInfo = () => {
         </Grid>
       </Box>
     </SidebarWrapper>
+
+
+</>
   );
 };
 
 
 
 const SidebarWrapper = styled(Box)`
+
 position: fixed;
 left: 0;
 display: flex;
 flex-direction: column;
 align-items: center;
+top : 80px;
 height: 500px;
 width: 250px;
 padding: 1rem;

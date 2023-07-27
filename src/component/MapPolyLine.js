@@ -15,7 +15,10 @@ import axios from "axios";
 import useAuth from './useAuth';
 import Button from '@mui/material/Button';
 import SendIcon from '@mui/icons-material/Send';
-
+import NotPushAlertModal from "./NotPushAlertModal";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import { useMutation, useQueryClient } from 'react-query';
 
 
 
@@ -29,7 +32,9 @@ const MapPolyLine = () => {
 
 
   const { isLogin, refetch } = useAuth();
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
 
   const location = useLocation();
@@ -48,7 +53,7 @@ const MapPolyLine = () => {
 
 
 
-
+//받은 데이터 처리 과정
 
   const [middleValue, setMiddleValue] = useState(null);
 
@@ -108,7 +113,7 @@ useEffect(() => {
 },[routeData])
 
 
-
+//차트 사이즈 조정
 const updateChartSize = () => {
   setChartWidth(window.innerWidth * 0.5);
   setChartHeight(window.innerHeight * 0.35); // window.innerHeight에 원하는 백분율로 조정.
@@ -145,26 +150,45 @@ const renderTooltipContent = (e) => {
   return null;
 };
 
-const handlerSaveRoute = async () =>{
-  try{
 
-    const body = {'body' : routeData, 
-  'workout_distance' : distanceAndDuration[0].distance,
-'workout_time' : distanceAndDuration[0].duration}
-
-    const config = {headers: {
-      'Authorization': sessionStorage.getItem('token'),
-    }};
-
-
-
-    const res = await axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_route_data_from_user', body, config)
-    console.log(res)
+//루트 저장
+const queryClient = useQueryClient();
+const saveRouteMutation = useMutation(
+  async (routeData) => {
+    const body = { ...routeData };
+    const config = {
+      headers: {
+        Authorization: sessionStorage.getItem('token'),
+      },
+    };
+    const res = await axios.post(
+      'https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_route_data_from_user',
+      body,
+      config
+    );
+    return res.data;
+  },
+  {
+    onSuccess: () => {
+      queryClient.invalidateQueries('routeInfo');
+    },
   }
-  catch(err){console.log(err)}
+);
 
+const handlerSaveRoute = async () => {
+  setIsModalOpen(true);
+  try {
+    const body = {
+      body: routeData,
+      workout_distance: distanceAndDuration[0].distance,
+      workout_time: distanceAndDuration[0].duration,
+    };
 
-}
+    await saveRouteMutation.mutateAsync(body);
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 
 
@@ -173,6 +197,31 @@ const handlerSaveRoute = async () =>{
 
 return (
   <>
+
+<div>
+      <NotPushAlertModal
+        isOpen={isModalOpen}
+        closeModal={closeModal}
+      >
+        <Box>
+          <Typography variant="h6" component="h2">
+            루트 저장이 완료되었습니다.
+            </Typography>
+
+        </Box>
+      </NotPushAlertModal>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
       <Card>
 
         <Saveroutebutton>
