@@ -78,6 +78,9 @@ const MapMain = () => {
           <LoadingModal show={loading} setShow={setLoading}></LoadingModal>
         ) : null}
       </div>
+
+
+      
       <FormWrapper onSubmit={handleSubmit(onSubmit)}>
         <InputWrapper>
           <StyledInput
@@ -164,10 +167,10 @@ const FormWrapper = styled.form`
   align-items: center;
   justify-content: center;
   gap: 1.5rem;
-  max-width: 800px;
+  max-width: 650px;
   margin: 0 auto;
   padding: 2rem;
-  min-height: calc(100vh - 70px); // Header 높이를 포함하여 Viewpoint의 높이에서 뺍니다.
+  min-height: 100%; // 이 부분을 수정하였습니다.
 
   @media (min-width: 768px) {
     flex-direction: row;

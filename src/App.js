@@ -19,6 +19,7 @@ import useAuth from './component/useAuth';
 import { ConfirmProvider } from 'material-ui-confirm';
 import CardComponent from './component/CardComponent';
 import BoardEdit from './component/BoardEdit';
+import MyTarootInfo from './component/MyTarootInfo';
 
 const queryClient = new QueryClient();
 
@@ -46,6 +47,7 @@ function App() {
 
 <Header toggleSidebar={toggleSidebar}/>
 <Sidebar sidebarOpen={sidebarOpen} isLogin={isLogin}/>
+<MyTarootInfo/>
 <MainContainer>
 
 
@@ -58,7 +60,7 @@ function App() {
 
 
 {/* 게시판 */}
-
+<Route path="/MyTarootInfo" component={MyTarootInfo}/>
 <Route path="/BoardSignIn" component={BoardSignIn}/>
 <Route path="/BoardSignup" component={BoardSignUp}/>
 <PrivateRoute path="/BoardWrite" component={BoardWrite}/>
@@ -78,8 +80,10 @@ function App() {
 
 
 const MainContainer = styled.main`
-  padding: 70px 20px;
-  padding-right: ${({ sidebarOpen }) => (sidebarOpen ? '270px' : '20px')};
+position: relative;
+padding: 70px 20px;
+padding-right: ${({ sidebarOpen }) => (sidebarOpen ? '270px' : '20px')};
+left: 0;
 
   // 최대 너비가 800px보다 작을 때 오른쪽 패딩은 기본 상태로 유지
   @media only screen and (max-width: 800px) {
