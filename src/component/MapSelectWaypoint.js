@@ -71,6 +71,7 @@ const MapSelectWaypoint = () =>{
     
         const wayPoint = await Promise.resolve([rawWaypoint[0].lng, rawWaypoint[0].lat]);
         console.log(wayPoint);
+
     
         const newBody = {
           startPoint: gpsData.body.startPoint,
@@ -86,6 +87,9 @@ const MapSelectWaypoint = () =>{
 
         console.log(secondResponse);
         setRouteData(secondResponse.data)
+
+        setWayPoint(wayPoint)
+        console.log(wayPoint)
       } catch (error) {
         console.log(error);
       } finally {
@@ -112,7 +116,7 @@ const MapSelectWaypoint = () =>{
           
           const response = await axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_highest_coordinate', body);
           const wayPoint = JSON.parse(response.data.body);
-          setWayPoint(wayPoint); 
+          setWayPoint(wayPoint.result); 
           console.log(wayPoint)
   
           const newBody = {
@@ -171,7 +175,7 @@ const MapSelectWaypoint = () =>{
       if(routeData){
         history.push({
           pathname : '/MapPolyLine',
-          state : {routeData}
+          state : {routeData, wayPoint}
         })
       }
     },[routeData,loading])

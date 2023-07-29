@@ -93,7 +93,7 @@ flex-direction: column;
 align-items: center;
 top : 80px;
 height: 500px;
-width: 250px;
+width: 200px;
 padding: 1rem;
 box-sizing: border-box;
 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);

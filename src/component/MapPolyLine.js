@@ -40,6 +40,8 @@ const MapPolyLine = () => {
   const location = useLocation();
   const routeData = location.state ? location.state.routeData : null;
 
+  const wayPoint = location.state ? location.state.wayPoint : null;
+
   const [startMark, setStartMark] = useState([]);
   const [endMark, setEndMark] = useState([]);
   const [chartWidth, setChartWidth] = useState(window.innerWidth * 0.525);
@@ -48,6 +50,28 @@ const MapPolyLine = () => {
 
 
   console.log(routeData)
+
+
+
+
+
+  
+const [markerWayPoint, setMarkerWayPoint] = useState({});
+
+useEffect(() => {
+  if (wayPoint) {
+    const updatedMarkerWayPoint = {
+      lat: wayPoint[1],
+      lng: wayPoint[0],
+    };
+    setMarkerWayPoint(updatedMarkerWayPoint);
+  }
+}, [wayPoint]);
+
+
+
+
+
 
 
 
@@ -257,6 +281,11 @@ return (
               }}}
             />
           ))}
+
+
+          {markerWayPoint.lat && (
+            <MapMarker position={markerWayPoint} />
+          )}
 
           {endMark.map((marker, index) => (
             <MapMarker
