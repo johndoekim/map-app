@@ -25,26 +25,63 @@ const MapMain = () => {
 
 
 
+//람다
+
+
+  // const onSubmit = async data => {
+  //   setLoading(true);
+
+  //   try {
+  //     const body = { startPoint: data.SP, destination: data.EP };
+
+  //     const res = await axios.post(
+  //       "https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_geocode",
+  //       body
+  //     );
+  //     setGpsData(res.data);
+  //     console.log(res);
+  //   } catch (err) {
+  //     console.log(err);
+  //   } finally {
+  //     setLoading(false);
+  //     setSnackbarOpen(true)
+  //   }
+  // };
+
+
+  
+//플라스크
+
 
   const onSubmit = async data => {
     setLoading(true);
 
     try {
-      const body = { startPoint: data.SP, destination: data.EP };
-
+      const body = { startPoint: data.SP, endPoint: data.EP };
+      
+  
       const res = await axios.post(
-        "https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_geocode",
-        body
+        "http://server.taroot.club/search/",
+        body, 
       );
       setGpsData(res.data);
-      console.log(res);
+      console.log(res.data.body);
+      setSnackbarOpen(true)
+
     } catch (err) {
       console.log(err);
+      // alert('출발지와 목적지를 설정하지 못했습니다')
     } finally {
       setLoading(false);
-      setSnackbarOpen(true)
     }
   };
+
+
+  
+
+
+
+
 
 
   const handleCloseSnackbar = (event, reason) => {

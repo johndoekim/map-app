@@ -17,7 +17,7 @@ const MapSelectWaypoint = () =>{
 
 
 
-    const [gpsPoint, setGpsPoint] = useState();
+    // const [gpsPoint, setGpsPoint] = useState();
     const [wayPoint, setWayPoint] = useState()
     const [routeData, setRouteData] = useState()
     const [loading, setLoading] = useState(false);
@@ -28,11 +28,17 @@ const MapSelectWaypoint = () =>{
     const [anotherWayPoint, setAnotherWayPoint] = useState();
 
 
-    useEffect(() => {
-        if(gpsData){
-            setGpsPoint(JSON.parse(gpsData.body))
-        }
-    },[gpsData])
+    // useEffect(() => {
+    //     if(gpsData){
+    //         setGpsPoint(gpsData.body)
+    //     }
+    // },[gpsData])
+
+    console.log(gpsData)
+
+  
+    // console.log(gpsPoint)
+
 
 
 
@@ -50,8 +56,8 @@ const MapSelectWaypoint = () =>{
       setLoading(true);
       try {
         const body = {
-          startPoint: gpsPoint.sp_nearest_station_coor,
-          endPoint: gpsPoint.tp_nearest_station_coor,
+          startPoint: gpsData.body.startPoint,
+          endPoint: gpsData.body.endPoint,
           purpose: purpose,
         };
     
@@ -67,9 +73,9 @@ const MapSelectWaypoint = () =>{
         console.log(wayPoint);
     
         const newBody = {
-          startPoint: gpsPoint.sp_nearest_station_coor,
+          startPoint: gpsData.body.startPoint,
           wayPoint: wayPoint,
-          endPoint: gpsPoint.tp_nearest_station_coor,
+          endPoint: gpsData.body.endPoint,
         };
     
     
@@ -98,9 +104,11 @@ const MapSelectWaypoint = () =>{
       setLoading(true);
       try {
           const body = {
-              'startPoint' : gpsPoint.sp_nearest_station_coor,
-              'endPoint' : gpsPoint.tp_nearest_station_coor,
+            startPoint: gpsData.body.startPoint,
+            endPoint: gpsData.body.endPoint,
           } 
+
+          console.log(body)
           
           const response = await axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_highest_coordinate', body);
           const wayPoint = JSON.parse(response.data.body);
@@ -108,10 +116,10 @@ const MapSelectWaypoint = () =>{
           console.log(wayPoint)
   
           const newBody = {
-              'startPoint' : gpsPoint.sp_nearest_station_coor,
+            startPoint: gpsData.body.startPoint,
               'wayPoint' : wayPoint.result,
-              'endPoint' : gpsPoint.tp_nearest_station_coor
-          };
+              endPoint: gpsData.body.endPoint,
+            };
           
           const secondResponse = await axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_route_purpose_geojson', newBody);
           console.log(secondResponse);
@@ -137,8 +145,8 @@ const MapSelectWaypoint = () =>{
 
       try{
       
-    const body = {'startPoint' : gpsPoint.sp_nearest_station_coor,
-    'endPoint' : gpsPoint.tp_nearest_station_coor} 
+    const body = {startPoint: gpsData.body.startPoint,
+      endPoint: gpsData.body.endPoint,} 
 
     
       const res = await axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_fast_route',body)

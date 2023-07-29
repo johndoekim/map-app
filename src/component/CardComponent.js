@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import Button from '@mui/material/Button'; 
 import styled from 'styled-components';
@@ -13,6 +10,10 @@ import axios from 'axios';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import MapPolyLineForBoard from './MapPolyLineForBoard';
+import { TextField } from '@mui/material';
+import { Box, CardContent, Typography, Divider, Avatar, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
+import SuccessModal from "./NotPushAlertModal";
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 const CardComponent = ({
   title,
@@ -27,12 +28,17 @@ const CardComponent = ({
   route_path
 }) => {
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
 
   const delay = ms => new Promise(
     resolve => setTimeout(resolve, ms)
   );
   
 
+  const history = useHistory();
   const confirm = useConfirm();
 
   const [routeData, setRouteData] = useState()
@@ -51,14 +57,56 @@ const CardComponent = ({
   };
 
 
-  console.log(routeData)
 
 
-  console.log(typeof routeData)
+  const [comment, setComment] = useState('');
+
+  const [comments, setCommnets] = useState([]);
+
+//댓글 작성
+
+  const handleCommentChange = (e) =>{
+    setComment(e.target.value)
+  }
+
+  const handleCommentSubmit = async () => {
+
+    try{
+      const config = {
+        headers: {
+        'Authorization': sessionStorage.getItem('token'),
+      }};
+
+      const body = {'content' : comment, 'post_idx' : post_idx}
+      console.log(body)
+
+      const res = await axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/board/comment', body, config)
+      console.log(res)
+      openModal();
+      
+    }
+    catch(err){console.log(err)}
+  }
+
+//댓글 조회
+
+//댓글 작성 후 리액트 쿼리 이용해서 리패치 해야할듯
+useEffect(() =>{
+  axios.get(`https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/board/${post_idx}/comment`)
+  .then(res => {
+    console.log(res)
+    setCommnets(res.data)
+  }
+  
+  )
+  .catch(err => console.log(err))
+},[expanded])
 
 
+console.log(comments)
 
 
+//글 삭제 처리
   const handleDeleteClick = () => {
     const config = {
       headers: {
@@ -117,6 +165,11 @@ const CardComponent = ({
   },[expanded])
 
 
+  const CommentContentTypography = (props) => (
+    <Typography {...props} component="span" variant="body2"/>
+  );
+
+
 
   return (
     <StyledCard>
@@ -163,6 +216,65 @@ const CardComponent = ({
             {routeData && <MapPolyLineForBoard routeData={routeData}/>}
             {image_path && <CardMedia component="img" alt="" height="auto" image={image_path} />}
             <ContentTypography paragraph>{content}</ContentTypography>
+
+
+            <Box display="flex" justifyContent="space-between" alignItems="center" marginTop={2}>
+       
+       
+
+       {/* 코멘트 작성 */}
+
+        <TextField
+          label="댓글 작성"
+          placeholder="댓글을 입력해주세요."
+          value={comment}
+          onChange={handleCommentChange}
+          fullWidth
+        />
+        <Button
+          variant="outlined"
+          color="primary"
+          onClick={handleCommentSubmit}
+          style={{ marginLeft: 8 }}
+        >
+          등록
+        </Button>
+      </Box>
+
+
+
+{/* 댓글 조회 */}
+{comments.map((comment) => (
+  <Box key={comment.comment_idx} marginBottom={2}>
+    <ListItem alignItems="flex-start">
+      <ListItemAvatar>
+        <Avatar>{comment.comment_user_nickname.charAt(0).toUpperCase()}</Avatar>
+      </ListItemAvatar>
+      <ListItemText>
+        <Box display="flex" alignItems="center">
+          <Typography variant="body1" component="span">
+            {comment.comment_user_nickname}
+          </Typography>
+          <Typography component="span" color="textSecondary" style={{ margin: '0px 4px' }}>
+            {' / '}
+          </Typography>
+          <Typography variant="body2" component="span" color="textSecondary">
+            {comment.created_at}
+          </Typography>
+        </Box>
+        <CommentContentTypography color="textPrimary" style={{ marginTop: 4 }}>
+          {comment.content}
+        </CommentContentTypography>
+      </ListItemText>
+    </ListItem>
+    <Divider variant="inset" />
+  </Box>
+))}
+
+
+
+
+
           </CardContent>
         </Collapse>
       </Card>
@@ -185,6 +297,26 @@ const CardComponent = ({
 
 
 
+{/* 모달 */}
+
+
+<div>
+      <SuccessModal
+        isOpen={isModalOpen}
+        closeModal={closeModal}
+      >
+        <Box>
+          <Typography variant="h6" component="h2">
+            댓글 작성에 성공하였습니다
+            </Typography>
+
+        </Box>
+      </SuccessModal>
+    </div>
+
+
+
+
 
     </StyledCard>
   );
@@ -203,5 +335,7 @@ const StyledCard = styled(Card)`
     margin: 0.5rem;
   }
 `;
+
+
 
 export default CardComponent;
