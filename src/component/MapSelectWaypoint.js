@@ -3,6 +3,8 @@ import { useEffect, useState, useReducer } from "react";
 import axios from "axios";
 import LoadingModal from "./LoadingModal";
 import MapMain from "./MapMain";
+import styled from 'styled-components';
+
 
 
 
@@ -195,30 +197,69 @@ const MapSelectWaypoint = () =>{
       </div>
  
 
-        <div className="waypoint-container">
-          
+      <WaypointContainer>
+    <WaypointCard onClick={WorkoutClickHandler}>
+      <CardImage src="/images/waypoint-workout.svg" alt="운동" />
+      <CardTitle>운동</CardTitle>
+    </WaypointCard>
 
-          <div className="waypoint-card" onClick={WorkoutClickHandler}>
-            <img src="/images/waypoint-workout.svg" alt="운동" />
-            <h3>운동</h3>
-          </div>
+    <WaypointCard onClick={HealingClickHandler}>
+      <CardImage src="/images/waypoint-bicycle.png" alt="힐링" />
+      <CardTitle>힐링</CardTitle>
+    </WaypointCard>
 
-          <div className="waypoint-card" onClick={HealingClickHandler}>
-            <img src="/images/waypoint-bicycle.png" alt="힐링" />
-            <h3>힐링</h3>
-          </div>
+    <WaypointCard onClick={FoodClickHandler}>
+      <CardImage src="/images/waypoint-food-bicycle.svg" alt="맛집" />
+      <CardTitle>맛집</CardTitle>
+    </WaypointCard>
 
-          <div className="waypoint-card" onClick={FoodClickHandler}>
-            <img src="/images/waypoint-food-bicycle.svg" alt="맛집" />
-            <h3>맛집</h3>
-          </div>
+    <WaypointCard onClick={FastRouteClickHandler}>
+      <CardImage src="/images/waypoint-fast-route.png" alt="최단거리" />
+      <CardTitle>최단거리</CardTitle>
+    </WaypointCard>
+  </WaypointContainer>
 
-          <div className="waypoint-card" onClick={FastRouteClickHandler}>
-            <img src="/images/waypoint-fast-route.png" alt="최단거리" />
-            <h3>최단거리</h3>
-          </div>
-        </div>
            </>
       );
     };
 export default MapSelectWaypoint;
+
+
+const WaypointContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 1rem;
+`;
+
+const WaypointCard = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 15rem;
+  height: 20rem;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.16), 0 2px 4px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-1rem);
+  }
+`;
+
+const CardImage = styled.img`
+  width: 90%;
+  height: 90%;
+  border-radius: 8px 8px 0 0;
+`;
+
+const CardTitle = styled.h3`
+  margin-top: 1rem;
+  font-size: 1.5rem;
+`;
