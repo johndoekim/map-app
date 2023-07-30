@@ -224,14 +224,16 @@ const MapSelectWaypoint = () =>{
     };
 export default MapSelectWaypoint;
 
-
 const WaypointContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-wrap: wrap;
   gap: 1rem;
   width: 100%;
   padding: 1rem;
+  max-width: 35rem;
+  margin: 0 auto; // 전체 화면에서 중앙 정렬 처리
 `;
 
 const WaypointCard = styled.div`
@@ -239,7 +241,7 @@ const WaypointCard = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 15rem;
+  width: 15rem; // 원래 크기로 변경
   height: 20rem;
   background-color: #f0f0f0;
   border-radius: 8px;
