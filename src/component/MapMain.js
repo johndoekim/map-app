@@ -61,7 +61,7 @@ const MapMain = () => {
       
   
       const res = await axios.post(
-        "http://server.taroot.club/search/",
+        "https://server.taroot.club/search/",
         body, 
       );
       setGpsData(res.data);
