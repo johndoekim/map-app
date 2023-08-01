@@ -22,6 +22,7 @@ import BoardEdit from './component/BoardEdit';
 import MyTarootInfo from './component/MyTarootInfo';
 import BoardResetPassword from './component/BoardResetPassword';
 import BoardFindID from './component/BoardFindID';
+import { MapWorkoutLevel } from './component/MapWorkoutLevel';
 
 const queryClient = new QueryClient();
 
@@ -59,6 +60,7 @@ function App() {
 <Route path="/MapPolyLine" component = {MapPolyLine}/>
 <Route exact path="/" component={MapMain}/>
 <Route path="/MapSelectWaypoint" component={MapSelectWaypoint}/>
+<Route path="/MapWorkoutLevel" component={MapWorkoutLevel}/>
 
 
 {/* 게시판 */}

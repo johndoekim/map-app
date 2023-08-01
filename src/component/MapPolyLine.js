@@ -38,8 +38,8 @@ const MapPolyLine = () => {
 
 
   const location = useLocation();
+  
   const routeData = location.state ? location.state.routeData : null;
-
   const wayPoint = location.state ? location.state.wayPoint : null;
 
   const [startMark, setStartMark] = useState([]);

@@ -25,6 +25,9 @@ const MapSelectWaypoint = () =>{
     const [loading, setLoading] = useState(false);
 
 
+    const [workoutWayPoint, setWorkoutWayPoint] = useState()
+
+
 
 
     const [anotherWayPoint, setAnotherWayPoint] = useState();
@@ -116,20 +119,29 @@ const MapSelectWaypoint = () =>{
 
           console.log(body)
           
-          const response = await axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_highest_coordinate', body);
-          const wayPoint = JSON.parse(response.data.body);
-          setWayPoint(wayPoint.result); 
-          console.log(wayPoint)
+          const response = await axios.post('https://server.taroot.club/search/exercise/', body);
+
+          console.log(response)
+
+          console.log(response.data)
+
+          setWorkoutWayPoint(response.data)
+
+          // const wayPoint = JSON.parse(response.data.body);
+
+
+          // setWayPoint(wayPoint.result); 
+          // console.log(wayPoint)
   
-          const newBody = {
-            startPoint: gpsData.body.startPoint,
-              'wayPoint' : wayPoint.result,
-              endPoint: gpsData.body.endPoint,
-            };
+          // const newBody = {
+          //   startPoint: gpsData.body.startPoint,
+          //     'wayPoint' : wayPoint.result,
+          //     endPoint: gpsData.body.endPoint,
+          //   };
           
-          const secondResponse = await axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_route_purpose_geojson', newBody);
-          console.log(secondResponse);
-          setRouteData(secondResponse.data)
+          // const secondResponse = await axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_route_purpose_geojson', newBody);
+          // console.log(secondResponse);
+          // setRouteData(secondResponse.data)
   
       } catch (error) {
           
@@ -142,6 +154,19 @@ const MapSelectWaypoint = () =>{
         setLoading(false); 
       }
   }
+
+
+
+
+    useEffect(() => {
+      if(workoutWayPoint){
+        history.push({
+          pathname : '/MapWorkoutLevel',
+          state : {gpsData, workoutWayPoint}
+        })
+      }
+    },[workoutWayPoint, loading])
+
   
   
 
@@ -172,15 +197,6 @@ const MapSelectWaypoint = () =>{
  
     }
 
-
-    useEffect(() => {
-      if(routeData){
-        history.push({
-          pathname : '/MapPolyLine',
-          state : {routeData, wayPoint}
-        })
-      }
-    },[routeData,loading])
 
 
 
