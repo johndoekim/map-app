@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
 import Grid from '@mui/material/Grid';
@@ -20,7 +20,7 @@ import { useForm } from 'react-hook-form';
 
 
 
-const CardComponent = ({
+const CardComponent = React.memo(({
   title,
   content,
   image_path,
@@ -38,9 +38,7 @@ const CardComponent = ({
   const closeModal = () => setIsModalOpen(false);
   const { isLogin, refetch } = useAuth();
 
-  const {register, handleSubmit, watch, formState: {errors}, setFocus} = useForm();
-
-
+  const {register, handleSubmit, watch, formState: {errors}, resetField} = useForm();
 
 
   const delay = ms => new Promise(
@@ -59,6 +57,9 @@ const CardComponent = ({
 
   console.log(markerWayPoint)
 
+  const memoizedRouteData = useMemo(() => routeData, [routeData]);
+  const memoizedMarkerWayPoint = useMemo(() => markerWayPoint, [markerWayPoint]);
+
 
 
 
@@ -66,10 +67,23 @@ const CardComponent = ({
 
   const [expanded, setExpanded] = useState(false);
 
+  const [expandPost, setExpandPost] = useState();
+
   const handleExpandClick = async () => {
-    await delay(100)
+    await delay(50)
     setExpanded(!expanded);
+    setExpandPost(post_idx)
   };
+
+  console.log('expanded post' , expandPost)
+  
+
+
+
+
+
+
+
 
   const handleEditClick = () => {
     onEdit(post_idx);
@@ -79,7 +93,7 @@ const CardComponent = ({
 
 
 
-  const [comments, setCommnets] = useState([]);
+  const [comments, setComments] = useState([]);
 
 
   console.log(comments)
@@ -123,16 +137,16 @@ const CardComponent = ({
 
       await commentSubmitMutation.mutateAsync(body)
 
-
       openModal();
+      resetField('comment')
+
     }
     catch(err){console.log(err)}
   }
 
 
 
-
-
+  
 
 //댓글 조회
 
@@ -142,19 +156,24 @@ const getComment = useQuery(
   async () => {
     const res = await axios.get(`https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/board/${post_idx}/comment`);
     return res.data;
+  },
+  {
+    enabled:true,
   }
 );
 
 
 
-//댓글 작성 후 리액트 쿼리 이용해서 리패치 해야할듯
-
+const fetchComments = async () => {
+  await getComment.refetch();
+  setComments(getComment.data);
+};
 
 useEffect(() => {
-  if (getComment.isSuccess) {
-    setCommnets(getComment.data);
+  if (expandPost) {
+    fetchComments();
   }
-}, [getComment.isSuccess, expanded]);
+}, [expandPost]);
 
 
 //글 삭제 처리
@@ -206,19 +225,18 @@ useEffect(() => {
   };
   
   //라우트 데이터 처리
-  useEffect(() =>{
-    if (route_path){
-      axios.get(`https://seoul-taroot.s3.ap-northeast-2.amazonaws.com/${route_path}`)
-      .then(res => {
-      console.log(res)
-      setRouteData(res.data.body)
-      setMarkerWayPoint(res.data.markerWayPoint)
-    
-    
-    })
-      .catch(err => console.log(err))
+  useEffect(() => {
+    if (route_path) {
+      axios
+        .get(`https://seoul-taroot.s3.ap-northeast-2.amazonaws.com/${route_path}`)
+        .then((res) => {
+          console.log(res);
+          setRouteData(res.data.body);
+          setMarkerWayPoint(res.data.markerWayPoint);
+        })
+        .catch((err) => console.log(err));
     }
-  },[expanded])
+  }, [expandPost]);
 
 
   const CommentContentTypography = (props) => (
@@ -269,7 +287,13 @@ useEffect(() => {
         </CardContent>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
-            {routeData && <MapPolyLineForBoard routeData={routeData} markerWayPoint={markerWayPoint}/>}
+
+            {routeData && (
+  <MapPolyLineForBoard
+    routeData={memoizedRouteData}
+    markerWayPoint={memoizedMarkerWayPoint}
+  />
+)}
             {image_path && <CardMedia component="img" alt="" height="auto" image={image_path} />}
             <ContentTypography paragraph>{content}</ContentTypography>
 
@@ -407,7 +431,7 @@ useEffect(() => {
 
     </StyledCard>
   );
-};
+});
 
 
 
