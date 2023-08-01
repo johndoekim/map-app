@@ -52,7 +52,7 @@ const handleFindRoute = async () => {
     };
 
     const res = await axios.post(
-      "https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_route_from_search_point",
+      "https://server.taroot.club/search/",
       body
     );
     setGpsData(res.data);

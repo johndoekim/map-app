@@ -22,7 +22,7 @@ const kakao = window.kakao;
 
 
 
-const MapPolyLineForBoard = ({routeData}) => {
+const MapPolyLineForBoard = ({routeData, markerWayPoint}) => {
 
 
 //   const location = useLocation();
@@ -45,6 +45,8 @@ const MapPolyLineForBoard = ({routeData}) => {
 
 
 
+
+
   const [middleValue, setMiddleValue] = useState(null);
 
   let polylinepath = [];
@@ -57,7 +59,12 @@ const MapPolyLineForBoard = ({routeData}) => {
     const jsonObject = JSON.parse(routeData.body);
     const routeGpx = JSON.parse(jsonObject.route_gpx);
     const pathLineData = routeGpx.features[0].geometry.coordinates;
+
+    console.log(routeData)
+
     console.log(jsonObject)
+
+    console.log(routeGpx)
 
     console.log(pathLineData)
 
@@ -195,6 +202,15 @@ return (
               }}}
             />
           ))}
+
+
+
+
+{markerWayPoint && (
+            <MapMarker position={markerWayPoint} />
+          )}
+
+
 
           {endMark.map((marker, index) => (
             <MapMarker

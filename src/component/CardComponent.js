@@ -14,6 +14,8 @@ import { TextField } from '@mui/material';
 import { Box, CardContent, Typography, Divider, Avatar, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
 import SuccessModal from "./NotPushAlertModal";
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import useAuth from './useAuth';
+
 
 const CardComponent = ({
   title,
@@ -31,6 +33,8 @@ const CardComponent = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+  const { isLogin, refetch } = useAuth();
+
 
 
   const delay = ms => new Promise(
@@ -42,6 +46,15 @@ const CardComponent = ({
   const confirm = useConfirm();
 
   const [routeData, setRouteData] = useState()
+
+
+  const [markerWayPoint, setMarkerWayPoint] = useState(null)
+
+
+  console.log(markerWayPoint)
+
+
+
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
@@ -158,8 +171,13 @@ console.log(comments)
   useEffect(() =>{
     if (route_path){
       axios.get(`https://seoul-taroot.s3.ap-northeast-2.amazonaws.com/${route_path}`)
-      .then(res => {console.log(res)
-      setRouteData(res.data.body)})
+      .then(res => {
+      console.log(res)
+      setRouteData(res.data.body)
+      setMarkerWayPoint(res.data.markerWayPoint)
+    
+    
+    })
       .catch(err => console.log(err))
     }
   },[expanded])
@@ -213,17 +231,17 @@ console.log(comments)
         </CardContent>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
-            {routeData && <MapPolyLineForBoard routeData={routeData}/>}
+            {routeData && <MapPolyLineForBoard routeData={routeData} markerWayPoint={markerWayPoint}/>}
             {image_path && <CardMedia component="img" alt="" height="auto" image={image_path} />}
             <ContentTypography paragraph>{content}</ContentTypography>
 
 
-            <Box display="flex" justifyContent="space-between" alignItems="center" marginTop={2}>
-       
-       
 
-       {/* 코멘트 작성 */}
+       {/* 댓글 작성 */}
 
+{isLogin && (
+        <Box display="flex" justifyContent="center" alignItems="center" marginTop={2}>
+       
         <TextField
           label="댓글 작성"
           placeholder="댓글을 입력해주세요."
@@ -239,7 +257,9 @@ console.log(comments)
         >
           등록
         </Button>
-      </Box>
+
+
+      </Box>)}
 
 
 

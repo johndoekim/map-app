@@ -20,6 +20,8 @@ import { ConfirmProvider } from 'material-ui-confirm';
 import CardComponent from './component/CardComponent';
 import BoardEdit from './component/BoardEdit';
 import MyTarootInfo from './component/MyTarootInfo';
+import BoardResetPassword from './component/BoardResetPassword';
+import BoardFindID from './component/BoardFindID';
 
 const queryClient = new QueryClient();
 
@@ -66,6 +68,8 @@ function App() {
 <PrivateRoute path="/BoardWrite" component={BoardWrite}/>
 <Route path="/BoardList" component={CardTest}/>
 <PrivateRoute path="/BoardEdit/:post_idx" component={BoardEdit} />
+<Route path="/BoardResetPassword" component={BoardResetPassword}/>
+<Route path="/BoardFindID" component={BoardFindID}/>
 
 
 

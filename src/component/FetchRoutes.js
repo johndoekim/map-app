@@ -9,7 +9,7 @@ export const FetchRoutes = async () => {
     };
   
     const res = await axios.get(
-      'https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_route_from_db',
+      'https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get-workout-info',
       config
     );
     return res.data;

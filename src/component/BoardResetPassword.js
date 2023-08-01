@@ -2,26 +2,41 @@ import { useState, forwardRef } from "react"
 import LoadingModal from "./LoadingModal";
 import axios from "axios";
 import { useForm } from "react-hook-form";
-import { Link, useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import styled from "styled-components";
-import SuccessModal from "./SuccessModal";
+import SignupModal from "./SignupModal";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import useAuth from "./useAuth";
-import { ButtonGroup } from "@mui/material";
+import WriteErrorModal from "./WriteErrorModal";
 
-const BoardSignIn = () => {
-
-
+const BoardResetPassword = () => {
 
 
+
+//성공 모달
   const [isModalOpen, setIsModalOpen] = useState(false);
   
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  const { isLogin, refetch } = useAuth();
+
+  // 에러 처리 모달
+
+
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+const [errorModalMessage, setErrorModalMessage] = useState('');
+
+const closeErrorModal = () => {
+  setIsErrorModalOpen(false);
+  setErrorModalMessage('');
+};
+
+
+
+
+
 
 
     const [loading, setLoading] = useState(false);
@@ -38,28 +53,27 @@ const BoardSignIn = () => {
         try{
             const body = {
                 'username' : data.username,
-                'password' : data.password
+                'email' : data.email
             }
-            const res = await axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/board/signin', body)
-            console.log(res.status)
-            if(res.status === 200){
-                sessionStorage.setItem('token', res.data.token)
-                sessionStorage.setItem('idx', res.data.idx)
-                sessionStorage.setItem('nickname', res.data.nickname)
-
-
-                openModal()
-                refetch();
-
-                // alert('로그인이 성공하였습니다.')
-                // history.push('/boardlist')
+            const res = await axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/board/reset-password', body)
+            console.log(res)
+            if (res.status === 200){
+                openModal();
             }
+            
         }
-        catch(err)
-        {console.log(err.response.data.success)
-        if(err.response.data.success === false)
-        {alert('로그인에 실패하였습니다. 아이디와 비밀번호를 다시 확인해 주세요')}
+        catch(err){
+          console.log(err)
+          if (err.response.status === 400){
+            setIsErrorModalOpen(true);
+            setErrorModalMessage('아아디와 이메일이 일치하지 않습니다. 확인 후 다시 이용해 주세요.')
+
+          }
+        
+        
         }
+
+        
         finally{setLoading(false)}
     
     }
@@ -72,22 +86,42 @@ const BoardSignIn = () => {
     return(
     <>
 
+{/* 성공 모달 */}
 
 <div>
-      <SuccessModal
+      <SignupModal
         isOpen={isModalOpen}
         closeModal={closeModal}
       >
         <Box>
           <Typography variant="h6" component="h2">
-            로그인 성공 !
+            비밀번호 재설정 성공 ! 로그인을 진행해 주세요
             </Typography>
 
         </Box>
-      </SuccessModal>
+      </SignupModal>
     </div>
 
 
+{/* 성공 모달 */}
+
+
+
+    {/* 에러 모달 */}
+
+    <div>
+  <WriteErrorModal isOpen={isErrorModalOpen} closeModal={closeErrorModal}>
+    <Box>
+      <Typography variant="h6" component="h2">
+        {errorModalMessage}
+      </Typography>
+    </Box>
+  </WriteErrorModal>
+</div>
+
+
+
+{/* 에러 모달 */}
 
 
 
@@ -105,30 +139,17 @@ const BoardSignIn = () => {
         {errors.username?.type === "required" && <p>필수 입력 항목입니다</p>}
         </ErrorMessage>
 
-        <StyledInput type="password" placeholder="비밀번호" {...register("password",
-        {required:true})}/>
+        <StyledInput type="text" placeholder="이메일" {...register("email",
+        {required:true, pattern: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,})}/>
                    <ErrorMessage>
 
-        {errors.password?.type === "required" && <p>필수 입력 항목입니다</p>}
+        {errors.email?.type === "required" && <p>필수 입력 항목입니다</p>}
+        {errors?.email?.type === "pattern" && (
+            <p>올바르지 않은 이메일 형식입니다.</p>
+          )}
         </ErrorMessage>
-        <SubmitButton type="submit" value="로그인" />
 
-
-<ButtonGroupd>
-
-    <ButtonGroup variant="outlined" size="small" aria-label="outlined button group">
-
-        <Button onClick={() => {history.push('/BoardFindID')}} variant="outlined">아이디 찾기</Button>
-
-        <Button onClick={() => {history.push('/Boardresetpassword')}}variant="outlined">비밀번호 재설정</Button>
-
-        <Button onClick={() => {history.push('/boardsignup')}}variant="outlined">회원가입</Button>
-
-
-      </ButtonGroup>
-
-        </ButtonGroupd>
-      
+        <SubmitButton type="submit" value="전송" />
 
         </FormGroup>
 
@@ -139,13 +160,6 @@ const BoardSignIn = () => {
     
     </>)
 }
-
-const ButtonGroupd = styled.div`
-  align-itmes: center;
-  padding : 5px;
-  margin : 5px auto;
-  
-`;
 
 const FormGroup = styled.div`
   display: flex;
@@ -211,4 +225,4 @@ const SubmitButton = styled.input`
 
 
 
-export default BoardSignIn;
+export default BoardResetPassword;

@@ -108,13 +108,6 @@ console.log(isLogin)
 
 
 
-{!isLogin && (
-      <SidebarItem>
-        <StyledLink to="/boardsignup">회원가입</StyledLink>
-      </SidebarItem>
-    )}
-
-
   </SidebarWrapper>
 
   </>

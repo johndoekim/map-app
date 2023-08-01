@@ -176,6 +176,11 @@ const closeErrorModal = () => {
             setErrorModalMessage('글 작성 권한이 없습니다. 로그인 후 다시 이용해 주세요.')
             history.push('/boardsignin')
           }
+
+          if (err.response.data.status === 403){
+            setIsErrorModalOpen(true);
+            setErrorModalMessage('권한이 없습니다. 다시 시도해 주세요.')
+          }
         
         }
         finally{setLoading(false)}
@@ -284,8 +289,31 @@ const closeErrorModal = () => {
 
 
 
+
+{/* 루트 선택 */}
+
+
+    <FormControl fullWidth variant="outlined">
+      <InputLabel id="route-select-label">루트 선택</InputLabel>
+      <Select
+        labelId="route-select-label"
+        id="route-select"
+        value={selectedRoute}
+        onChange={handleChange}
+        label="루트 선택"
+      >
+        {routeDataFromDB.map((route) => (
+          <MenuItem key={route.route_idx} value={route}>
+            {`루트 ${route.route_idx}: ${route.created_at}, ${route.workout_distance}m`}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+
+
+
 {/* 이미지 선택 */}
-    <StyledInputWrapper>
+<StyledInputWrapper>
   <input
     accept="image/*"
     style={{ display: 'none' }}
@@ -305,26 +333,9 @@ const closeErrorModal = () => {
 </StyledInputWrapper>
 
 
+
+
     <SubmitButton type="submit" value="글 작성" />
-
-
-
-    <FormControl fullWidth variant="outlined">
-      <InputLabel id="route-select-label">루트 선택</InputLabel>
-      <Select
-        labelId="route-select-label"
-        id="route-select"
-        value={selectedRoute}
-        onChange={handleChange}
-        label="루트 선택"
-      >
-        {routeDataFromDB.map((route) => (
-          <MenuItem key={route.route_idx} value={route}>
-            {`루트 ${route.route_idx}: ${route.created_at}, ${route.workout_distance}m`}
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
 
 
     </FormGroup>

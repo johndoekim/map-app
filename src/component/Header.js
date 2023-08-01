@@ -6,7 +6,7 @@ import styled from "styled-components";
 const Header = ({ toggleSidebar }) => (
   <HeaderWrapper>
     <HeaderTitle>
-      <Link to ="/"> <img src="/images/tarootlogo.svg" alt="따룻" /></Link>
+      <Link to ="/"> <img src="/images/tarootlogo.png" alt="따룻" height={58}/></Link>
       </HeaderTitle>
     <HamburgerMenu onClick={toggleSidebar}>
       <div />
@@ -36,7 +36,7 @@ z-index: 1000;
 `;
 
 const HeaderTitle = styled.div`
-font-weight: bold;
+
 `;
 
 const HamburgerMenu = styled.div`

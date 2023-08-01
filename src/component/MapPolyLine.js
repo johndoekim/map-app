@@ -179,7 +179,7 @@ const renderTooltipContent = (e) => {
 const queryClient = useQueryClient();
 const saveRouteMutation = useMutation(
   async (routeData) => {
-    const body = { ...routeData };
+    const body = { ...routeData, markerWayPoint };
     const config = {
       headers: {
         Authorization: sessionStorage.getItem('token'),
