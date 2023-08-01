@@ -10,11 +10,14 @@ import axios from 'axios';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import MapPolyLineForBoard from './MapPolyLineForBoard';
-import { TextField } from '@mui/material';
+import { Input, TextField } from '@mui/material';
 import { Box, CardContent, Typography, Divider, Avatar, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
 import SuccessModal from "./NotPushAlertModal";
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import useAuth from './useAuth';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useForm } from 'react-hook-form';
+
 
 
 const CardComponent = ({
@@ -34,6 +37,9 @@ const CardComponent = ({
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
   const { isLogin, refetch } = useAuth();
+
+  const {register, handleSubmit, watch, formState: {errors}, setFocus} = useForm();
+
 
 
 
@@ -72,17 +78,39 @@ const CardComponent = ({
 
 
 
-  const [comment, setComment] = useState('');
 
   const [comments, setCommnets] = useState([]);
 
+
+  console.log(comments)
+
+
+
+
+
 //댓글 작성
 
-  const handleCommentChange = (e) =>{
-    setComment(e.target.value)
-  }
+  const queryClient = useQueryClient();
 
-  const handleCommentSubmit = async () => {
+  const commentSubmitMutation = useMutation(
+    async (data) => {
+      const body = {...data};
+      const config = {
+        headers: {
+        'Authorization': sessionStorage.getItem('token'),
+      }};
+      console.log(body)
+
+      const res = await axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/board/comment', body, config)
+      return res.data;
+    },
+    {onSuccess: () =>{
+      queryClient.invalidateQueries('commentList')
+    }
+  }
+  )
+
+  const onSubmit = async (data) => {
 
     try{
       const config = {
@@ -90,33 +118,43 @@ const CardComponent = ({
         'Authorization': sessionStorage.getItem('token'),
       }};
 
-      const body = {'content' : comment, 'post_idx' : post_idx}
+      const body = {'content' : data.comment, 'post_idx' : post_idx}
       console.log(body)
 
-      const res = await axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/board/comment', body, config)
-      console.log(res)
+      await commentSubmitMutation.mutateAsync(body)
+
+
       openModal();
-      
     }
     catch(err){console.log(err)}
   }
 
+
+
+
+
+
 //댓글 조회
 
-//댓글 작성 후 리액트 쿼리 이용해서 리패치 해야할듯
-useEffect(() =>{
-  axios.get(`https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/board/${post_idx}/comment`)
-  .then(res => {
-    console.log(res)
-    setCommnets(res.data)
+
+const getComment = useQuery(
+  'commentList',
+  async () => {
+    const res = await axios.get(`https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/board/${post_idx}/comment`);
+    return res.data;
   }
-  
-  )
-  .catch(err => console.log(err))
-},[expanded])
+);
 
 
-console.log(comments)
+
+//댓글 작성 후 리액트 쿼리 이용해서 리패치 해야할듯
+
+
+useEffect(() => {
+  if (getComment.isSuccess) {
+    setCommnets(getComment.data);
+  }
+}, [getComment.isSuccess, expanded]);
 
 
 //글 삭제 처리
@@ -238,6 +276,7 @@ console.log(comments)
 
 
        {/* 댓글 작성 */}
+{/* 
 
 {isLogin && (
         <Box display="flex" justifyContent="center" alignItems="center" marginTop={2}>
@@ -258,8 +297,36 @@ console.log(comments)
           등록
         </Button>
 
+      </Box>)} */}
 
-      </Box>)}
+{isLogin && (
+  <Box marginTop={2}>
+    <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexGrow: 1 }}>
+      <TextField
+        label="댓글 작성"
+        fullWidth
+        type="text"
+        placeholder="댓글을 입력해 주세요"
+        {...register("comment", { required: true })}
+      />
+
+      <Button variant="outlined" style={{ marginLeft: 8 }}
+          color="primary" type="submit" value="등록">등록</Button>
+    </form>
+    <Box marginTop={1}>
+      <ErrorMessage>
+      {errors.comment?.type === "required" && <p>필수 입력 항목입니다</p>}
+      </ErrorMessage>
+    </Box>
+  </Box>
+)}
+
+
+
+
+
+
+
 
 
 
@@ -342,6 +409,14 @@ console.log(comments)
   );
 };
 
+
+
+const ErrorMessage = styled.p`
+  margin-top: 4px;
+  font-size: 14px;
+  color: red;
+`;
+
 const ContentTypography = styled(Typography)`
   white-space: pre-line;
 `;
@@ -355,6 +430,7 @@ const StyledCard = styled(Card)`
     margin: 0.5rem;
   }
 `;
+
 
 
 

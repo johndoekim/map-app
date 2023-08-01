@@ -108,9 +108,10 @@ const BoardSignIn = () => {
         <StyledInput type="password" placeholder="비밀번호" {...register("password",
         {required:true})}/>
                    <ErrorMessage>
-
         {errors.password?.type === "required" && <p>필수 입력 항목입니다</p>}
         </ErrorMessage>
+
+        
         <SubmitButton type="submit" value="로그인" />
 
 

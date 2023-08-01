@@ -32,7 +32,7 @@ const BoardList = () =>{
         
         axios
           .get(
-            `https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/board/list?limit=50&last_post_idx=${
+            `https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/board/list?limit=20&last_post_idx=${
               lastPostIdx || ""
             }`
           )
