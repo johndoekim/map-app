@@ -143,8 +143,12 @@ const MapSelectWaypoint = () =>{
 
     
       const res = await axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_fast_route',body)
-          console.log(res)
+          console.log(res.data)
           setRouteData(res.data)
+
+
+
+
       }catch(error){
         console.log(error);
         if ("TypeError: Cannot read properties of undefined (reading 'sp_nearest_station_coor')")
@@ -153,11 +157,29 @@ const MapSelectWaypoint = () =>{
 
 
 
+
       }finally{
         setLoading(false);
+
+
+
+
       }
- 
     }
+
+
+    useEffect(() =>{
+      if(routeData){
+        history.push({
+          pathname : '/MapPolyLine',
+          state : {routeData}
+        })
+      }
+    },[routeData])
+
+
+    console.log(routeData)
+
 
 
 

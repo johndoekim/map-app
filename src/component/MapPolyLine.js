@@ -74,11 +74,9 @@ const MapPolyLine = () => {
   const Category = location.state ? location.state.Category : null;
   const foodInfo = location.state ? location.state.foodInfo : null;
 
+  console.log(routeData)
 
-  console.log(foodInfo)
 
-
-  console.log(Category)
 
   const [startMark, setStartMark] = useState([]);
   const [endMark, setEndMark] = useState([]);
@@ -121,7 +119,7 @@ console.log(markerWayPoint)
 useEffect(() =>{
   if(foodInfo) {
     setFoodsMarker(foodInfo.map((marker) => {
-      return {latlng : {lat : parseFloat(marker.위도), lng : parseFloat(marker.경도)}, content : {name : marker.이름, addr : marker.주소}}
+      return {latlng : {lat : marker.위도, lng : marker.경도}, content : {name : marker.이름, addr : marker.주소}}
     }))
   }
 }, [foodInfo])
@@ -137,11 +135,6 @@ console.log(foodsMarker)
 
   const [middleValue, setMiddleValue] = useState(null);
 
-  // let polylinepath = [];
-
-  // let distanceAndDuration = [];
-
-  // let pathlineElevation = [];
 
 
   let polylinepath = [];
@@ -453,6 +446,9 @@ return (
 
       <Card>
 
+
+
+{foodInfo &&
 <ButtonGroup>
 
 <Button onClick={RouteTwoHandler}>루트 2</Button>
@@ -461,7 +457,7 @@ return (
 <Button onClick={RouteFiveHandler}>루트 5</Button>
 
 </ButtonGroup>
-
+}
 
 
 
