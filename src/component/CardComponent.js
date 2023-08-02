@@ -13,7 +13,7 @@ import MapPolyLineForBoard from './MapPolyLineForBoard';
 import { Input, TextField } from '@mui/material';
 import { Box, CardContent, Typography, Divider, Avatar, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
 import SuccessModal from "./NotPushAlertModal";
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import { Redirect, useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import useAuth from './useAuth';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useForm } from 'react-hook-form';
@@ -35,6 +35,7 @@ const CardComponent = React.memo(({
 
 
   const isValidImagePath = !image_path.includes('null');
+
 
 
 
@@ -127,8 +128,8 @@ const CardComponent = React.memo(({
       const res = await axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/board/comment', body, config)
       return res.data;
     },
-    {onSuccess: () =>{
-      queryClient.invalidateQueries('commentList')
+    {onSuccess: async () =>{
+      await queryClient.invalidateQueries('commentList')
     }
   }
   )
@@ -148,7 +149,6 @@ const CardComponent = React.memo(({
 
       openModal();
       resetField('comment')
-      
 
 
     }
@@ -173,17 +173,13 @@ const getComment = useQuery(
   }
 );
 
-
-
 const fetchComments = async () => {
   await getComment.refetch();
   setComments(getComment.data);
 };
 
 useEffect(() => {
-  if (expandPost) {
     fetchComments();
-  }
 }, [expandPost]);
 
 
