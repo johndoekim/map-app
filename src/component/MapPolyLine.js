@@ -74,7 +74,6 @@ const MapPolyLine = () => {
   const Category = location.state ? location.state.Category : null;
   const foodInfo = location.state ? location.state.foodInfo : null;
 
-  console.log(routeData)
 
 
 
@@ -113,7 +112,6 @@ useEffect(() => {
   }
 }, [foodInfo]);
 
-console.log(markerWayPoint)
 
 
 useEffect(() =>{
@@ -126,8 +124,6 @@ useEffect(() =>{
 
 console.log(foodsMarker)
 
-
-  
 
 
 
@@ -142,7 +138,6 @@ console.log(foodsMarker)
   let distanceAndDuration = [];
 
   let pathlineElevation = [];
-
 
 
 
@@ -380,6 +375,8 @@ const handlerSaveRoute = async () => {
       body: routeData,
       workout_distance: distanceAndDuration[0].distance,
       workout_time: distanceAndDuration[0].duration,
+      startPoint : [startMark[0].lng, startMark[0].lat], endPoint : [endMark[0].lng, endMark[0].lat],
+      category : Category
     };
 
     await saveRouteMutation.mutateAsync(body);

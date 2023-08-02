@@ -24,6 +24,7 @@ import BoardResetPassword from './component/BoardResetPassword';
 import BoardFindID from './component/BoardFindID';
 import { MapWorkoutLevel } from './component/MapWorkoutLevel';
 import { MapFoodCategory } from './component/MapFoodCategory';
+import { MapHealingCategory } from './component/MapHealingCategory';
 
 const queryClient = new QueryClient();
 
@@ -63,6 +64,7 @@ function App() {
 <Route path="/MapSelectWaypoint" component={MapSelectWaypoint}/>
 <Route path="/MapWorkoutLevel" component={MapWorkoutLevel}/>
 <Route path="/MapFoodCategory" component={MapFoodCategory}/>
+<Route path="/MapHealingCategory" component={MapHealingCategory}/>
 
 
 {/* 게시판 */}

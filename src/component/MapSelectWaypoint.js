@@ -60,8 +60,9 @@ const MapSelectWaypoint = () =>{
 
 
     const HealingClickHandler =  () => {
-       history.push({pathname : '/mapfoodcategory',
-      state: gpsData});
+       history.push({pathname : '/MapHealingCategory',
+      state: {gpsData}
+    });
     };
 
 
