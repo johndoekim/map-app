@@ -103,7 +103,7 @@ const CardComponent = React.memo(({
   const [comments, setComments] = useState([]);
 
 
-  const isvalidComments = comments.length > 0
+  // const isvalidComments = comments.length > 0
 
   // console.log(comments.length)
 
@@ -143,7 +143,7 @@ const CardComponent = React.memo(({
       }};
 
       const body = {'content' : data.comment, 'post_idx' : post_idx}
-      console.log(body)
+      // console.log(body)
 
       await commentSubmitMutation.mutateAsync(body)
 
@@ -364,7 +364,7 @@ useEffect(() => {
 
 {/* 댓글 조회 */}
 
-{isvalidComments && comments.map((comment) => (
+{comments.map((comment) => (
   <Box key={comment.comment_idx} marginBottom={2}>
     <ListItem alignItems="flex-start">
       <ListItemAvatar>
