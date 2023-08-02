@@ -33,6 +33,12 @@ const CardComponent = React.memo(({
   route_path
 }) => {
 
+
+  const isValidImagePath = !image_path.includes('null');
+
+
+
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -55,7 +61,7 @@ const CardComponent = React.memo(({
   const [markerWayPoint, setMarkerWayPoint] = useState(null)
 
 
-  console.log(markerWayPoint)
+  // console.log(markerWayPoint)
 
   const memoizedRouteData = useMemo(() => routeData, [routeData]);
   const memoizedMarkerWayPoint = useMemo(() => markerWayPoint, [markerWayPoint]);
@@ -70,15 +76,15 @@ const CardComponent = React.memo(({
   const [expandPost, setExpandPost] = useState();
 
   const handleExpandClick = async () => {
-    await delay(50)
+    await delay(100)
     setExpanded(!expanded);
     setExpandPost(post_idx)
   };
 
-  console.log('expanded post' , expandPost)
+  // console.log('expanded post' , expandPost)
   
 
-
+// console.log(image_path)
 
 
 
@@ -96,7 +102,10 @@ const CardComponent = React.memo(({
   const [comments, setComments] = useState([]);
 
 
-  console.log(comments)
+  const isvalidComments = comments.length > 0
+
+  // console.log(comments.length)
+
 
 
 
@@ -139,6 +148,8 @@ const CardComponent = React.memo(({
 
       openModal();
       resetField('comment')
+      
+
 
     }
     catch(err){console.log(err)}
@@ -226,11 +237,11 @@ useEffect(() => {
   
   //라우트 데이터 처리
   useEffect(() => {
-    if (route_path) {
+    if (route_path !== null) {
       axios
         .get(`https://seoul-taroot.s3.ap-northeast-2.amazonaws.com/${route_path}`)
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           setRouteData(res.data.body);
           setMarkerWayPoint(res.data.markerWayPoint);
         })
@@ -294,7 +305,8 @@ useEffect(() => {
     markerWayPoint={memoizedMarkerWayPoint}
   />
 )}
-            {image_path && <CardMedia component="img" alt="" height="auto" image={image_path} />}
+  {isValidImagePath && <img src={image_path} alt="post-thumbnail" />}
+            
             <ContentTypography paragraph>{content}</ContentTypography>
 
 
@@ -355,7 +367,8 @@ useEffect(() => {
 
 
 {/* 댓글 조회 */}
-{comments.map((comment) => (
+
+{isvalidComments && comments.map((comment) => (
   <Box key={comment.comment_idx} marginBottom={2}>
     <ListItem alignItems="flex-start">
       <ListItemAvatar>
@@ -380,7 +393,7 @@ useEffect(() => {
     </ListItem>
     <Divider variant="inset" />
   </Box>
-))}
+))} 
 
 
 

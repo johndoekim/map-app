@@ -37,7 +37,7 @@ const MapPolyLineForBoard = ({routeData, markerWayPoint}) => {
   
 
 
-  console.log(routeData)
+  // console.log(routeData)
 
 
 
@@ -60,13 +60,13 @@ const MapPolyLineForBoard = ({routeData, markerWayPoint}) => {
     const routeGpx = JSON.parse(jsonObject.route_gpx);
     const pathLineData = routeGpx.features[0].geometry.coordinates;
 
-    console.log(routeData)
+    // console.log(routeData)
 
-    console.log(jsonObject)
+    // console.log(jsonObject)
 
-    console.log(routeGpx)
+    // console.log(routeGpx)
 
-    console.log(pathLineData)
+    // console.log(pathLineData)
 
     
     distanceAndDuration = [routeGpx.features[0].properties.summary].map((dadinfo) =>{
@@ -86,7 +86,7 @@ const MapPolyLineForBoard = ({routeData, markerWayPoint}) => {
 
 }
 
-console.log(pathlineElevation)
+// console.log(pathlineElevation)
 
     
 
