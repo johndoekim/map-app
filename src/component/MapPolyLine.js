@@ -19,6 +19,9 @@ import NotPushAlertModal from "./NotPushAlertModal";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { useMutation, useQueryClient } from 'react-query';
+import { FamilyRestroomOutlined } from "@mui/icons-material";
+import LoadingModal from "./LoadingModal";
+import { ButtonGroup } from "@mui/material";
 
 
 
@@ -31,49 +34,115 @@ const kakao = window.kakao;
 const MapPolyLine = () => {
 
 
+  const delay = ms => new Promise(
+    resolve => setTimeout(resolve, ms)
+  );
+
+
+  // const firstLoading = async () =>{
+  //   setLoading(true)
+
+  //   try{
+  //   await delay(3000)
+  //   }
+
+  //   catch(err){console.log(err)}
+
+  //   finally{setLoading(false)}
+
+  // }
+
+  // firstLoading()
+
+
+
+  
+
+  const [loading, setLoading] = useState(false);
+
   const { isLogin, refetch } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
 
+
   const location = useLocation();
   
   const routeData = location.state ? location.state.routeData : null;
   const wayPoint = location.state ? location.state.wayPoint : null;
+  const foodCategory = location.state ? location.state.foodCategory : null;
+  const foodInfo = location.state ? location.state.foodInfo : null;
+
+
+  console.log(foodInfo)
+
+
+  console.log(foodCategory)
 
   const [startMark, setStartMark] = useState([]);
   const [endMark, setEndMark] = useState([]);
   const [chartWidth, setChartWidth] = useState(window.innerWidth * 0.525);
   const [chartHeight, setChartHeight] = useState(window.innerHeight * 0.35); 
+
+
+
+
+  const [foodsMarker, setFoodsMarker] = useState([]);
+
+
+
+
+
+
+
+
+
   
 
 
-  console.log(routeData)
+  // console.log(routeData)
+
+
+  const [isVisible, setIsVisible] = useState(false)
 
 
 
 
 
   
-const [markerWayPoint, setMarkerWayPoint] = useState({});
+const [markerWayPoint, setMarkerWayPoint] = useState();
 
 useEffect(() => {
   if (wayPoint) {
-    const updatedMarkerWayPoint = {
+    const updatedMarkerWayPoint = {latlng : {
       lat: wayPoint[1],
       lng: wayPoint[0],
-    };
+    }};
     setMarkerWayPoint(updatedMarkerWayPoint);
   }
 }, [wayPoint]);
 
+console.log(markerWayPoint)
 
 
 
 
 
+ 
 
+useEffect(() =>{
+  if(foodInfo) {
+    setFoodsMarker(foodInfo.map((marker) => {
+      return {latlng : {lat : parseFloat(marker.위도), lng : parseFloat(marker.경도)}, content : {name : marker.이름, addr : marker.주소}}
+    }))
+  }
+}, [foodInfo])
+
+console.log(foodsMarker)
+
+
+  
 
 
 
@@ -81,22 +150,34 @@ useEffect(() => {
 
   const [middleValue, setMiddleValue] = useState(null);
 
+  // let polylinepath = [];
+
+  // let distanceAndDuration = [];
+
+  // let pathlineElevation = [];
+
+
   let polylinepath = [];
 
   let distanceAndDuration = [];
 
   let pathlineElevation = [];
 
-  if (routeData) {
+
+
+
+
+
+  if(routeData){
     const jsonObject = JSON.parse(routeData.body);
     const routeGpx = JSON.parse(jsonObject.route_gpx);
     const pathLineData = routeGpx.features[0].geometry.coordinates;
-    console.log(jsonObject)
+    // console.log(jsonObject)
 
-    console.log(pathLineData)
+    // console.log(pathLineData)
 
     
-    distanceAndDuration = [routeGpx.features[0].properties.summary].map((dadinfo) =>{
+    distanceAndDuration = [routeGpx.features[0].properties.summary].map((dadinfo) => {
       return {distance : dadinfo.distance, duration : dadinfo.duration}
     })
 
@@ -104,16 +185,129 @@ useEffect(() => {
     return { lat: path[1], lng: path[0]};
   });
 
-    
   pathlineElevation = pathLineData.map((path, idx) => {
     return { idx: idx, elevation: path[2] };
 });
-
-
-
 }
 
-console.log(pathlineElevation)
+const [anotherRouteData, setAnotherRouteData] = useState()
+
+
+  if(anotherRouteData){
+
+    const jsonObject = JSON.parse(anotherRouteData.body);
+    const routeGpx = JSON.parse(jsonObject.route_gpx);
+    const pathLineData = routeGpx.features[0].geometry.coordinates;
+
+
+
+    distanceAndDuration = [routeGpx.features[0].properties.summary].map((dadinfo) => {
+      return {distance : dadinfo.distance, duration : dadinfo.duration}
+    })
+
+    polylinepath = pathLineData.map((path) => {
+    return { lat: path[1], lng: path[0]};
+  });
+
+  pathlineElevation = pathLineData.map((path, idx) => {
+    return { idx: idx, elevation: path[2] };
+});
+    
+  }
+
+
+
+
+
+
+
+
+
+const RouteTwoHandler = async () =>{
+
+setLoading(true)
+  try {
+    const body = {startPoint : [startMark[0].lng, startMark[0].lat], endPoint : [endMark[0].lng, endMark[0].lat], wayPoint : [foodInfo[1].경도, foodInfo[1].위도]}
+
+    console.log(body)
+    
+    const res = await axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_route_purpose_geojson', body)
+    console.log(res)
+    setAnotherRouteData(res.data)
+    setMarkerWayPoint(foodsMarker[1])
+  }
+  catch(err){console.log(err)}
+
+  finally{setLoading(false)}
+}
+
+
+
+
+const RouteThreeHandler = async () =>{
+
+  setLoading(true)
+    try {
+      const body = {startPoint : [startMark[0].lng, startMark[0].lat], endPoint : [endMark[0].lng, endMark[0].lat], wayPoint : [foodInfo[2].경도, foodInfo[2].위도]}
+  
+      console.log(body)
+      
+      const res = await axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_route_purpose_geojson', body)
+      console.log(res)
+      setAnotherRouteData(res.data)
+      setMarkerWayPoint(foodsMarker[2])
+    }
+    catch(err){console.log(err)}
+  
+    finally{setLoading(false)}
+  }
+
+
+  const RouteFourHandler = async () =>{
+
+    setLoading(true)
+      try {
+        const body = {startPoint : [startMark[0].lng, startMark[0].lat], endPoint : [endMark[0].lng, endMark[0].lat], wayPoint : [foodInfo[3].경도, foodInfo[3].위도]}
+    
+        console.log(body)
+        
+        const res = await axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_route_purpose_geojson', body)
+        console.log(res)
+        setAnotherRouteData(res.data)
+        setMarkerWayPoint(foodsMarker[3])
+      }
+      catch(err){console.log(err)}
+    
+      finally{setLoading(false)}
+    }
+
+
+    const RouteFiveHandler = async () =>{
+
+      setLoading(true)
+        try {
+          const body = {startPoint : [startMark[0].lng, startMark[0].lat], endPoint : [endMark[0].lng, endMark[0].lat], wayPoint : [foodInfo[4].경도, foodInfo[4].위도]}
+      
+          console.log(body)
+          
+          const res = await axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_route_purpose_geojson', body)
+          console.log(res)
+          setAnotherRouteData(res.data)
+          setMarkerWayPoint(foodsMarker[4])
+        }
+        catch(err){console.log(err)}
+      
+        finally{setLoading(false)}
+      }
+
+
+
+  
+
+
+
+
+
 
     
 
@@ -222,6 +416,30 @@ const handlerSaveRoute = async () => {
 return (
   <>
 
+
+
+
+
+
+  {/* 로딩 모달 */}
+
+<div className="modal-box">
+
+
+          {loading ? (
+              <LoadingModal show={loading} setShow={setLoading}></LoadingModal>
+          ) : null}
+      </div>
+
+  {/* 로딩 모달 */}
+
+
+
+
+
+
+
+{/* 모달 */}
 <div>
       <NotPushAlertModal
         isOpen={isModalOpen}
@@ -248,6 +466,21 @@ return (
 
       <Card>
 
+<ButtonGroup>
+
+<Button onClick={RouteTwoHandler}>루트 2</Button>
+<Button onClick={RouteThreeHandler}>루트 3</Button>
+<Button onClick={RouteFourHandler}>루트 4</Button>
+<Button onClick={RouteFiveHandler}>루트 5</Button>
+
+
+</ButtonGroup>
+
+
+
+
+
+{/* 루트 저장 */}
         <Saveroutebutton>
         {isLogin && (<Button onClick={() =>{
           handlerSaveRoute();
@@ -257,6 +490,10 @@ return (
       </Saveroutebutton>
 
         
+        {/* 루트 저장 */}
+
+
+
 
       <MapContainer>
 
@@ -270,6 +507,12 @@ return (
       >
         <ZoomControl position={kakao.maps.ControlPosition.TOPRIGHT}/>
 
+
+
+{/* 마커 */}
+
+
+{/* 시작점 */}
           {startMark.map((marker, index) => (
             <MapMarker
               key={index}
@@ -281,11 +524,76 @@ return (
               }}}
             />
           ))}
+{/* 시작점 */}
 
 
-          {markerWayPoint.lat && (
-            <MapMarker position={markerWayPoint} />
-          )}
+
+{/* 경유지 */}
+
+
+          {markerWayPoint && (
+            <MapMarker position={markerWayPoint.latlng} />
+          )} 
+
+
+{/* 경유지 */}
+
+
+
+
+{/* 음식 관련 마커 */}
+
+
+{/* 
+          {foodsMarker.map((marker, index) => (
+            <MapMarker
+            key={index}
+            position={marker.latlng}
+            onMouseOver={() => setIsVisible(true)}
+            onMouseOut={() => setIsVisible(false)}
+            >
+            </MapMarker>
+        
+          ))}
+
+          
+{foodsMarker.map((marker, index) => (
+  isVisible && <CustomOverlayMap
+  key={index}
+  position={marker.latlng}
+  >
+
+
+<div
+    className="label"
+    style={{
+      color: "#000",
+      backgroundColor: "#fff",
+      padding: "5px",
+      borderRadius: "10px",
+      whiteSpace: "nowrap", 
+      fontSize:'0.7rem'
+
+    }}
+  >
+  {marker.content.name}
+
+  {marker.content.addr}
+
+  </div>
+  </CustomOverlayMap>
+
+))} */}
+
+
+
+
+{/* 음식 관련 마커 */}
+
+
+
+
+{/* 도착지 마커 */}
 
           {endMark.map((marker, index) => (
             <MapMarker
@@ -298,6 +606,10 @@ return (
             }}}
             />
           ))}
+
+{/* 도착지 마커 */}
+
+          {/* 마커 */}
 
 <CustomOverlayMap position={middleValue}
               yAnchor={2.5}
@@ -352,6 +664,9 @@ return (
       </StyledMap> 
       </MapContainer>
 
+
+
+{/* 리액트 차트 */}
 
       <AreaChart
             width={chartWidth}

@@ -23,6 +23,7 @@ import MyTarootInfo from './component/MyTarootInfo';
 import BoardResetPassword from './component/BoardResetPassword';
 import BoardFindID from './component/BoardFindID';
 import { MapWorkoutLevel } from './component/MapWorkoutLevel';
+import { MapFoodCategory } from './component/MapFoodCategory';
 
 const queryClient = new QueryClient();
 
@@ -61,9 +62,11 @@ function App() {
 <Route exact path="/" component={MapMain}/>
 <Route path="/MapSelectWaypoint" component={MapSelectWaypoint}/>
 <Route path="/MapWorkoutLevel" component={MapWorkoutLevel}/>
+<Route path="/MapFoodCategory" component={MapFoodCategory}/>
 
 
 {/* 게시판 */}
+
 <Route path="/MyTarootInfo" component={MyTarootInfo}/>
 <Route path="/BoardSignIn" component={BoardSignIn}/>
 <Route path="/BoardSignup" component={BoardSignUp}/>
