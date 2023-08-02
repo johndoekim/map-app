@@ -364,7 +364,7 @@ useEffect(() => {
 
 {/* 댓글 조회 */}
 
-{comments.map((comment) => (
+{comments && comments.map((comment) => (
   <Box key={comment.comment_idx} marginBottom={2}>
     <ListItem alignItems="flex-start">
       <ListItemAvatar>
