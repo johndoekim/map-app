@@ -20,7 +20,7 @@ export const MapFoodCategory = () =>{
     const [wayPoint, setWayPoint] = useState()
 
 
-    const [foodCategory, setFoodCategory] = useState();
+    const [Category, setCategory] = useState();
 
     const [foodInfo, setFoodInfo] = useState([]);
 
@@ -95,7 +95,7 @@ export const MapFoodCategory = () =>{
         console.log(wayPoint)
 
 
-        setFoodCategory(category)
+        setCategory(category)
 
         setFoodInfo(res.data.documents)
 
@@ -140,7 +140,7 @@ export const MapFoodCategory = () =>{
         if(routeData){
           history.push({
             pathname : '/MapPolyLine',
-            state : {routeData, wayPoint, foodCategory, foodInfo}
+            state : {routeData, wayPoint, Category, foodInfo}
           })}
       },[routeData, loading])
 

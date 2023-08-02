@@ -71,23 +71,19 @@ const MapPolyLine = () => {
   
   const routeData = location.state ? location.state.routeData : null;
   const wayPoint = location.state ? location.state.wayPoint : null;
-  const foodCategory = location.state ? location.state.foodCategory : null;
+  const Category = location.state ? location.state.Category : null;
   const foodInfo = location.state ? location.state.foodInfo : null;
 
 
   console.log(foodInfo)
 
 
-  console.log(foodCategory)
+  console.log(Category)
 
   const [startMark, setStartMark] = useState([]);
   const [endMark, setEndMark] = useState([]);
   const [chartWidth, setChartWidth] = useState(window.innerWidth * 0.525);
   const [chartHeight, setChartHeight] = useState(window.innerHeight * 0.35); 
-
-
-
-
   const [foodsMarker, setFoodsMarker] = useState([]);
 
 
@@ -110,26 +106,17 @@ const MapPolyLine = () => {
 
 
 
-  
+  // 음식 관련 웨이포인트 설정
 const [markerWayPoint, setMarkerWayPoint] = useState();
 
 useEffect(() => {
-  if (wayPoint) {
-    const updatedMarkerWayPoint = {latlng : {
-      lat: wayPoint[1],
-      lng: wayPoint[0],
-    }};
-    setMarkerWayPoint(updatedMarkerWayPoint);
+  if (foodInfo) {
+    setMarkerWayPoint({latlng : { lat : foodInfo[0].위도, lng : foodInfo[0].경도}, content : {name : foodInfo[0].이름, addr : foodInfo[0].주소}});
   }
-}, [wayPoint]);
+}, [foodInfo]);
 
 console.log(markerWayPoint)
 
-
-
-
-
- 
 
 useEffect(() =>{
   if(foodInfo) {
@@ -473,7 +460,6 @@ return (
 <Button onClick={RouteFourHandler}>루트 4</Button>
 <Button onClick={RouteFiveHandler}>루트 5</Button>
 
-
 </ButtonGroup>
 
 
@@ -532,7 +518,34 @@ return (
 
 
           {markerWayPoint && (
-            <MapMarker position={markerWayPoint.latlng} />
+            <MapMarker position={markerWayPoint.latlng}
+
+            onMouseOver={() => setIsVisible(true)}
+            onMouseOut={() => setIsVisible(false)}
+            
+            >
+
+<div
+    className="label"
+    style={{
+      color: "#000",
+      backgroundColor: "#fff",
+      padding: "5px",
+      borderRadius: "10px",
+      whiteSpace: "nowrap", 
+      fontSize:'0.7rem'
+
+    }}
+  >
+  {markerWayPoint.content.name}
+
+  {markerWayPoint.content.addr}
+
+  </div>
+
+            </MapMarker>
+
+
           )} 
 
 
