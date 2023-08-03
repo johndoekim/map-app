@@ -25,6 +25,7 @@ import BoardFindID from './component/BoardFindID';
 import { MapWorkoutLevel } from './component/MapWorkoutLevel';
 import { MapFoodCategory } from './component/MapFoodCategory';
 import { MapHealingCategory } from './component/MapHealingCategory';
+import { BoardUserInfo } from './component/BoardUserInfo';
 
 const queryClient = new QueryClient();
 
@@ -77,6 +78,7 @@ function App() {
 <PrivateRoute path="/BoardEdit/:post_idx" component={BoardEdit} />
 <Route path="/BoardResetPassword" component={BoardResetPassword}/>
 <Route path="/BoardFindID" component={BoardFindID}/>
+<Route path="/BoardUserInfo" component={BoardUserInfo}/>
 
 
 
