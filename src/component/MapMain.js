@@ -207,10 +207,13 @@ const FormWrapper = styled.form`
   max-width: 650px;
   margin: 0 auto;
   padding: 2rem;
-  min-height: 100%; // 이 부분을 수정하였습니다.
+  min-height: 100vh; 
 
   @media (min-width: 768px) {
     flex-direction: row;
+    //<-- 중앙 정렬을 유지하면서 양 옆 정렬로
+    //align-items: center;
+    //justify-content: center;
   }
 `;
 
