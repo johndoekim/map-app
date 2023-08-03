@@ -229,8 +229,8 @@ useEffect(() => {
       axios
         .get(`https://seoul-taroot.s3.ap-northeast-2.amazonaws.com/${route_path}`)
         .then((res) => {
-          // console.log(res);
-          setRouteData(res.data.body);
+          console.log(res);
+          setRouteData(res.data);
           setMarkerWayPoint(res.data.markerWayPoint);
         })
         .catch((err) => console.log(err));

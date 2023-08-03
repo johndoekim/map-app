@@ -97,6 +97,8 @@ const MapPolyLine = () => {
 
 
 
+  const [optionRoute, setOptionRoute] = useState(0);
+
 
 
 
@@ -242,6 +244,7 @@ setLoading(true)
     const body = {startPoint : [startMark[0].lng, startMark[0].lat], endPoint : [endMark[0].lng, endMark[0].lat], wayPoint : [foodInfo[1].경도, foodInfo[1].위도]}
 
     console.log(body)
+    setOptionRoute(1)
     
     const res = await axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_route_purpose_geojson', body)
     console.log(res)
@@ -253,7 +256,7 @@ setLoading(true)
   finally{setLoading(false)}
 }
 
-
+console.log(optionRoute)
 
 
 const RouteThreeHandler = async () =>{
@@ -263,6 +266,8 @@ const RouteThreeHandler = async () =>{
       const body = {startPoint : [startMark[0].lng, startMark[0].lat], endPoint : [endMark[0].lng, endMark[0].lat], wayPoint : [foodInfo[2].경도, foodInfo[2].위도]}
   
       console.log(body)
+      setOptionRoute(1)
+
       
       const res = await axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_route_purpose_geojson', body)
       console.log(res)
@@ -282,6 +287,8 @@ const RouteThreeHandler = async () =>{
         const body = {startPoint : [startMark[0].lng, startMark[0].lat], endPoint : [endMark[0].lng, endMark[0].lat], wayPoint : [foodInfo[3].경도, foodInfo[3].위도]}
     
         console.log(body)
+        setOptionRoute(1)
+
         
         const res = await axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_route_purpose_geojson', body)
         console.log(res)
@@ -301,6 +308,8 @@ const RouteThreeHandler = async () =>{
           const body = {startPoint : [startMark[0].lng, startMark[0].lat], endPoint : [endMark[0].lng, endMark[0].lat], wayPoint : [foodInfo[4].경도, foodInfo[4].위도]}
       
           console.log(body)
+          setOptionRoute(1)
+
           
           const res = await axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_route_purpose_geojson', body)
           console.log(res)
@@ -321,7 +330,8 @@ const HealingRouteTwoHandler = async () =>{
 
   try{
     const body = {startPoint : [startMark[0].lng, startMark[0].lat], endPoint : [endMark[0].lng, endMark[0].lat], wayPoint : [healingInfo[1].경도, healingInfo[1].위도]}
-  
+    setOptionRoute(1)
+
 
   const res = await axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_route_purpose_geojson', body)
   console.log(res)
@@ -342,7 +352,8 @@ const HealingRouteThreeHandler = async () =>{
 
   try{
     const body = {startPoint : [startMark[0].lng, startMark[0].lat], endPoint : [endMark[0].lng, endMark[0].lat], wayPoint : [healingInfo[2].경도, healingInfo[2].위도]}
-  
+    setOptionRoute(1)
+
 
   const res = await axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_route_purpose_geojson', body)
   console.log(res)
@@ -422,47 +433,57 @@ const renderTooltipContent = (e) => {
 
 
 //루트 저장
-const queryClient = useQueryClient();
-const saveRouteMutation = useMutation(
-  async (routeData) => {
-    const body = { ...routeData, markerWayPoint };
-    const config = {
-      headers: {
-        Authorization: sessionStorage.getItem('token'),
-      },
-    };
-    const res = await axios.post(
-      'https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_route_data_from_user',
-      body,
-      config
-    );
-    return res.data;
-  },
-  {
-    onSuccess: () => {
-      queryClient.invalidateQueries('routeInfo');
+
+  //루트 저장
+  const queryClient = useQueryClient();
+  const saveRouteMutation = useMutation(
+    async (routeData) => {
+      const body = { ...(optionRoute === 0 ? routeData : anotherRouteData),
+         markerWayPoint,
+         workout_distance: distanceAndDuration[0].distance,
+         workout_time: distanceAndDuration[0].duration,
+         startPoint : [startMark[0].lng, startMark[0].lat], 
+         endPoint : [endMark[0].lng, endMark[0].lat],
+         category : Category
+         };
+      const config = {
+        headers: {
+          Authorization: sessionStorage.getItem('token'),
+        },
+      };
+      const res = await axios.post(
+        'https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_route_data_from_user',
+        body,
+        config
+      );
+      return res.data;
     },
-  }
-);
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('routeInfo');
+      },
+    }
+  );
+  
+  const handlerSaveRoute = async () => {
+    setIsModalOpen(true);
+    try {
+      const body = {
+        body: routeData,
+        workout_distance: distanceAndDuration[0].distance,
+        workout_time: distanceAndDuration[0].duration,
+        startPoint : [startMark[0].lng, startMark[0].lat], 
+        endPoint : [endMark[0].lng, endMark[0].lat],
+        category : Category
+      };
+  
+      await saveRouteMutation.mutateAsync(body);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-const handlerSaveRoute = async () => {
-  setIsModalOpen(true);
-  try {
-    const body = {
-      body: routeData,
-      workout_distance: distanceAndDuration[0].distance,
-      workout_time: distanceAndDuration[0].duration,
-      startPoint : [startMark[0].lng, startMark[0].lat], endPoint : [endMark[0].lng, endMark[0].lat],
-      category : Category
-    };
-
-    await saveRouteMutation.mutateAsync(body);
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-
+  
 
 
 
