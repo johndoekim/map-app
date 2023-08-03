@@ -643,6 +643,7 @@ return (
             
             >
 
+{isVisible && 
 <div
     className="label"
     style={{
@@ -661,7 +662,7 @@ return (
   {markerWayPoint.content.addr} 
 
   </div>
-
+}
             </MapMarker>
           )} 
 
