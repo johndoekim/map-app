@@ -20,7 +20,7 @@ import { useForm } from 'react-hook-form';
 
 
 
-const CardComponent = React.memo(({
+const CardComponent = ({
   title,
   content,
   image_path,
@@ -62,24 +62,15 @@ const CardComponent = React.memo(({
   const [markerWayPoint, setMarkerWayPoint] = useState(null)
 
 
-  // console.log(markerWayPoint)
-
-  const memoizedRouteData = useMemo(() => routeData, [routeData]);
-  const memoizedMarkerWayPoint = useMemo(() => markerWayPoint, [markerWayPoint]);
-
-
-
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const [expanded, setExpanded] = useState(false);
 
-  const [expandPost, setExpandPost] = useState();
 
   const handleExpandClick = async () => {
     await delay(100)
     setExpanded(!expanded);
-    setExpandPost(post_idx)
   };
 
   // console.log('expanded post' , expandPost)
@@ -151,6 +142,9 @@ const CardComponent = React.memo(({
       resetField('comment')
 
 
+      
+
+
     }
     catch(err){console.log(err)}
   }
@@ -168,9 +162,6 @@ const getComment = useQuery(
     const res = await axios.get(`https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/board/${post_idx}/comment`);
     return res.data;
   },
-  {
-    enabled:true,
-  }
 );
 
 const fetchComments = async () => {
@@ -178,9 +169,10 @@ const fetchComments = async () => {
   setComments(getComment.data);
 };
 
+
 useEffect(() => {
     fetchComments();
-}, [expandPost]);
+}, [expanded]);
 
 
 //글 삭제 처리
@@ -243,7 +235,7 @@ useEffect(() => {
         })
         .catch((err) => console.log(err));
     }
-  }, [expandPost]);
+  }, [expanded]);
 
 
   const CommentContentTypography = (props) => (
@@ -297,8 +289,8 @@ useEffect(() => {
 
             {routeData && (
   <MapPolyLineForBoard
-    routeData={memoizedRouteData}
-    markerWayPoint={memoizedMarkerWayPoint}
+    routeData={routeData}
+    markerWayPoint={markerWayPoint}
   />
 )}
   {isValidImagePath && <img src={image_path} alt="post-thumbnail" />}
@@ -440,7 +432,7 @@ useEffect(() => {
 
     </StyledCard>
   );
-});
+};
 
 
 

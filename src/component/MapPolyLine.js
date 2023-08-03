@@ -69,7 +69,14 @@ const MapPolyLine = () => {
 
 
 
+
+
   const location = useLocation();
+
+
+
+
+
   
   const routeData = location.state ? location.state.routeData : null;
   const wayPoint = location.state ? location.state.wayPoint : null;
@@ -86,6 +93,7 @@ const MapPolyLine = () => {
   const [chartHeight, setChartHeight] = useState(window.innerHeight * 0.35); 
   const [foodsMarker, setFoodsMarker] = useState([]);
   const [healingMarker, setHealingMarker] = useState([])
+
 
 
 
@@ -347,16 +355,6 @@ const HealingRouteThreeHandler = async () =>{
   finally{setLoading(false)}
 }
 
-
-
-
-
-
-
-
-
-
-  
 
 
 
