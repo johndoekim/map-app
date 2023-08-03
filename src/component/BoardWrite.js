@@ -177,7 +177,7 @@ const closeErrorModal = () => {
             history.push('/boardsignin')
           }
 
-          if (err.response.data.status === 403){
+          if (err.response.status == 403){
             setIsErrorModalOpen(true);
             setErrorModalMessage('권한이 없습니다. 다시 시도해 주세요.')
           }

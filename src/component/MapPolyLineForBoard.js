@@ -29,6 +29,7 @@ const MapPolyLineForBoard = ({routeData, markerWayPoint}) => {
 //   const routeData = location.state ? location.state.routeData : null;
 
 
+  const [isVisible, setIsVisible] = useState(false)
 
   const [startMark, setStartMark] = useState([]);
   const [endMark, setEndMark] = useState([]);
@@ -38,6 +39,8 @@ const MapPolyLineForBoard = ({routeData, markerWayPoint}) => {
 
 
   // console.log(routeData)
+
+  console.log(markerWayPoint)
 
 
 
@@ -148,27 +151,6 @@ const renderTooltipContent = (e) => {
   return null;
 };
 
-const handlerSaveRoute = async () =>{
-  try{
-
-    const body = {'body' : routeData, 
-  'workout_distance' : distanceAndDuration[0].distance,
-'workout_time' : distanceAndDuration[0].duration}
-
-    const config = {headers: {
-      'Authorization': sessionStorage.getItem('token'),
-    }};
-
-
-
-    const res = await axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_route_data_from_user', body, config)
-    console.log(res)
-  }
-  catch(err){console.log(err)}
-
-
-}
-
 
 
 
@@ -207,8 +189,34 @@ return (
 
 
 {markerWayPoint && (
-            <MapMarker position={markerWayPoint} />
-          )}
+            <MapMarker position={markerWayPoint.latlng}
+
+            onMouseOver={() => setIsVisible(true)}
+            onMouseOut={() => setIsVisible(false)}
+            
+            >
+
+<div
+    className="label"
+    style={{
+      color: "#000",
+      backgroundColor: "#fff",
+      padding: "5px",
+      borderRadius: "10px",
+      whiteSpace: "nowrap", 
+      fontSize:'0.7rem'
+
+    }}
+  >
+
+  {markerWayPoint.content.name}
+
+  {markerWayPoint.content.addr} 
+
+  </div>
+
+            </MapMarker>
+          )} 
 
 
 
