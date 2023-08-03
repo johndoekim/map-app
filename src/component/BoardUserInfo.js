@@ -1,6 +1,6 @@
 import axios from "axios"
 import { useEffect, useState } from "react";
-import { Box, TextField } from "@mui/material";
+import { Box, TextField, Grid, Button } from "@mui/material";
 
 export const BoardUserInfo = () => {
 
@@ -28,65 +28,134 @@ export const BoardUserInfo = () => {
     },[])
 
 
+    const [currentPassword, setCurrentPassWord] = useState();
+    const [changePassword, setChangePassword] = useState();
+
+    const currentPasswordHandler = (e) =>{
+      setCurrentPassWord(e.target.value)
+    }
+
+    const changePasswordHandler = (e) =>{
+      setChangePassword(e.target.value)
+    }
 
 
-    return(<>
-  <Box
-      component="form"
-      sx={{
-        '& .MuiTextField-root': { m: 1, width: '25ch' },
-      }}
-      noValidate
-      autoComplete="off"
+    const editPasswordHandler = async () =>{
+
+
+      const config = {
+        headers: {
+        'Authorization': sessionStorage.getItem('token'),
+      }};
+
+      try{
+        const body = {currentPassword : currentPassword, changePassword : changePassword}
+
+
+        const res = await axios.post('', body, config)
+
+        console.log(res)
+      }catch(err){console.log(err)}
+    }
+
+ 
+
+  return (
+    <Grid
+      container
+      justifyContent="center"
+      alignItems="center"
+      style={{ minHeight: "70vh" }}
     >
-      <div>
+      <Box
+        component="form"
+        sx={{
+          "& .MuiTextField-root": { m: 1, width: "25ch" },
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+        noValidate
+        autoComplete="off"
+      >
         <TextField
-          disabled
           id="outlined-disabled"
-          label="가입일"
-          defaultValue='1999-01-01'
-          value={userInfo}
-        />
-        <TextField
-          id="outlined-password-input"
-          label="Password"
-          type="password"
-          autoComplete="current-password"
-        />
-        <TextField
-          id="outlined-read-only-input"
-          label="Read Only"
-          defaultValue="Hello World"
+          label="ID"
+          defaultValue="JaneDoe"
+          value={userInfo && userInfo.username}
           InputProps={{
             readOnly: true,
           }}
         />
+
         <TextField
-          id="outlined-number"
-          label="Number"
-          type="number"
-          InputLabelProps={{
-            shrink: true,
+          id="outlined-disabled"
+          label="닉네임"
+          defaultValue="JaneDoe"
+          value={userInfo && userInfo.nickname}
+          InputProps={{
+            readOnly: true,
           }}
         />
-        <TextField id="outlined-search" label="Search field" type="search" />
+
+
+        
         <TextField
-          id="outlined-helperText"
-          label="Helper text"
-          defaultValue="Default Value"
-          helperText="Some important text"
+          id="outlined-disabled"
+          label="이메일"
+          defaultValue="JaneDoe@gmail.com"
+          value={userInfo && userInfo.email}
+          InputProps={{
+            readOnly: true,
+          }}
         />
-      </div>
-
-    </Box>
 
 
 
+        <TextField
+          id="outlined-password-input"
+          label="현재 비밀번호"
+          type="password"
+          value={currentPassword}
+          onChange={currentPasswordHandler}
+        />
 
-    
-    
-    
-    
-    
-    </>)
-}
+
+
+
+        <TextField
+          id="outlined-password-input"
+          label="수정할 비밀번호"
+          type="password"
+          value={changePassword}
+          onChange={changePasswordHandler}
+        />
+
+          <Button onClick={editPasswordHandler}>비밀번호 수정하기</Button>
+
+
+        
+        <TextField
+          id="outlined-disabled"
+          label="가입일"
+          defaultValue="1999-01-01"
+          InputProps={{
+            readOnly: true,
+          }}
+          value={userInfo && userInfo.created_at}
+        />
+
+
+
+
+        
+
+
+
+
+
+
+      </Box>
+    </Grid>
+  );
+};
