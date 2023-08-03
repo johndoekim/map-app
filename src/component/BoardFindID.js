@@ -83,10 +83,6 @@ const BoardFindID = () => {
     </div>
 
 
-
-
-
-
     <Card>
 
     <form onSubmit={handleSubmit(onSubmit)}>
