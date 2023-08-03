@@ -142,7 +142,7 @@ const MapMain = () => {
             <ErrorText>한글, 영어, 숫자 이외 입력이 불가능합니다.</ErrorText>
           )}
         </InputWrapper>
-        <SubmitButton type="submit" value="출발지와 목적지를 입력해주세요" />
+        <SubmitButton type="submit" value="출발지와 도착지를 입력해주세요" />
         <InputWrapper>
           <StyledInput
             placeholder="도착지"

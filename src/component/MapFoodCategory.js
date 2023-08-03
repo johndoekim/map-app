@@ -113,6 +113,8 @@ export const MapFoodCategory = () =>{
         setRouteData(secondRes.data)
 
 
+        
+
   
 
 
@@ -131,7 +133,7 @@ export const MapFoodCategory = () =>{
 
 
 
-
+  console.log(foodInfo)
 
     // console.log(routeData)
 

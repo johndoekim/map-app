@@ -22,7 +22,7 @@ export const MapHealingCategory = () =>{
 
     const [Category, setCategory] = useState();
 
-    const [HealingInfo, setHealingInfo] = useState([]);
+    const [healingInfo, setHealingInfo] = useState([]);
 
 
 
@@ -45,7 +45,7 @@ export const MapHealingCategory = () =>{
   }
 
   const SpotHandler = async () =>{
-    await CategoryClickHandler('지역명소');
+    await CategoryClickHandler('명소');
   }
 
 
@@ -64,16 +64,24 @@ export const MapHealingCategory = () =>{
         console.log(res)
 
 
-        let wayPoint = [res.data[0].경도, res.data[0].위도]
+        let wayPoint = [res.data.documents[0].경도, res.data.documents[0].위도]
 
-        setWayPoint([res.data[0].경도, res.data[0].위도])
+        setWayPoint([res.data.documents[0].경도, res.data.documents[0].위도])
 
         console.log(wayPoint)
 
 
+
+
+
         setCategory(category)
 
-        setHealingInfo(res.data)
+
+
+        
+        setHealingInfo(res.data.documents)
+
+        console.log(res.data)
 
 
         const newbody = {startPoint : gpsData.body.startPoint, endPoint : gpsData.body.endPoint, wayPoint : wayPoint}
@@ -115,7 +123,7 @@ export const MapHealingCategory = () =>{
         if(routeData){
           history.push({
             pathname : '/MapPolyLine',
-            state : {routeData, wayPoint, Category, HealingInfo}
+            state : {routeData, wayPoint, Category, healingInfo}
           })}
       },[routeData, loading])
 

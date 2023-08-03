@@ -60,6 +60,8 @@ const MapPolyLine = () => {
 
   const [loading, setLoading] = useState(false);
 
+  const [isVisible, setIsVisible] = useState(false)
+
   const { isLogin, refetch } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
@@ -73,6 +75,7 @@ const MapPolyLine = () => {
   const wayPoint = location.state ? location.state.wayPoint : null;
   const Category = location.state ? location.state.Category : null;
   const foodInfo = location.state ? location.state.foodInfo : null;
+  const healingInfo = location.state ? location.state.healingInfo : null;
 
 
 
@@ -82,22 +85,13 @@ const MapPolyLine = () => {
   const [chartWidth, setChartWidth] = useState(window.innerWidth * 0.525);
   const [chartHeight, setChartHeight] = useState(window.innerHeight * 0.35); 
   const [foodsMarker, setFoodsMarker] = useState([]);
+  const [healingMarker, setHealingMarker] = useState([])
 
 
 
 
 
 
-
-
-
-  
-
-
-  // console.log(routeData)
-
-
-  const [isVisible, setIsVisible] = useState(false)
 
 
 
@@ -122,7 +116,39 @@ useEffect(() =>{
   }
 }, [foodInfo])
 
-console.log(foodsMarker)
+// console.log(foodsMarker)
+
+
+console.log(foodInfo)
+
+console.log(healingInfo)
+
+
+// 힐링 관련 웨이포인트 설정
+
+useEffect(() => {
+  if (healingInfo) {
+    setMarkerWayPoint({latlng : {lat : healingInfo[0].위도, lng : healingInfo[0].경도}, content : {name : healingInfo[0].상호명, addr : healingInfo[0].주소}})
+  }
+},[healingInfo])
+
+
+useEffect(() =>{
+  if (healingInfo){
+    setHealingMarker(healingInfo.map((marker) => {
+      return {latlng : {lat : marker.위도, lng : marker.경도}, content : {name : marker.상호명, addr : marker.주소}}
+    }))
+  }
+},[healingInfo])
+
+
+console.log(healingMarker)
+
+
+
+
+
+
 
 
 
@@ -197,7 +223,7 @@ const [anotherRouteData, setAnotherRouteData] = useState()
 
 
 
-
+// 음식 루트 선택
 const RouteTwoHandler = async () =>{
 
 setLoading(true)
@@ -274,6 +300,56 @@ const RouteThreeHandler = async () =>{
       
         finally{setLoading(false)}
       }
+
+
+// 음식 루트 선택
+
+const HealingRouteTwoHandler = async () =>{
+
+  setLoading(true)
+
+  try{
+    const body = {startPoint : [startMark[0].lng, startMark[0].lat], endPoint : [endMark[0].lng, endMark[0].lat], wayPoint : [healingInfo[1].경도, healingInfo[1].위도]}
+  
+
+  const res = await axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_route_purpose_geojson', body)
+  console.log(res)
+  setAnotherRouteData(res.data)
+  setMarkerWayPoint(healingMarker[1])
+
+  }
+  catch(err){console.log(err)}
+
+  finally{setLoading(false)}
+}
+
+
+
+const HealingRouteThreeHandler = async () =>{
+
+  setLoading(true)
+
+  try{
+    const body = {startPoint : [startMark[0].lng, startMark[0].lat], endPoint : [endMark[0].lng, endMark[0].lat], wayPoint : [healingInfo[2].경도, healingInfo[2].위도]}
+  
+
+  const res = await axios.post('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get_route_purpose_geojson', body)
+  console.log(res)
+  setAnotherRouteData(res.data)
+  setMarkerWayPoint(healingMarker[2])
+
+  }
+  catch(err){console.log(err)}
+
+  finally{setLoading(false)}
+}
+
+
+
+
+
+
+
 
 
 
@@ -443,7 +519,7 @@ return (
 
       <Card>
 
-
+{/* 푸드 선택지 */}
 
 {foodInfo &&
 <ButtonGroup>
@@ -455,6 +531,34 @@ return (
 
 </ButtonGroup>
 }
+
+{/* 푸드 선택지 */}
+
+
+
+{/* 힐링 선택지 */}
+
+
+{healingInfo && 
+<ButtonGroup>
+
+<Button onClick={HealingRouteTwoHandler}>루트 2</Button>
+<Button onClick={HealingRouteThreeHandler}>루트 3</Button>
+
+  
+  
+  
+</ButtonGroup>}
+
+
+
+
+
+
+
+
+
+{/* 힐링 선택지 */}
 
 
 
@@ -509,7 +613,6 @@ return (
 
 {/* 경유지 */}
 
-
           {markerWayPoint && (
             <MapMarker position={markerWayPoint.latlng}
 
@@ -530,9 +633,10 @@ return (
 
     }}
   >
+
   {markerWayPoint.content.name}
 
-  {markerWayPoint.content.addr}
+  {markerWayPoint.content.addr} 
 
   </div>
 
