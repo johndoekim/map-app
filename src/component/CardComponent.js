@@ -10,7 +10,7 @@ import axios from 'axios';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import MapPolyLineForBoard from './MapPolyLineForBoard';
-import { Input, TextField } from '@mui/material';
+import { Grow, Input, TextField } from '@mui/material';
 import { Box, CardContent, Typography, Divider, Avatar, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
 import SuccessModal from "./NotPushAlertModal";
 import { Redirect, useHistory } from 'react-router-dom/cjs/react-router-dom.min';
@@ -30,11 +30,13 @@ const CardComponent = ({
   created_at,
   onTitleClick,
   onEdit,
-  route_path
+  route_path,
 }) => {
 
 
   const isValidImagePath = !image_path.includes('null');
+
+
 
 
 
@@ -67,16 +69,28 @@ const CardComponent = ({
 
   const [expanded, setExpanded] = useState(false);
 
+  const [commentclicked, setCommentclicked] = useState(false)
 
-  const handleExpandClick = async () => {
-    await delay(100)
-    setExpanded(!expanded);
-  };
 
-  // console.log('expanded post' , expandPost)
   
 
-// console.log(image_path)
+  const commentShowHandle = async () =>{
+    setCommentclicked(!commentclicked)
+    await delay(100)
+    fetchComments()
+
+
+  }
+
+
+
+  const handleExpandClick = async () => {
+    await delay(50)
+    setExpanded(!expanded);
+    fetchComments()
+
+    
+  };
 
 
 
@@ -160,6 +174,7 @@ const getComment = useQuery(
   'commentList',
   async () => {
     const res = await axios.get(`https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/board/${post_idx}/comment`);
+    console.log(res)
     return res.data;
   },
 );
@@ -169,10 +184,6 @@ const fetchComments = async () => {
   setComments(getComment.data);
 };
 
-
-useEffect(() => {
-    fetchComments();
-}, [expanded]);
 
 
 //글 삭제 처리
@@ -229,7 +240,6 @@ useEffect(() => {
       axios
         .get(`https://seoul-taroot.s3.ap-northeast-2.amazonaws.com/${route_path}`)
         .then((res) => {
-          console.log(res);
           setRouteData(res.data);
           setMarkerWayPoint(res.data.markerWayPoint);
         })
@@ -284,8 +294,15 @@ useEffect(() => {
             </Grid>
           </Grid>
         </CardContent>
-        <Collapse in={expanded} timeout="auto" unmountOnExit>
+
+
+{/* 글 내용 */}
+
+        <Grow in={expanded} timeout="auto" unmountOnExit style={{ transformOrigin: '0 0 0' }}
+    {...(expanded ? { timeout: 500 } : {})}>
           <CardContent>
+
+{/* 지도 */}
 
             {routeData && (
   <MapPolyLineForBoard
@@ -299,29 +316,7 @@ useEffect(() => {
 
 
 
-       {/* 댓글 작성 */}
-{/* 
-
-{isLogin && (
-        <Box display="flex" justifyContent="center" alignItems="center" marginTop={2}>
-       
-        <TextField
-          label="댓글 작성"
-          placeholder="댓글을 입력해주세요."
-          value={comment}
-          onChange={handleCommentChange}
-          fullWidth
-        />
-        <Button
-          variant="outlined"
-          color="primary"
-          onClick={handleCommentSubmit}
-          style={{ marginLeft: 8 }}
-        >
-          등록
-        </Button>
-
-      </Box>)} */}
+{/* 댓글 작성 */}
 
 {isLogin && (
   <Box marginTop={2}>
@@ -346,10 +341,14 @@ useEffect(() => {
 )}
 
 
+{comments && <Button onClick={commentShowHandle}>댓글</Button>}
 
 
 
 
+
+<Collapse in={commentclicked} style={{ transformOrigin: '0 0 0' }}
+    {...(commentclicked ? { timeout: 1000 } : {})}>
 
 
 
@@ -384,11 +383,16 @@ useEffect(() => {
 ))} 
 
 
+</Collapse>
 
 
 
           </CardContent>
-        </Collapse>
+
+
+
+
+        </Grow>
       </Card>
 
 

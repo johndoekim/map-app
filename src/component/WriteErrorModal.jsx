@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
-const errorColor = "#f44336";
+const errorColor = "#e57373";
 
 function WriteErrorModal({ isOpen, closeModal, children }) {
   const history = useHistory();
@@ -24,7 +24,7 @@ function WriteErrorModal({ isOpen, closeModal, children }) {
           left: "50%",
           transform: "translate(-50%, -50%)",
           padding: '16px 32px 24px 32px',
-          width: 400,
+          width: 500,
           maxWidth: "100%",
           maxHeight: "90%",
           overflowY: "auto",

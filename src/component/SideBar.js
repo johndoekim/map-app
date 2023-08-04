@@ -106,6 +106,20 @@ console.log(isLogin)
     </SidebarItem>
 
 
+    <SidebarItem>
+      <StyledLink to="/BoardUserInfo">나의 정보</StyledLink>
+    </SidebarItem>
+
+
+
+    <SidebarItem>
+      <StyledLink to="/BoardUserStatistics">나의 따룻 통계</StyledLink>
+    </SidebarItem>
+
+
+
+
+
 
 
   </SidebarWrapper>

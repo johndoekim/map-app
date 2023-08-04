@@ -743,8 +743,10 @@ return (
           {/* 마커 */}
 
 <CustomOverlayMap position={middleValue}
-              yAnchor={2.5}
-              zIndex={2}>
+              yAnchor={5.5}
+              xAnchor={2.5}
+              zIndex={1}>
+              
   <div
     className="label"
     style={{

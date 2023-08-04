@@ -14,7 +14,7 @@ const CardTest = () => {
         threshold: 0.3,
       });
     
-    const [clickedPost_idx, setClickedPost_idx] = useState(null);
+
 
 
     const fetchPosts = () => {
@@ -62,11 +62,12 @@ const CardTest = () => {
 
 
   const [expandedCardId, setExpandedCardId] = useState(null);
+  const [clickedPost_idx, setClickedPost_idx] = useState(null);
 
   const handlePostClick = (post_idx) => {
     setClickedPost_idx(post_idx);
-    // history.push(`/board/${post_idx}`);
-};    
+    setExpandedCardId(post_idx)
+}; 
 
 
 
@@ -79,6 +80,9 @@ const handleEdit = (post_idx) => {
   return (
 
     <>
+
+
+
     <div>
       {postsData.map((post) => (
         <CardComponent
@@ -95,7 +99,6 @@ const handleEdit = (post_idx) => {
         />
       ))}
 
-
     </div>
 
 
@@ -104,8 +107,6 @@ const handleEdit = (post_idx) => {
 
 
     <div ref={ref}></div>
-
-
 
     </>
   );

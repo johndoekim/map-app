@@ -1,11 +1,38 @@
 import axios from "axios"
 import { useEffect, useState } from "react";
-import { Box, TextField, Grid, Button } from "@mui/material";
+import { Box, TextField, Grid, Button, Typography } from "@mui/material";
+import SignupModal from "./SignupModal";
+import WriteErrorModal from "./WriteErrorModal";
+
+
 
 export const BoardUserInfo = () => {
 
 
     const [userInfo, setUserInfo] = useState()
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+  
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
+
+
+
+
+
+  //에러 처리 모달
+
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const [errorModalMessage, setErrorModalMessage] = useState('');
+  
+  const closeErrorModal = () => {
+    setIsErrorModalOpen(false);
+    setErrorModalMessage('');
+  };
+  
+
+
+    
 
 
     const getUserInfo = async () => {
@@ -52,15 +79,84 @@ export const BoardUserInfo = () => {
         const body = {currentPassword : currentPassword, changePassword : changePassword}
 
 
-        const res = await axios.post('', body, config)
+        const res = await axios.put('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/board/user-info', body, config)
 
         console.log(res)
-      }catch(err){console.log(err)}
+
+        if(res.status === 200){
+            sessionStorage.clear();
+            openModal()
+        }
+
+        
+      }catch(err){
+        console.log(err)
+
+        if(err.response.data === "can't change password cuz you didn't through password verify")
+        {   setIsErrorModalOpen(true);
+            setErrorModalMessage('비밀번호 변경에 실패하였습니다. 비밀번호를 다시 확인해 주세요')}
+
+        if(err.response.data === "new password is too short")
+        {setIsErrorModalOpen(true);
+        setErrorModalMessage('비밀번호 변경에 실패하였습니다. 새로운 비밀번호가 너무 짧습니다')}}
+    
+    
+    
+    
     }
 
  
 
   return (
+    <>
+
+
+
+
+    {/* 에러 모달 */}
+
+    <div>
+  <WriteErrorModal isOpen={isErrorModalOpen} closeModal={closeErrorModal}>
+    <Box>
+      <Typography variant="h6" component="h2">
+        {errorModalMessage}
+      </Typography>
+    </Box>
+  </WriteErrorModal>
+</div>
+
+
+
+{/* 에러 모달 */}
+
+
+
+<div>
+      <SignupModal
+        isOpen={isModalOpen}
+        closeModal={closeModal}
+      >
+        <Box>
+          <Typography variant="h6" component="h2">
+            비밀번호 변경 성공 ! 다시 로그인을 진행해 주세요
+            </Typography>
+
+        </Box>
+      </SignupModal>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
     <Grid
       container
       justifyContent="center"
@@ -157,5 +253,7 @@ export const BoardUserInfo = () => {
 
       </Box>
     </Grid>
+
+</>
   );
 };
