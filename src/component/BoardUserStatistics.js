@@ -5,7 +5,7 @@ import { FetchRoutes } from "./FetchRoutes";
 import { useQuery } from "react-query";
 import axios from "axios";
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
-    Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis  } from 'recharts';
+    Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, RadialBarChart, RadialBar  } from 'recharts';
 
 
 
@@ -45,7 +45,8 @@ export const BoardUserStatistics = () => {
         .catch(err => console.log(err))
     },[])
 
-    console.log(totalstat)
+
+
 
 
 
@@ -75,20 +76,30 @@ export const BoardUserStatistics = () => {
     : 0;
 
 
+    const radialData = [
+        {
+            name : '칼로리', 
+            calorie : (personaltotalTime/60) * 7.1, 
+            fill: '#8dd1e1',
+        },
+    ]
+
+
+
 
     
     const barData = [
         {
             name : '거리',
-            user : personaltotalDistance,
-            avg : avgtotalDistance,
+            user : personaltotalDistance/1000,
+            avg : avgtotalDistance/1000,
         }
         ,
 
         {
             name : '시간',
-            user : personaltotalTime,
-            avg : avgtotalTime,
+            user : personaltotalTime/3600,
+            avg : avgtotalTime/3600,
         }
         ,
         {
@@ -103,21 +114,25 @@ export const BoardUserStatistics = () => {
             category : '음식'
             
             
+            
+            
         }
-
 
 
     ]
 
 
+
+
     
-
-
     return(
 
         <>
 
 {/* 비교 차트 */}
+
+
+
         <BarChart
           width={500}
           height={300}
@@ -141,12 +156,41 @@ export const BoardUserStatistics = () => {
 
 {/* 카테고리 차트 */}
 
-<RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>
+        <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>
           <PolarGrid />
           <PolarAngleAxis dataKey="subject" />
           <PolarRadiusAxis />
           <Radar name="Mike" dataKey="A" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
         </RadarChart>
+
+
+
+
+
+
+<hr></hr>
+
+
+        {/* 칼로리 차트 */}
+        <ResponsiveContainer width="50%" height="50%">
+
+        <RadialBarChart cx="50%" cy="50%" innerRadius="10%" outerRadius="80%" barSize={10} data={radialData}>
+          <RadialBar
+            minAngle={15}
+            label={{ position: 'insideStart', fill: '#fff' }}
+            background
+            clockWise
+            dataKey="calorie"
+          />
+        </RadialBarChart>
+        </ResponsiveContainer>
+
+
+
+
+
+
+
 
 
 
