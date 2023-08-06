@@ -21,6 +21,8 @@ export const MapWorkoutLevel = () =>{
 
     const [wayPoint, setWayPoint] = useState()
 
+    const [Category, setCategory] = useState('운동')
+
 
 
   const delay = ms => new Promise(
@@ -104,6 +106,7 @@ export const MapWorkoutLevel = () =>{
 
             setRouteData(response.data)
             setWayPoint(body.wayPoint)
+            
 
 
             console.log(wayPoint)
@@ -124,7 +127,7 @@ export const MapWorkoutLevel = () =>{
         if(routeData){
           history.push({
             pathname : '/MapPolyLine',
-            state : {routeData, wayPoint}
+            state : {routeData, wayPoint, Category}
           })}
       },[routeData, loading])
 

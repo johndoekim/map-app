@@ -431,6 +431,7 @@ const renderTooltipContent = (e) => {
   return null;
 };
 
+console.log(Category)
 
 //루트 저장
 

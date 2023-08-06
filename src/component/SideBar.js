@@ -87,7 +87,16 @@ console.log(isLogin)
 <SidebarItem onClick={handleLogout}>
   <StyledLink to="/" >로그아웃</StyledLink>
 </SidebarItem>
+
+
+
+
+
 )}
+
+
+
+    
 
 
 {isLogin && (
@@ -106,16 +115,23 @@ console.log(isLogin)
     </SidebarItem>
 
 
-    <SidebarItem>
+    {isLogin && (
+
+
+
+<SidebarItem>
       <StyledLink to="/BoardUserInfo">나의 정보</StyledLink>
     </SidebarItem>
 
+    )}
 
-
+    
+{isLogin && (
     <SidebarItem>
       <StyledLink to="/BoardUserStatistics">나의 따룻 통계</StyledLink>
     </SidebarItem>
 
+)}
 
 
 

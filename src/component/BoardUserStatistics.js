@@ -1,4 +1,4 @@
-import { Grid , Box, Container} from "@mui/material"
+import { Grid , Box, Container, Typography } from "@mui/material"
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { FetchRoutes } from "./FetchRoutes";
@@ -19,7 +19,8 @@ export const BoardUserStatistics = () => {
 
     const [allUserNum, setAllUserNum] = useState()
 
-    
+    const [radarData, setRadarData] = useState([]);
+
 
 
 
@@ -36,16 +37,23 @@ export const BoardUserStatistics = () => {
 
             setAllUserNum(jsonedData.user_idx_total)
 
-            
 
-        
+            console.log(jsonedData)
+
+    
+    
         
         
         })
         .catch(err => console.log(err))
     },[])
 
-
+    useEffect(() => {
+        if (totalstat) {
+          const processedData = processData(totalstat);
+          setRadarData(processedData);
+        }
+      }, [totalstat]);
 
 
 
@@ -80,9 +88,10 @@ export const BoardUserStatistics = () => {
         {
             name : '칼로리', 
             calorie : (personaltotalTime/60) * 7.1, 
-            fill: '#8dd1e1',
         },
     ]
+
+    console.log(radialData)
 
 
 
@@ -98,8 +107,8 @@ export const BoardUserStatistics = () => {
 
         {
             name : '시간',
-            user : personaltotalTime/3600,
-            avg : avgtotalTime/3600,
+            user : personaltotalTime/60,
+            avg : avgtotalTime/60,
         }
         ,
         {
@@ -109,101 +118,159 @@ export const BoardUserStatistics = () => {
         }
     ]
 
-    const radarData = [
-        {
-            category : '음식'
-            
-            
-            
-            
-        }
+    const processData = (totalstat) => {
+        const categoriesCount = {
+          food: 0,
+          Healing: 0,
+          exercise: 0,
+          general: 0,
+        };
 
+        totalstat.forEach((item) => {
+            const category = item.category;
+            if (category >= 1 && category <= 11) {
+              categoriesCount.food++;
+            } else if (category >= 12 && category <= 15) {
+              categoriesCount.Healing++;
+            } else if (category === 16) {
+              categoriesCount.exercise++;
+            } else if (category === -1) {
+              categoriesCount.general++;
+            }
+          });
 
-    ]
-
-
-
-
-    
-    return(
-
-        <>
-
-{/* 비교 차트 */}
-
-
-
-        <BarChart
-          width={500}
-          height={300}
-          data={barData}
-          margin={{
-            top: 5,
-            right: 30,
-            left: 20,
-            bottom: 5,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Bar dataKey="user" fill="#8884d8" />
-          <Bar dataKey="avg" fill="#82ca9d" />
-        </BarChart>
-
-
-{/* 카테고리 차트 */}
-
-        <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>
-          <PolarGrid />
-          <PolarAngleAxis dataKey="subject" />
-          <PolarRadiusAxis />
-          <Radar name="Mike" dataKey="A" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
-        </RadarChart>
+          return [
+            { subject: "맛집", A: categoriesCount.food },
+            { subject: "힐링", A: categoriesCount.Healing },
+            { subject: "운동", A: categoriesCount.exercise },
+            { subject: "최단경로", A: categoriesCount.general },
+          ];
+        };
 
 
 
 
-
-
-<hr></hr>
-
-
-        {/* 칼로리 차트 */}
-        <ResponsiveContainer width="50%" height="50%">
-
-        <RadialBarChart cx="50%" cy="50%" innerRadius="10%" outerRadius="80%" barSize={10} data={radialData}>
-          <RadialBar
-            minAngle={15}
-            label={{ position: 'insideStart', fill: '#fff' }}
-            background
-            clockWise
-            dataKey="calorie"
-          />
-        </RadialBarChart>
-        </ResponsiveContainer>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        const CustomTooltip = ({ active, payload }) => {
+          if (active && payload && payload.length) {
+            const { name, user, avg } = payload[0].payload;
+            const userHours = Math.floor(user / 60);
+            const userMinutes = Math.floor(user % 60);
+            const avgHours = Math.floor(avg / 60);
+            const avgMinutes = Math.floor(avg % 60);
         
-        </>
-    )
+            return (
+              <div className="custom-tooltip" style={{ background: "#f5f5f5", padding: "5px", border: "1px solid #ccc" }}>
+                <p className="label" style={{ color: "#8884d8" }}>{`${name}`}</p>
+                <p className="info" style={{ color: "#8884d8" }}>
+                  {name === "시간"
+                    ? `User: ${userHours}시간 ${userMinutes}분`
+                    : `User: ${user.toFixed(1)}${name === "거리" ? "km" : ""}`}
+                </p>
+                <p className="info" style={{ color: "#82ca9d" }}>
+                  {name === "시간"
+                    ? `Avg: ${avgHours}시간 ${avgMinutes}분`
+                    : `Avg: ${avg.toFixed(1)}${name === "거리" ? "km" : ""}`}
+                </p>
+              </div>
+            );
+          }
+        
+          return null;
+        };
 
 
-    
-}
+
+
+
+
+
+return (
+  <Container maxWidth="lg">
+    <Grid container spacing={4} justifyContent="center" alignItems="center">
+      {/* 비교 차트 */}
+      <Grid item xs={12} md={6}>
+      <Box display="flex" flexDirection="column" alignItems="center">
+
+      <Typography variant="h6" gutterBottom>
+        유저님과 평균 따룻 유저는 이렇게 이용했어요.
+      </Typography>        
+      <ResponsiveContainer width="100%" height={300}>
+          <BarChart
+            data={barData}
+            margin={{
+              top: 5,
+              right: 30,
+              left: 20,
+              bottom: 5,
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip content={<CustomTooltip />} />
+            <Legend />
+            <Bar dataKey="user" fill="#8884d8" />
+            <Bar dataKey="avg" fill="#82ca9d" />
+          </BarChart>
+        </ResponsiveContainer>
+        </Box>
+
+      </Grid>
+
+      {/* 카테고리 차트 */}
+      <Grid item xs={12} md={6}>
+      <Box display="flex" flexDirection="column" alignItems="center">
+
+      <Typography variant="h6" gutterBottom>
+        따룻을 이런 목적으로 이용 하셨어요 !
+      </Typography>        
+      <ResponsiveContainer width="100%" height={500}>
+          <RadarChart data={radarData}>
+            <PolarGrid />
+            <PolarAngleAxis dataKey="subject" />
+            <PolarRadiusAxis angle={30} domain={[0, 10]} />
+            <Radar
+              name="category_count"
+              dataKey="A"
+              stroke="#8884d8"
+              fill="#8884d8"
+              fillOpacity={0.6}
+            />
+          </RadarChart>
+        </ResponsiveContainer>
+        </Box>
+
+      </Grid>
+
+
+
+      {/* 칼로리 차트 */}
+
+      <Grid item xs={12} md={4}>
+  <ResponsiveContainer width="100%" height="80%">
+    <RadialBarChart
+      cx="50%"
+      cy="50%"
+      innerRadius="10%"
+      outerRadius="80%"
+      barSize={10}
+      data={radialData}
+      startAngle={180}
+      endAngle={0}
+    >
+      <RadialBar
+        minAngle={15}
+        label={{ position: "insideStart", fill: "#fff" }}
+        background
+        clockWise
+        dataKey="calorie"
+        name="칼로리"
+      />
+    </RadialBarChart>
+  </ResponsiveContainer>
+</Grid>
+
+    </Grid>
+  </Container>
+);
+};
