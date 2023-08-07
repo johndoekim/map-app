@@ -86,12 +86,18 @@ export const BoardUserStatistics = () => {
 
     const radialData = [
         {
-            name : '칼로리', 
-            calorie : (personaltotalTime/60) * 7.1, 
+            name : '활동 칼로리', 
+            calorie : Math.round((personaltotalTime/60) * 7.1), 
+            fill: '#4DA490'
         },
+
+        {
+          name : '권장 칼로리',
+          calorie : 500,
+          fill : '#8884d8'
+        }
     ]
 
-    console.log(radialData)
 
 
 
@@ -180,15 +186,25 @@ export const BoardUserStatistics = () => {
 
 
 
+    console.log(radialData)
+
+    console.log(barData)
 
 
+
+const style = {
+  top: '50%',
+  right: 0,
+  transform: 'translate(0, -50%)',
+  lineHeight: '2rem',
+};
 
 
 return (
-  <Container maxWidth="lg">
-    <Grid container spacing={4} justifyContent="center" alignItems="center">
+  <Container maxWidth="md">
+    <Grid container spacing={1} justifyContent="center" alignItems="center">
       {/* 비교 차트 */}
-      <Grid item xs={12} md={6}>
+      <Grid item xs={8} md={4}>
       <Box display="flex" flexDirection="column" alignItems="center">
 
       <Typography variant="h6" gutterBottom>
@@ -218,23 +234,24 @@ return (
       </Grid>
 
       {/* 카테고리 차트 */}
-      <Grid item xs={12} md={6}>
+      <Grid item xs={8} md={4}>
       <Box display="flex" flexDirection="column" alignItems="center">
 
       <Typography variant="h6" gutterBottom>
         따룻을 이런 목적으로 이용 하셨어요 !
       </Typography>        
-      <ResponsiveContainer width="100%" height={500}>
-          <RadarChart data={radarData}>
+      <ResponsiveContainer width="100%" height={300} >
+          <RadarChart cx="50%" cy="50%" outerRadius="70%" data={radarData}
+          >
             <PolarGrid />
             <PolarAngleAxis dataKey="subject" />
-            <PolarRadiusAxis angle={30} domain={[0, 10]} />
+            <PolarRadiusAxis angle={30} domain={[0, 12]} />
             <Radar
               name="category_count"
               dataKey="A"
               stroke="#8884d8"
               fill="#8884d8"
-              fillOpacity={0.6}
+              fillOpacity={0.7}
             />
           </RadarChart>
         </ResponsiveContainer>
@@ -246,17 +263,26 @@ return (
 
       {/* 칼로리 차트 */}
 
-      <Grid item xs={12} md={4}>
-  <ResponsiveContainer width="100%" height="80%">
+      <Grid item xs={8} md={4}>
+      <Box display="flex" flexDirection="column" alignItems="center">
+
+
+      <Typography variant="h6" gutterBottom>
+        따룻으로 칼로리를 이만큼 소모 하셨어요 !
+      </Typography>        
+
+
+
+  <ResponsiveContainer width="100%" height={300}>
     <RadialBarChart
+      width={500}
+      height={300}
       cx="50%"
       cy="50%"
-      innerRadius="10%"
-      outerRadius="80%"
+      innerRadius={30}
+      outerRadius={90}
       barSize={10}
       data={radialData}
-      startAngle={180}
-      endAngle={0}
     >
       <RadialBar
         minAngle={15}
@@ -264,13 +290,21 @@ return (
         background
         clockWise
         dataKey="calorie"
-        name="칼로리"
       />
+      <Legend iconSize={10} layout="vertical" verticalAlign="middle" wrapperStyle={style} />
     </RadialBarChart>
-  </ResponsiveContainer>
+  </ResponsiveContainer> 
+
+
+
+
+
+
+  </Box>
 </Grid>
 
     </Grid>
   </Container>
 );
 };
+
