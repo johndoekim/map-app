@@ -20,6 +20,10 @@ export const BoardUserStatistics = () => {
     const [allUserNum, setAllUserNum] = useState()
 
     const [radarData, setRadarData] = useState([]);
+    
+
+    const [radialData, setRadialData] = useState(null);
+
 
 
     console.log(routeInfo)
@@ -92,19 +96,23 @@ export const BoardUserStatistics = () => {
   : 0;
 
 
-    const radialData = [
+  useEffect(() => {
+    const updatedRadialData = [
         {
-            name : '활동 칼로리', 
-            calorie : Math.round((personaltotalTimeToday/60) * 7.1), 
-            fill: '#4DA490'
+            name: "활동 칼로리",
+            calorie: Math.round((personaltotalTimeToday / 60) * 7.1),
+            fill: "#4DA490",
         },
 
         {
-          name : '권장 칼로리',
-          calorie : 500,
-          fill : '#8884d8'
-        }
-    ]
+            name: "권장 칼로리",
+            calorie: 500,
+            fill: "#8884d8",
+        },
+    ];
+    setRadialData(updatedRadialData);
+}, [personaltotalTimeToday]);
+
 
 
 
@@ -264,8 +272,6 @@ return (
 
       </Grid>
 
-
-
       {/* 칼로리 차트 */}
 
       <Grid item xs={12} md={8}>
@@ -277,16 +283,16 @@ return (
       </Typography>        
 
 
-
+{radialData && (
   <ResponsiveContainer width="100%" height={300}>
     <RadialBarChart
-      width={500}
+      width={600}
       height={300}
       cx="50%"
       cy="50%"
-      innerRadius={30}
-      outerRadius={90}
-      barSize={10}
+      innerRadius={50}
+      outerRadius={150}
+      barSize={30}
       data={radialData}
     >
       <RadialBar
@@ -299,8 +305,7 @@ return (
       <Legend iconSize={10} layout="vertical" verticalAlign="middle" wrapperStyle={style} />
     </RadialBarChart>
   </ResponsiveContainer> 
-
-
+)}
 
 
 
