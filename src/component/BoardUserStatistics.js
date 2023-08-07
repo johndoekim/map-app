@@ -6,7 +6,7 @@ import { useQuery } from "react-query";
 import axios from "axios";
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
     Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, RadialBarChart, RadialBar  } from 'recharts';
-
+import { parseISO, isToday } from "date-fns";
 
 
 export const BoardUserStatistics = () => {
@@ -22,6 +22,8 @@ export const BoardUserStatistics = () => {
     const [radarData, setRadarData] = useState([]);
 
 
+    console.log(routeInfo)
+
 
 
 
@@ -29,7 +31,6 @@ export const BoardUserStatistics = () => {
         axios.get('https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/get-workout-info/avg-stat')
         .then(res => {
 
-            console.log(res)
 
             const jsonedData = JSON.parse(res.data.body)
 
@@ -38,7 +39,6 @@ export const BoardUserStatistics = () => {
             setAllUserNum(jsonedData.user_idx_total)
 
 
-            console.log(jsonedData)
 
     
     
@@ -48,12 +48,13 @@ export const BoardUserStatistics = () => {
         .catch(err => console.log(err))
     },[])
 
+
     useEffect(() => {
-        if (totalstat) {
-          const processedData = processData(totalstat);
+        if (routeInfo) {
+          const processedData = processData(routeInfo);
           setRadarData(processedData);
         }
-      }, [totalstat]);
+      }, [routeInfo]);
 
 
 
@@ -84,10 +85,17 @@ export const BoardUserStatistics = () => {
     : 0;
 
 
+    const personaltotalTimeToday = routeInfo
+  ? routeInfo
+      .filter((route) => isToday(parseISO(route.created_at)))
+      .reduce((acc, route) => acc + route.workout_time, 0)
+  : 0;
+
+
     const radialData = [
         {
             name : '활동 칼로리', 
-            calorie : Math.round((personaltotalTime/60) * 7.1), 
+            calorie : Math.round((personaltotalTimeToday/60) * 7.1), 
             fill: '#4DA490'
         },
 
@@ -124,7 +132,7 @@ export const BoardUserStatistics = () => {
         }
     ]
 
-    const processData = (totalstat) => {
+    const processData = (routeInfo) => {
         const categoriesCount = {
           food: 0,
           Healing: 0,
@@ -132,18 +140,21 @@ export const BoardUserStatistics = () => {
           general: 0,
         };
 
-        totalstat.forEach((item) => {
+        routeInfo.forEach((item) => {
             const category = item.category;
-            if (category >= 1 && category <= 11) {
+            if (category === -1) {
+              categoriesCount.general++;
+            }
+            else if (1 <= category && category <= 11) {
               categoriesCount.food++;
-            } else if (category >= 12 && category <= 15) {
+            } else if (15 >= category && 12 <= category) {
               categoriesCount.Healing++;
             } else if (category === 16) {
               categoriesCount.exercise++;
-            } else if (category === -1) {
-              categoriesCount.general++;
             }
           });
+
+
 
           return [
             { subject: "맛집", A: categoriesCount.food },
@@ -153,7 +164,7 @@ export const BoardUserStatistics = () => {
           ];
         };
 
-
+        console.log(processData(routeInfo))
 
 
         const CustomTooltip = ({ active, payload }) => {
@@ -186,12 +197,6 @@ export const BoardUserStatistics = () => {
 
 
 
-    console.log(radialData)
-
-    console.log(barData)
-
-
-
 const style = {
   top: '50%',
   right: 0,
@@ -204,8 +209,8 @@ return (
   <Container maxWidth="md">
     <Grid container spacing={1} justifyContent="center" alignItems="center">
       {/* 비교 차트 */}
-      <Grid item xs={8} md={4}>
-      <Box display="flex" flexDirection="column" alignItems="center">
+      <Grid item xs={12} md={8}>
+      <Box mt={4} display="flex" flexDirection="column" alignItems="center">
 
       <Typography variant="h6" gutterBottom>
         유저님과 평균 따룻 유저는 이렇게 이용했어요.
@@ -214,10 +219,10 @@ return (
           <BarChart
             data={barData}
             margin={{
-              top: 5,
+              top: 10,
               right: 30,
               left: 20,
-              bottom: 5,
+              bottom: 20,
             }}
           >
             <CartesianGrid strokeDasharray="3 3" />
@@ -234,7 +239,7 @@ return (
       </Grid>
 
       {/* 카테고리 차트 */}
-      <Grid item xs={8} md={4}>
+      <Grid item xs={12} md={8}>
       <Box display="flex" flexDirection="column" alignItems="center">
 
       <Typography variant="h6" gutterBottom>
@@ -245,7 +250,7 @@ return (
           >
             <PolarGrid />
             <PolarAngleAxis dataKey="subject" />
-            <PolarRadiusAxis angle={30} domain={[0, 12]} />
+            <PolarRadiusAxis angle={30} domain={[0, 6]} />
             <Radar
               name="category_count"
               dataKey="A"
@@ -263,7 +268,7 @@ return (
 
       {/* 칼로리 차트 */}
 
-      <Grid item xs={8} md={4}>
+      <Grid item xs={12} md={8}>
       <Box display="flex" flexDirection="column" alignItems="center">
 
 
