@@ -205,7 +205,7 @@ const MapSelectWaypoint = () =>{
     </WaypointCard>
 
     <WaypointCard onClick={HealingClickHandler}>
-      <CardImage src="/images/waypoint-bicycle.png" alt="힐링" />
+      <CardImage src="/images/heal.png" alt="힐링" />
       <CardTitle>힐링</CardTitle>
     </WaypointCard>
 

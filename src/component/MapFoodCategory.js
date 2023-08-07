@@ -166,57 +166,57 @@ export const MapFoodCategory = () =>{
 
       <WaypointContainer>
     <WaypointCard onClick={MeatHandler}>
-      <CardImage src="/images/waypoint-workout.svg" alt="운동" />
+      <CardImage src="/images/gogi.png" alt="운동" />
       <CardTitle>고기</CardTitle>
     </WaypointCard>
 
     <WaypointCard onClick={GrillHandler} >
-      <CardImage src="/images/waypoint-workout.svg" alt="운동" />
+      <CardImage src="/images/bbq.png" alt="운동" />
       <CardTitle>구이</CardTitle>
     </WaypointCard>
 
     <WaypointCard onClick={WesternHandler}>
-      <CardImage src="/images/waypoint-workout.svg" alt="운동" />
+      <CardImage src="/images/free-icon-spaguetti-3480559.png" alt="운동" />
       <CardTitle>양식</CardTitle>
     </WaypointCard>
 
 
     <WaypointCard onClick={PizzaHandler}>
-      <CardImage src="/images/waypoint-workout.svg" alt="운동" />
+      <CardImage src="/images/free-icon-pizza-7910424.png" alt="운동" />
       <CardTitle>피자</CardTitle>
     </WaypointCard>
 
 
     <WaypointCard onClick={ChineseHandler}>
-      <CardImage src="/images/waypoint-workout.svg" alt="운동" />
+      <CardImage src="/images/chinesefood.png" alt="운동" />
       <CardTitle>중식</CardTitle>
     </WaypointCard>
 
     <WaypointCard onClick={BoonsikHandler}>
-      <CardImage src="/images/waypoint-workout.svg" alt="운동" />
+      <CardImage src="/images/dduk.png" alt="운동" />
       <CardTitle>분식</CardTitle>
     </WaypointCard>
 
     <WaypointCard onClick={SaladHandler}>
-      <CardImage src="/images/waypoint-workout.svg" alt="운동" />
+      <CardImage src="/images/salad.png" alt="운동" />
       <CardTitle>샐러드</CardTitle>
     </WaypointCard>
 
 
     <WaypointCard onClick={JapaneseHandler}>
-      <CardImage src="/images/waypoint-workout.svg" alt="운동" />
+      <CardImage src="/images/free-icon-sushi-3480504.png" alt="운동" />
       <CardTitle>일식</CardTitle>
     </WaypointCard>
 
 
     <WaypointCard onClick={FastfoodHandler}>
-      <CardImage src="/images/waypoint-workout.svg" alt="운동" />
+      <CardImage src="/images/free-icon-fast-food-3272764.png" alt="운동" />
       <CardTitle>패스트푸드</CardTitle>
     </WaypointCard>
 
 
     <WaypointCard onClick={AloneHandler}>
-      <CardImage src="/images/waypoint-workout.svg" alt="운동" />
+      <CardImage src="/images/alone.png" alt="운동" />
       <CardTitle>혼밥</CardTitle>
     </WaypointCard>
 

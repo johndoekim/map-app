@@ -147,23 +147,23 @@ export const MapHealingCategory = () =>{
 
       <WaypointContainer>
     <WaypointCard onClick={InspirationHandler}>
-      <CardImage src="/images/waypoint-workout.svg" alt="운동" />
+      <CardImage src="/images/free-icon-inspiration-1367689.png" alt="운동" />
       <CardTitle>영감</CardTitle>
     </WaypointCard>
 
     <WaypointCard onClick={WalkHandler} >
-      <CardImage src="/images/waypoint-workout.svg" alt="운동" />
+      <CardImage src="/images/free-icon-footprint-2591439.png" alt="운동" />
       <CardTitle>산책</CardTitle>
     </WaypointCard>
 
     <WaypointCard onClick={CafeHandler}>
-      <CardImage src="/images/waypoint-workout.svg" alt="운동" />
+      <CardImage src="/images/cafe.png" alt="운동" />
       <CardTitle>카페</CardTitle>
     </WaypointCard>
 
 
     <WaypointCard onClick={SpotHandler}>
-      <CardImage src="/images/waypoint-workout.svg" alt="운동" />
+      <CardImage src="/images/tower.png" alt="운동" />
       <CardTitle>지역 명소</CardTitle>
     </WaypointCard>
 
