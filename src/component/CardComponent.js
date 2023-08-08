@@ -69,6 +69,7 @@ const CardComponent = ({
 
   const [expanded, setExpanded] = useState(false);
 
+
   const [commentclicked, setCommentclicked] = useState(false)
 
 
@@ -78,8 +79,6 @@ const CardComponent = ({
     setCommentclicked(!commentclicked)
     await delay(100)
     fetchComments()
-
-
   }
 
 
@@ -89,8 +88,8 @@ const CardComponent = ({
     setExpanded(!expanded);
     fetchComments()
 
-    
   };
+
 
 
 
@@ -156,7 +155,8 @@ const CardComponent = ({
       resetField('comment')
 
 
-      
+
+
 
 
     }
@@ -165,7 +165,6 @@ const CardComponent = ({
 
 
 
-  
 
 //댓글 조회
 
@@ -174,7 +173,7 @@ const getComment = useQuery(
   'commentList',
   async () => {
     const res = await axios.get(`https://fc7oadp240.execute-api.ap-south-1.amazonaws.com/map-app/board/${post_idx}/comment`);
-    console.log(res)
+    // console.log(res)
     return res.data;
   },
 );
@@ -184,6 +183,7 @@ const fetchComments = async () => {
   setComments(getComment.data);
 };
 
+// console.log(getComment.data)
 
 
 //글 삭제 처리
@@ -341,10 +341,7 @@ const fetchComments = async () => {
 )}
 
 
-{comments && <Button onClick={commentShowHandle}>댓글</Button>}
-
-
-
+{comments[0] && <Button onClick={commentShowHandle}>댓글</Button>}
 
 
 <Collapse in={commentclicked} style={{ transformOrigin: '0 0 0' }}
