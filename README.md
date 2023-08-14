@@ -1,5 +1,7 @@
 # Taroot(따룻)
-빅데이터와 머신러닝을 사용한 따릉이 기반 사용자 친화 추천 경로 서비스
+빅데이터와 머신러닝을 사용한 따릉이 기반 사용자 친화 추천 경로 서비스.
+
+단순 경로 추천뿐만이 아닌, 사용자들간 개인화 된 경로를 커뮤니티에서 추천과 동시에 소통 할 수 있는 기능 제공.
 
 
 ## 🔨 Stack 
@@ -36,3 +38,10 @@
 ### 시연
 
 https://youtu.be/LZw7UR6CkW4
+
+
+
+### API 및 컴포넌트 명세서
+
+![화면 캡처 2023-08-14 172955](https://github.com/johndoekim/map-app/assets/127470168/12a8d801-82fe-4d8e-9ad7-4441bd13e7e3)
+![123](https://github.com/johndoekim/map-app/assets/127470168/3ac803d2-ffa8-4588-be39-fd441e61cd1b)
