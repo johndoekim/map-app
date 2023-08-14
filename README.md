@@ -45,3 +45,7 @@ https://youtu.be/LZw7UR6CkW4
 
 ![화면 캡처 2023-08-14 172955](https://github.com/johndoekim/map-app/assets/127470168/12a8d801-82fe-4d8e-9ad7-4441bd13e7e3)
 ![123](https://github.com/johndoekim/map-app/assets/127470168/3ac803d2-ffa8-4588-be39-fd441e61cd1b)
+
+### 아키텍쳐 설계 및 흐름
+
+![화면 캡처 2023-08-14 173616](https://github.com/johndoekim/map-app/assets/127470168/171d9302-c550-4e6c-9a8e-512f06a668ad)
